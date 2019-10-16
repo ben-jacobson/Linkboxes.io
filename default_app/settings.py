@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'bookmarks.urls'
+ROOT_URLCONF = 'default_app.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'bookmarks.wsgi.application'
+WSGI_APPLICATION = 'default_app.wsgi.application'
 
 
 # Database
