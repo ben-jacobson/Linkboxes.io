@@ -1,0 +1,35 @@
+from bookmarks.models import Bookmark
+import random, string
+
+'''
+    title = models.CharField(max_length=512, blank=False)    
+    thumbnail_url = models.URLField(max_length=2048, blank=False)
+    url = models.URLField(max_length=2048, default='/no_thumbnail.jpg')
+
+'''
+
+
+def create_test_bookmark(   title='Testing ASDF',
+                            thumbnail_url='https://via.placeholder.com/320x200', 
+                            url='http://www.google.com'):
+    '''
+    Test Helper Function - Creates a test bookmark object and saves to test db. Returns the object
+    '''                            
+    test_bookmark = Bookmark(
+        title=title,
+        thumbnail_url=thumbnail_url,
+        url=url,
+    )
+    test_bookmark.save()
+    return test_bookmark
+
+def create_test_junk_data(len):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(len))
+
+class test_objects_mixin():
+    '''
+    A lot of these test classes have the same setUp method, created a quick mixin for DRY purposes
+    '''
+    def setUp(self):
+        self.test_bookmark = create_test_bookmark()
