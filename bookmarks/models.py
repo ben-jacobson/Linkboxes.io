@@ -15,10 +15,15 @@ Lists can have multiple bookmarks - ManyToOne relationships
 Bookmarks are the most granular component
 '''
 
+class BookmarksList(models.Model):
+    title = models.CharField(max_length=512, blank=False)
+    # Todo - insert User Foreign Key
+
 class Bookmark(models.Model):
     title = models.CharField(max_length=512, blank=False)
     thumbnail_url = models.CharField(max_length=2048)
     url = models.CharField(max_length=2048, blank=False)
+    bookmarks_list = models.ForeignKey(BookmarksList, on_delete=models.CASCADE, related_name='bookmarks_list')     # ManyToOne - BookmarksList can have multiple BookMarks, but a BookMark can only be associated with one list. 
 
     def save(self, *args, **kwargs):
         if self.thumbnail_url == '':

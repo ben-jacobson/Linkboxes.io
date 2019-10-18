@@ -1,4 +1,4 @@
-from bookmarks.models import Bookmark
+from bookmarks.models import Bookmark, BookmarksList
 import random, string
 
 '''
@@ -9,7 +9,8 @@ import random, string
 '''
 
 
-def create_test_bookmark(   title='Testing ASDF',
+def create_test_bookmark(   bookmarks_list, 
+                            title='Testing ASDF',
                             thumbnail_url='https://via.placeholder.com/320x200', 
                             url='http://www.google.com'):
     '''
@@ -19,9 +20,21 @@ def create_test_bookmark(   title='Testing ASDF',
         title=title,
         thumbnail_url=thumbnail_url,
         url=url,
+        bookmarks_list=bookmarks_list
     )
     test_bookmark.save()
     return test_bookmark
+
+def create_test_bookmarks_list(title='My Test Bookmarks'):
+    '''
+    Test Helper Function - Creates a test bookmark list object and saves to test db. Returns the object
+    '''                            
+    test_bookmarks_list = BookmarksList(
+        title=title,
+    )
+    test_bookmarks_list.save()
+    return test_bookmarks_list
+
 
 def create_test_junk_data(len):
     letters = string.ascii_lowercase
@@ -32,4 +45,5 @@ class test_objects_mixin():
     A lot of these test classes have the same setUp method, created a quick mixin for DRY purposes
     '''
     def setUp(self):
-        self.test_bookmark = create_test_bookmark()
+        self.test_bookmarks_list = create_test_bookmarks_list()
+        self.test_bookmark = create_test_bookmark(self.test_bookmarks_list)
