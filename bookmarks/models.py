@@ -1,10 +1,10 @@
 from django.db import models
+from django.conf import settings
 
 from datetime import datetime
 from hashids import Hashids
 
 from django.core.exceptions import ValidationError
-
 
 '''
 Models definition for Bookmarks
@@ -12,7 +12,6 @@ Models definition for Bookmarks
 User (ID, manyToOne relationships with BookmarksList)
 BookmarksList (Url, manyToOne relationships with links, Privacy flag, pin_code_for_editing)
 Bookmarks (Title, URL, Picture URL)
-
 
 User can have multiple bookmark lists - ManyToOne relationships
 Lists can have multiple bookmarks - ManyToOne relationships
@@ -27,7 +26,7 @@ def encode_url_id(encode_string):
     return hashids.encode(6, 666)                                           # encode it, 6's because hail satan    
 
 class BookmarksList(models.Model):
-    # Todo - insert User Foreign Key
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=512, blank=False)
     url_id = models.CharField(max_length=5, blank=False, unique=True)
 

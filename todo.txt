@@ -5,3 +5,5 @@ TODO list
 - Probably a good idea to use a Captcha to ensure people can't just use a bot to create their own pages. We have space for 60M bookmark lists
 
 - Re-Look at our save method for the hashing function, can we catch other exceptions and maybe do some logging? How can we test this a bit more for robustness 
+
+- In your deployment script, alter Debug=False and disable the admin registrations
