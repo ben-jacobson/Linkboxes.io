@@ -1,2 +1,7 @@
--The owner of bookmarks.com wants $300K for the site. Maybe we call our service Bokmarks.com or some other misspelling of the service.
+TODO list
 
+- The owner of bookmarks.com wants $300K for the site. Maybe we call our service Bokmarks.com or some other misspelling of the service.
+
+- Probably a good idea to use a Captcha to ensure people can't just use a bot to create their own pages. We have space for 60M bookmark lists
+
+- Re-Look at our save method for the hashing function, can we catch other exceptions and maybe do some logging? How can we test this a bit more for robustness 

@@ -1,6 +1,10 @@
 from django.db import models
 
-# Create your models here.
+from datetime import datetime
+from hashids import Hashids
+
+from django.core.exceptions import ValidationError
+
 
 '''
 Models definition for Bookmarks
@@ -15,9 +19,32 @@ Lists can have multiple bookmarks - ManyToOne relationships
 Bookmarks are the most granular component
 '''
 
+def encode_url_id(encode_string):
+    ### generate the hash
+    date_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S:%f")           # start by creating a string of the date + time + milliseconds
+    date_string += encode_string                                            # include the title
+    hashids = Hashids(salt=date_string)                                     # make use of hashids to generate the id
+    return hashids.encode(6, 666)                                           # encode it, 6's because hail satan    
+
 class BookmarksList(models.Model):
-    title = models.CharField(max_length=512, blank=False)
     # Todo - insert User Foreign Key
+    title = models.CharField(max_length=512, blank=False)
+    url_id = models.CharField(max_length=5, blank=False, unique=True)
+
+    def save(self, *args, **kwargs):
+        # on save, the bookmarks list needs to create a 5 digit tinyurl for the page
+        # the tinyurl should be unique, so the algorithm needs to ensure there is no clash
+        # the algorithm used can be a string of the DD:MM:YYYY:HH:MM:SS:M + name of the page - made into a 5 digit hash
+        # the algorithm allows for 60M+ different combinations from 00000 to zzzzz. We'll outgrow our database bandwidth well before we run out of bookmark lists 
+        self.url_id = encode_url_id(self.title)
+        
+        ### checking for collision is automatic, because field is set to be unique so should raise an IntegrityError if any issues
+        try:
+            super(BookmarksList, self).save(*args, **kwargs) 
+        except ValidationError:       
+            # reroll with another string and save again    
+            self.id = encode_url_id(self.title + "1")
+            super(BookmarksList, self).save(*args, **kwargs) 
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=512, blank=False)

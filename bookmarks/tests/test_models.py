@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .base import test_objects_mixin, create_test_bookmark, create_test_junk_data
+from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list, create_test_junk_data
 from bookmarks.models import Bookmark, BookmarksList
 
 from django.core.exceptions import ValidationError
@@ -84,66 +84,53 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
         '''   
         self.assertEquals(self.test_bookmarks_list, BookmarksList.objects.get(title=self.test_bookmarks_list.title))
 
-    def test_create_bookmark_without_title_throws_validation_error(self):
+    def test_create_bookmarks_list_without_title_throws_validation_error(self):
         '''
         Unit Test - URL and Title are mandatory fields
         '''    
-        test_bookmark_without_title = create_test_bookmark(self.test_bookmarks_list, title='')
+        test_bookmarks_list_without_title = create_test_bookmarks_list(title='')
 
         # does it raise exceptions on full_clean and save? 
         with self.assertRaises(ValidationError):
-            test_bookmark_without_title.full_clean()
-        self.fail('finish the test')
+            test_bookmarks_list_without_title.full_clean()
 
-
-    def test_create_bookmark_without_url_throws_validation_error(self):
+    def test_create_bookmarks_list_creates_id(self):
         '''
-        Unit Test - URL and Title are mandatory fields
-        '''        
-        test_bookmark_without_url = create_test_bookmark(self.test_bookmarks_list, url='')
+        Unit Test - Test the model generated tiny url BookmarksList.save()
+        '''    
+        # expected output is a 5 digit code. 
+        bookmarks_list_obj = BookmarksList.objects.get(title=self.test_bookmarks_list.title)  
+        self.assertEqual(len(bookmarks_list_obj.url_id), 5)      
 
-        # does it raise exceptions on full_clean and save? 
+        # check that the string is alphanumeric
+        self.assertTrue(bookmarks_list_obj.url_id.isalnum())
+
+    def test_create_bookmarks_id_must_be_unique(self):
+        '''
+        Unit Test - Test the model generated tiny url BookmarksList.save()
+        '''    
+        # running the save function will generate the hash, so to test this we'll instead run the validate_unique and verify that it generates the appropraite exception
+        bookmarks_list_obj = BookmarksList.objects.get(title=self.test_bookmarks_list.title)  
+        comparison_list = BookmarksList(title='adsf', url_id=bookmarks_list_obj.url_id)
+
         with self.assertRaises(ValidationError):
-            test_bookmark_without_url.full_clean()
+            comparison_list.validate_unique()
 
-        self.fail('finish the test')
+    def test_create_bookmarks_id_full_clean_raises_exception(self):
+        # virtually the same as above, except with full_clean()
+        bookmarks_list_obj = BookmarksList.objects.get(title=self.test_bookmarks_list.title)  
+        comparison_list = BookmarksList(title='adsf', url_id=bookmarks_list_obj.url_id)
 
-    def test_create_bookmark_without_picture(self):
-        '''
-        Unit Test - Users can create a bookmark without a picture, it should default to a placeholder image
-        '''
-        test_bookmark_without_image = create_test_bookmark(self.test_bookmarks_list, thumbnail_url='')
-        test_bookmark_without_image.save()
-        self.assertEqual(test_bookmark_without_image.thumbnail_url, '/no_thumbnail.jpg')
-        self.fail('finish the test')
+        with self.assertRaises(ValidationError):
+            comparison_list.full_clean()
 
     def test_title_max_length(self):
-        test_bookmark_with_long_title = create_test_bookmark(self.test_bookmarks_list, title=create_test_junk_data(MAX_TITLE_LEN + 1))
+        test_bookmarks_list_with_long_title = create_test_bookmarks_list(title=create_test_junk_data(MAX_TITLE_LEN + 1))
 
         # does it raise exceptions on full_clean and save? 
         with self.assertRaises(ValidationError):
-            test_bookmark_with_long_title.full_clean()
-        self.fail('finish the test')
-
-
-    def test_thumbnail_max_length(self):
-        test_bookmark_with_long_thumbnail = create_test_bookmark(self.test_bookmarks_list, thumbnail_url=create_test_junk_data(MAX_URL_LEN + 1))
-
-        # does it raise exceptions on full_clean and save? 
-        with self.assertRaises(ValidationError):
-            test_bookmark_with_long_thumbnail.full_clean()
-        self.fail('finish the test')
+            test_bookmarks_list_with_long_title.full_clean()
             
-
-    def test_url_max_length(self):
-        test_bookmark_with_long_url = create_test_bookmark(self.test_bookmarks_list, url=create_test_junk_data(MAX_URL_LEN + 1))
-
-        # does it raise exceptions on full_clean and save? 
-        with self.assertRaises(ValidationError):
-            test_bookmark_with_long_url.full_clean()
-        self.fail('finish the test')
-
-
 class UserModelTests(test_objects_mixin, TestCase): 
     def test_create_bookmark(self):
         '''
