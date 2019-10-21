@@ -131,6 +131,12 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
         with self.assertRaises(ValidationError):
             test_bookmarks_list_with_long_title.full_clean()
 
+    def test_model_save_feature_doesnt_reroll_urlid(self):
+        '''
+        Unit Test - fix a bug early on where the url_id field (slug) was rerolled on every save.
+        '''
+        self.fail('finish the test')
+
 
 class UserModelTests(test_objects_mixin, TestCase): 
     def test_create_user(self):

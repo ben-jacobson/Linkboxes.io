@@ -28,7 +28,7 @@ def encode_url_id(encode_string):
 class BookmarksList(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=512, blank=False)
-    url_id = models.CharField(max_length=5, blank=False, unique=True)
+    url_id = models.SlugField(max_length=5, blank=False, unique=True)
 
     def save(self, *args, **kwargs):
         # on save, the bookmarks list needs to create a 5 digit tinyurl for the page

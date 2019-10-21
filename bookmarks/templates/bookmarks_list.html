@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block page-title %}{{ page_title }}{% endblock %}
+
+{% block main-content %}
+    <ul>
+    {% for bookmark in bookmarks_list %}
+        <li>{{ bookmark.title }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

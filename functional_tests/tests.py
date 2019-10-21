@@ -21,14 +21,14 @@ class LayoutAndStylingTest(FunctionalTest):
         self.browser.get(self.live_server_url)
 
         # user notices the page is live - it shows a set of instructions for how to use the site
-        self.fail("finish the test")
-
+        self.assertEqual('Welcome!', self.browser.title)
+        self.fail('finish the test')
 
 class BookMarkViewPage(FunctionalTest):
     def test_view_bookmarks_list_view(self):
         # user logs directly into his bookmarks page via it's url. He has remembered his code is abcde
         bookmark_link = 'abcde'
-        self.browser.get(self.live_server_url + '/' +bookmark_link)
+        self.browser.get(self.live_server_url + '/' + bookmark_link)
 
         # user notices that the page title is what he set it as 'Test List One'
         self.assertEqual('Test List One', self.browser.title)   

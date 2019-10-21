@@ -7,3 +7,7 @@ TODO list
 - Re-Look at our save method for the hashing function, can we catch other exceptions and maybe do some logging? How can we test this a bit more for robustness 
 
 - In your deployment script, alter Debug=False and disable the admin registrations
+
+- write some tests to demonstrate the many to one relationships, eg. testing reverse lookups
+
+- Just realised that the save method rerolls the bookmarkslist every time. Need to alter this
