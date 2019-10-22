@@ -15,5 +15,5 @@ class BookmarksListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = BookmarksList.objects.get(url_id=self.kwargs['slug']).title
+        context['list_name'] = BookmarksList.objects.get(url_id=self.kwargs['slug']).title
         return context
