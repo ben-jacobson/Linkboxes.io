@@ -12,9 +12,12 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.implicitly_wait(MAX_WAIT)
         self.browser.set_page_load_timeout(MAX_WAIT)
 
+        # set up some DRY variables to use throughout these tests
+        self.bookmark_list_page_title = 'Saved bookmarks'
+
         # create our test user, a test bookmarks list
         self.test_user = User.objects.create_user('Joe Bloggs', 'joe@bloggs.com', 'joepassword')
-        self.test_list = create_test_bookmarks_list(self.test_user, title='Some of my favourite things')
+        self.test_list = create_test_bookmarks_list(self.test_user, title=self.bookmark_list_page_title)
         self.test_list_slug = self.test_list.url_id
 
         # create some test bookmarks
@@ -46,11 +49,11 @@ class BookMarkViewPage(FunctionalTest):
         self.browser.get(self.live_server_url + '/' + bookmark_link)
 
         # user notices the page title 
-        self.assertEqual('Some of my favourite things', self.browser.title)   
+        self.assertEqual(self.bookmark_list_page_title, self.browser.title)   
 
         # user notices the header
         page_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Some of my favourite things', page_header.text)   
+        self.assertEqual(self.bookmark_list_page_title, page_header.text)   
 
         # user notices that there are 6 bookmarks on the page, in a list view
         bookmark_elems = self.browser.find_elements_by_class_name('bookmark-link')
