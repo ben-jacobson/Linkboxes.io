@@ -1,6 +1,8 @@
 from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list, create_test_junk_data
+
 from bookmarks.models import Bookmark, BookmarksList
+from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -152,30 +154,46 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
 class UserModelTests(test_objects_mixin, TestCase): 
     def test_create_user(self):
         '''
-        Unit Test - User successfully creates a bookmark with a valid title, url and picture
+        Unit Test - Test that we can successfully create a user. 
         '''   
-        self.assertEquals(self.test_bookmark, Bookmark.objects.get(title=self.test_bookmark.title))
-        self.fail('finish the test')
+        self.assertEqual(User.objects.get(username=self.test_user.username), self.test_user)
 
     def test_create_user_without_password_throws_validation_error(self):
         '''
-        Unit Test - URL and Title are mandatory fields
+        Unit Test - Test that creating a User without a password will throw a validation error
         '''    
-        test_bookmark_without_title = create_test_bookmark(self.test_bookmarks_list, title='')
+        test_user = User.objects.create(
+            username='TestTesterson',
+            email='test@testco.com',
+            password=''
+        )
 
         # does it raise exceptions on full_clean and save? 
         with self.assertRaises(ValidationError):
-            test_bookmark_without_title.full_clean()
-        self.fail('finish the test')
+            test_user.full_clean()
 
-    def test_create_user_without_username_throws_validation_error(self):
+    def test_create_user_with_faulty_username_throws_validation_error(self):
         '''
-        Unit Test - URL and Title are mandatory fields
+        Unit Test - Test that creating a User with a faulty username, or even a blank username will throw a validation error
         '''    
-        test_bookmark_without_title = create_test_bookmark(self.test_bookmarks_list, title='')
+        test_user_one = User.objects.create(
+            username='Test Testerson', #usernames can't contain spaces
+            email='test@testco.com',
+            password='asdfasdf1234'
+        )
 
         # does it raise exceptions on full_clean and save? 
         with self.assertRaises(ValidationError):
-            test_bookmark_without_title.full_clean()
-        self.fail('finish the test')
+            test_user_one.full_clean()
+
+        test_user_two = User.objects.create(
+            username='', #usernames can't be blank
+            email='test@testco.com',
+            password='asdfasdf1234'
+        )
+
+        # does it raise exceptions on full_clean and save? 
+        with self.assertRaises(ValidationError):
+            test_user_two.full_clean()
+
 
