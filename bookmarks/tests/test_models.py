@@ -17,6 +17,12 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         '''   
         self.assertEquals(self.test_bookmark, Bookmark.objects.get(title=self.test_bookmark.title))
 
+    def test_string_method_returns_title(self):
+        '''
+        Unit Test - str() method should return the title of the bookmark
+        '''
+        self.assertEquals(self.test_bookmark.title, self.test_bookmark.__str__())
+
     def test_creating_a_bookmark_without_list_throws_validation_error(self):
         test_bookmark = Bookmark(
             title='asdf',
@@ -85,6 +91,12 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
         Unit Test - User successfully creates a bookmark list with a valid title, url and picture
         '''   
         self.assertEquals(self.test_bookmarks_list, BookmarksList.objects.get(title=self.test_bookmarks_list.title))
+
+    def test_string_method_returns_title(self):
+        '''
+        Unit Test - str() method should return the title of the list
+        '''
+        self.assertEquals(self.test_bookmarks_list.title, self.test_bookmarks_list.__str__())
 
     def test_create_bookmarks_list_without_title_throws_validation_error(self):
         '''
