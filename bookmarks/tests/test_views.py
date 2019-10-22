@@ -26,7 +26,7 @@ class BookMarkViewTests(test_objects_mixin, TestCase):
         test_url_slug = self.test_bookmarks_list.url_id
         test_list_title = self.test_bookmarks_list.title
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': test_url_slug}))
-        self.assertEqual(response.context['page_title'], test_list_title) # todo, the page title may change later e.g to include branding
+        self.assertEqual(response.context['list_name'], test_list_title) # todo, the page title may change later e.g to include branding
 
     def test_slug_returns_valid_context(self):
         '''

@@ -135,8 +135,19 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
         '''
         Unit Test - fix a bug early on where the url_id field (slug) was rerolled on every save.
         '''
-        self.fail('finish the test')
+        # create a new test_bookmarks_list
+        test_bookmarks_list = create_test_bookmarks_list(self.test_user)
 
+        # functionan automatically calls save, so we now record what the id is after first save
+        url_first_save = test_bookmarks_list.url_id
+
+        # make a change to it, save it and record the url again
+        test_bookmarks_list.title = 'new title'
+        test_bookmarks_list.save()
+        url_second_save = test_bookmarks_list.url_id
+
+        # they should be the same
+        self.assertEqual(url_first_save, url_second_save)          
 
 class UserModelTests(test_objects_mixin, TestCase): 
     def test_create_user(self):

@@ -4,7 +4,7 @@ from django.conf import settings
 from datetime import datetime
 from hashids import Hashids
 
-from django.core.exceptions import ValidationError
+#from django.core.exceptions import ValidationError
 
 '''
 Models definition for Bookmarks
@@ -31,19 +31,17 @@ class BookmarksList(models.Model):
     url_id = models.SlugField(max_length=5, blank=False, unique=True)
 
     def save(self, *args, **kwargs):
-        # on save, the bookmarks list needs to create a 5 digit tinyurl for the page
+        # on creation, the bookmarks list needs to create a 5 digit tinyurl for the page. We don't want this to run on every save because that will re-roll your urls
         # the tinyurl should be unique, so the algorithm needs to ensure there is no clash
         # the algorithm used can be a string of the DD:MM:YYYY:HH:MM:SS:M + name of the page - made into a 5 digit hash
         # the algorithm allows for 60M+ different combinations from 00000 to zzzzz. We'll outgrow our database bandwidth well before we run out of bookmark lists 
-        self.url_id = encode_url_id(self.title)
+        if not self.url_id:
+            self.url_id = encode_url_id(self.title)
         
         ### checking for collision is automatic, because field is set to be unique so should raise an IntegrityError if any issues
-        try:
-            super(BookmarksList, self).save(*args, **kwargs) 
-        except ValidationError:       
-            # reroll with another string and save again    
-            self.id = encode_url_id(self.title + "1")
-            super(BookmarksList, self).save(*args, **kwargs) 
+        super(BookmarksList, self).save(*args, **kwargs) 
+
+
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=512, blank=False)
