@@ -7,6 +7,9 @@ class HomePageView(TemplateView):
 class LoginView(TemplateView):
     template_name = 'login.html'
 
+class SignupView(TemplateView):
+    template_name = 'signup.html'
+
 class ListListView(ListView):
     template_name= 'bookmarks_list.html'
     model = List

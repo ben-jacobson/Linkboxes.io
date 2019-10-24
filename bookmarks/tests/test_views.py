@@ -3,23 +3,31 @@ from .base import test_objects_mixin, create_test_bookmark, create_test_bookmark
 from django.urls import reverse
 
 class HomePageTest(TestCase):
-    def test_uses_home_template(self):
+    def test_uses_correct_template(self):
         '''
         Unit Test - Does the home page view use the correct template?
         '''
         response = self.client.get(reverse('home'))
         self.assertTemplateUsed(response, 'home.html')
 
-class LoginVTest(TestCase):
-    def test_uses_home_template(self):
+class LoginTest(TestCase):
+    def test_uses_correct_template(self):
         '''
         Unit Test - Does the login view use the correct template?
         '''
         response = self.client.get(reverse('login'))
         self.assertTemplateUsed(response, 'login.html')
 
+class SignupTest(TestCase):
+    def test_uses_correct_template(self):
+        '''
+        Unit Test - Does the sign up view use the correct template?
+        '''
+        response = self.client.get(reverse('signup'))
+        self.assertTemplateUsed(response, 'signup.html')
+
 class BookMarkViewTests(test_objects_mixin, TestCase): 
-    def test_bookmarks_listview_uses_correct_template(self):
+    def test_uses_correct_template(self):
         '''
         Unit Test - Does the listview use the correct template? Also tests the url_id functionality works
         '''

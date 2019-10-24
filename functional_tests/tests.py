@@ -13,6 +13,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.set_page_load_timeout(MAX_WAIT)
 
         # set up some DRY variables to use throughout these tests
+        self.home_page_main_header = 'INSERT LOGO HERE'
         self.bookmark_list_page_title = 'Saved bookmarks'
 
         # create our test user, a test bookmarks list
@@ -40,7 +41,11 @@ class LayoutAndStylingTest(FunctionalTest):
 
         # user notices the page is live - it shows a set of instructions for how to use the site
         self.assertEqual('Welcome!', self.browser.title)
-        self.fail('finish the test')
+
+        page_h1 = self.browser.find_element_by_id('main-header') # will find the first one on the page
+        self.assertEqual(page_h1.text, self.home_page_main_header)
+
+        self.fail('finish the test - put in something to test that the stylesheet was loaded correctly, e.g check that something is centered')
 
 class BookMarkViewPage(FunctionalTest):
     def test_view_bookmarks_list_view_read_only(self):
