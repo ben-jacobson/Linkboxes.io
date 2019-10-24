@@ -9,8 +9,8 @@ from hashids import Hashids
 '''
 Models definition for Bookmarks
 
-User (ID, manyToOne relationships with BookmarksList)
-BookmarksList (Url, manyToOne relationships with links, Privacy flag, pin_code_for_editing)
+User (ID, manyToOne relationships with List)
+List (Url, manyToOne relationships with links, Privacy flag, pin_code_for_editing)
 Bookmarks (Title, URL, Picture URL)
 
 User can have multiple bookmark lists - ManyToOne relationships
@@ -25,7 +25,7 @@ def encode_url_id(encode_string):
     hashids = Hashids(salt=date_string)                                     # make use of hashids to generate the id
     return hashids.encode(6, 666)                                           # encode it, 6's because hail satan    
 
-class BookmarksList(models.Model):
+class List(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=512, blank=False)
     url_id = models.SlugField(max_length=5, blank=False, unique=True, editable=False)
@@ -39,7 +39,7 @@ class BookmarksList(models.Model):
             self.url_id = encode_url_id(self.title)
         
         ### checking for collision is automatic, because field is set to be unique so should raise an IntegrityError if any issues
-        super(BookmarksList, self).save(*args, **kwargs) 
+        super(List, self).save(*args, **kwargs) 
 
     def __str__(self):
         return self.title
@@ -48,7 +48,7 @@ class Bookmark(models.Model):
     title = models.CharField(max_length=512, blank=False)
     thumbnail_url = models.CharField(max_length=2048, blank=True)
     url = models.CharField(max_length=2048)
-    bookmarks_list = models.ForeignKey(BookmarksList, on_delete=models.CASCADE, related_name='bookmarks_list')     # ManyToOne - BookmarksList can have multiple BookMarks, but a BookMark can only be associated with one list. 
+    _list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='list')     # ManyToOne - List can have multiple BookMarks, but a BookMark can only be associated with one list. 
 
     def save(self, *args, **kwargs):
         if not self.thumbnail_url:

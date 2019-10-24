@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list, create_test_junk_data
 
-from bookmarks.models import Bookmark, BookmarksList
+from bookmarks.models import Bookmark, List
 from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
@@ -85,12 +85,12 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         with self.assertRaises(ValidationError):
             test_bookmark_with_long_url.full_clean()
 
-class BookmarksListModelTests(test_objects_mixin, TestCase): 
+class ListModelTests(test_objects_mixin, TestCase): 
     def test_create_bookmark_list(self):
         '''
         Unit Test - User successfully creates a bookmark list with a valid title, url and picture
         '''   
-        self.assertEquals(self.test_bookmarks_list, BookmarksList.objects.get(title=self.test_bookmarks_list.title))
+        self.assertEquals(self.test_bookmarks_list, List.objects.get(title=self.test_bookmarks_list.title))
 
     def test_string_method_returns_title(self):
         '''
@@ -110,10 +110,10 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
 
     def test_create_bookmarks_list_creates_id(self):
         '''
-        Unit Test - Test the model generated tiny url BookmarksList.save()
+        Unit Test - Test the model generated tiny url List.save()
         '''    
         # expected output is a 5 digit code. 
-        bookmarks_list_obj = BookmarksList.objects.get(title=self.test_bookmarks_list.title)  
+        bookmarks_list_obj = List.objects.get(title=self.test_bookmarks_list.title)  
         self.assertEqual(len(bookmarks_list_obj.url_id), 5)      
 
         # check that the string is alphanumeric
@@ -121,19 +121,19 @@ class BookmarksListModelTests(test_objects_mixin, TestCase):
 
     def test_create_bookmarks_id_must_be_unique(self):
         '''
-        Unit Test - Test the model generated tiny url BookmarksList.save()
+        Unit Test - Test the model generated tiny url List.save()
         '''    
         # running the save function will generate the hash, so to test this we'll instead run the validate_unique and verify that it generates the appropraite exception
-        bookmarks_list_obj = BookmarksList.objects.get(title=self.test_bookmarks_list.title)  
-        comparison_list = BookmarksList(title='adsf', url_id=bookmarks_list_obj.url_id)
+        bookmarks_list_obj = List.objects.get(title=self.test_bookmarks_list.title)  
+        comparison_list = List(title='adsf', url_id=bookmarks_list_obj.url_id)
 
         with self.assertRaises(ValidationError):
             comparison_list.validate_unique()
 
     def test_create_bookmarks_id_full_clean_raises_exception(self):
         # virtually the same as above, except with full_clean()
-        bookmarks_list_obj = BookmarksList.objects.get(title=self.test_bookmarks_list.title)  
-        comparison_list = BookmarksList(title='adsf', url_id=bookmarks_list_obj.url_id)
+        bookmarks_list_obj = List.objects.get(title=self.test_bookmarks_list.title)  
+        comparison_list = List(title='adsf', url_id=bookmarks_list_obj.url_id)
 
         with self.assertRaises(ValidationError):
             comparison_list.full_clean()

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from bookmarks.models import Bookmark, BookmarksList
+from bookmarks.models import Bookmark, List
 import random, string
 
 '''
@@ -21,7 +21,7 @@ def create_test_bookmark(   bookmarks_list,
         title=title,
         thumbnail_url=thumbnail_url,
         url=url,
-        bookmarks_list=bookmarks_list
+        _list=bookmarks_list
     )
     test_bookmark.save()
     return test_bookmark
@@ -30,7 +30,7 @@ def create_test_bookmarks_list(owner, title='My Test Bookmarks'):
     '''
     Test Helper Function - Creates a test bookmark list object and saves to test db. Returns the object
     '''                            
-    test_bookmarks_list = BookmarksList(
+    test_bookmarks_list = List(
         title=title,
         owner=owner
     )
