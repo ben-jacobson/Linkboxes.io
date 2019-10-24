@@ -4,6 +4,9 @@ from bookmarks.models import List, Bookmark
 class HomePageView(TemplateView):
     template_name = 'home.html'
 
+class LoginView(TemplateView):
+    template_name = 'login.html'
+
 class ListListView(ListView):
     template_name= 'bookmarks_list.html'
     model = List

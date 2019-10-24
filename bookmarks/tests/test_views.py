@@ -10,6 +10,14 @@ class HomePageTest(TestCase):
         response = self.client.get(reverse('home'))
         self.assertTemplateUsed(response, 'home.html')
 
+class LoginVTest(TestCase):
+    def test_uses_home_template(self):
+        '''
+        Unit Test - Does the login view use the correct template?
+        '''
+        response = self.client.get(reverse('login'))
+        self.assertTemplateUsed(response, 'login.html')
+
 class BookMarkViewTests(test_objects_mixin, TestCase): 
     def test_bookmarks_listview_uses_correct_template(self):
         '''
