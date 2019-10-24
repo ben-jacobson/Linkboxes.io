@@ -3,10 +3,23 @@
 {% block page-title %}{{ list_name }}{% endblock %}
 
 {% block main-content %}
-    <h1>{{ list_name }}</h1>
-    <ul class='bookmarks-list'>
-    {% for bookmark in bookmarks_list %}
-        <li class='bookmark'><a href='{{ bookmark.url }}' class='bookmark-link'>{{ bookmark.title }}</a></li>
-    {% endfor %}
-    </ul>
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>{{ list_name }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-left">
+                <ul class='bookmarks-list'>
+                    {% for bookmark in bookmarks_list %}
+                    <li class='bookmark'><a href='{{ bookmark.url }}' class='bookmark-link'>{{ bookmark.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+<div>
 {% endblock %}

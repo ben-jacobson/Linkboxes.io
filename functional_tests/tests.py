@@ -43,7 +43,7 @@ class LayoutAndStylingTest(FunctionalTest):
         self.fail('finish the test')
 
 class BookMarkViewPage(FunctionalTest):
-    def test_view_bookmarks_list_view(self):
+    def test_view_bookmarks_list_view_read_only(self):
         # user logs directly into his bookmarks page via it's url. He has remembered his code is abcde
         bookmark_link = self.test_list_slug
         self.browser.get(self.live_server_url + '/' + bookmark_link)
@@ -72,9 +72,22 @@ class BookMarkViewPage(FunctionalTest):
         first_bookmark.click()
         self.assertIn('www.google.com', self.browser.current_url)
 
+    def test_login_feature_from_home_page(self):
+        # user visits home page, notices the login button and clicks it
 
+        # user logs in and sees his list of bookmark lists
+        self.fail('finish the test')
 
-        
+    def test_edit_a_bookmarks_list(self):
+        # user visits a bookmark list he owns, and clicks edit
 
+        # user is taken to the login screen and logs in
 
-    
+        # user is redirected back to the page he wanted to edit
+
+        # user clicks the pencil icon next to the item he wants to edit
+
+        # user edits the item, saves it and logs out
+
+        # user revisits the page to make sure, lo and behold the edit took place
+        self.fail('finish the test')

@@ -10,4 +10,4 @@ TODO list
 
 - write some tests to demonstrate the many to one relationships, eg. testing reverse lookups
 
-- Just realised that the save method rerolls the bookmarkslist every time. Need to alter this
+- We should come up with better terminology for BookmarksList. It's not user friendly
