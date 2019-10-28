@@ -10,16 +10,24 @@
                 <h1>{{ list_name }}</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12 text-left">
-                <ul class='bookmarks-list'>
-                    {% for bookmark in bookmarks_list %}
-                    <li class='bookmark'><a href='{{ bookmark.url }}' class='bookmark-link'>{{ bookmark.title }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
+        <div id='thumbnail-container' class='row thumbnail-sortable'>
+            {% for bookmark in bookmarks_list %}
+            <div class="bookmark-card col-sm-6 col-md-6">
+                <div class="bookmark-hovereffect">
+                    <img class="img-responsive bookmark-thumbnail" src="{{ bookmark.thumbnail_url }}" draggable="false">
+                    <div class="edit-button-overlays">
+                        <p class="bookmark-edit-icons">
+                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon"></i>
+                            <i class="far fa-trash-alt bookmark-edit-icons delete-icon"></i>
+                            <i class="far fa-copy bookmark-edit-icons copy-icon"></i>
+                            <i class="fas fa-arrows-alt bookmark-edit-icons move-icon"></i>
+                        </p>
+                    </div>
+                </div>
+                <a href="{{ bookmark.url }}" draggable="false"><h3 class="bookmark-title">{{ bookmark.title }}</h3></a>
             </div>
+            {% endfor %}
         </div>
     </div>
-<div>
-{% endblock %}
+    <div>
+        {% endblock %}

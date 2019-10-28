@@ -11,3 +11,5 @@ TODO list
 - write some tests to demonstrate the many to one relationships, eg. testing reverse lookups
 
 - We should come up with better terminology for List. It's not user friendly
+
+- Remove our static reference in our bookmark grid view
