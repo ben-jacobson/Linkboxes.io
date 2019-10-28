@@ -14,7 +14,11 @@
             {% for bookmark in bookmarks_list %}
             <div class="bookmark-card col-sm-6 col-md-6">
                 <div class="bookmark-hovereffect">
-                    <img class="img-responsive bookmark-thumbnail" src="{{ bookmark.thumbnail_url }}" draggable="false">
+                    <div class='bookmark-card-thumbnail-img'>
+                        <a href="{{ bookmark.url }}" draggable="false">
+                            <img class="img-responsive bookmark-thumbnail" src="{{ bookmark.thumbnail_url }}" draggable="false" />
+                        </a>
+                    </div>
                     <div class="edit-button-overlays">
                         <p class="bookmark-edit-icons">
                             <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon"></i>
@@ -24,7 +28,11 @@
                         </p>
                     </div>
                 </div>
-                <a href="{{ bookmark.url }}" draggable="false"><h3 class="bookmark-title">{{ bookmark.title }}</h3></a>
+                <div class='bookmark-card-title'>
+                    <a href="{{ bookmark.url }}" draggable="false">
+                        <h3 class="bookmark-title">{{ bookmark.title }}</h3>
+                    </a>
+                </div>
             </div>
             {% endfor %}
         </div>
