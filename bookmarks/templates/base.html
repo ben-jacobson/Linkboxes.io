@@ -9,8 +9,8 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{% static 'vendor_js/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'vendor_js/bootstrap-4.3.1.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.3.1.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/list-view-grid-sort.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/list-view-grid.css' %}" type="text/css">
     <title>{% block page-title %}{% endblock %}</title>
@@ -18,11 +18,11 @@
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div class="container"> <a class="navbar-brand" href="/">
+        <div class="container">
+            <a class="navbar-brand" href="/">
                 <i class="fa d-inline fa-lg fa-stop-circle"></i>
                 <b id='main-header'>INSERT LOGO HERE</b>
-            </a> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse"
-                data-target="#navbar10">
+            </a> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar10">
@@ -43,20 +43,24 @@
                 <div class="col-md-9">
                     <p class="lead">Sign up to our newsletter for the latest news</p>
                     <form class="form-inline">
-                        <div class="form-group"> <input type="email" class="form-control"
-                                placeholder="Your e-mail here"> </div> <button type="submit"
-                            class="btn btn-primary ml-3">Subscribe</button>
+                        <div class="form-group"> <input type="email" class="form-control" placeholder="Your e-mail here"> </div> <button type="submit" class="btn btn-primary ml-3">Subscribe</button>
                     </form>
                 </div>
-                <div class="col-4 col-md-1 align-self-center"> <a href="#">
+                <div class="col-4 col-md-1 align-self-center">
+                    <a href="#">
                         <i class="fab fa-facebook-f text-muted fa-2x"></i>
-                    </a> </div>
-                <div class="col-4 col-md-1 align-self-center"> <a href="#">
+                    </a>
+                </div>
+                <div class="col-4 col-md-1 align-self-center">
+                    <a href="#">
                         <i class="fab fa-twitter text-muted fa-2x"></i>
-                    </a> </div>
-                <div class="col-4 col-md-1 align-self-center"> <a href="#">
+                    </a>
+                </div>
+                <div class="col-4 col-md-1 align-self-center">
+                    <a href="#">
                         <i class="fab fa-instagram text-muted fa-2x"></i>
-                    </a> </div>
+                    </a>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3 text-center">
@@ -66,10 +70,11 @@
         </div>
     </div>
 
-    <script src="{% static 'vendor_js/jquery-3.3.1.slim.min.js' %}"></script>
-    <script src="{% static 'vendor_js/popper.min.js' %}"></script>
-    <script src="{% static 'vendor_js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'vendor_js/jquery.sortable.js' %}"></script>
-    <script src="{% static 'vendor_js/jquery.enable_sortable.js' %}"></script>        
+    <script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.sortable.js' %}"></script>
+    <script src="{% static 'js/jquery.list-view-grid.js' %}"></script>
 </body>
+
 </html>

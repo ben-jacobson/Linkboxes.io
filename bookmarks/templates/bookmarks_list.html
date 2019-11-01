@@ -1,8 +1,4 @@
-{% extends 'base.html' %}
-
-{% block page-title %}{{ list_name }}{% endblock %}
-
-{% block main-content %}
+{% extends 'base.html' %} {% block page-title %}{{ list_name }}{% endblock %} {% block main-content %}
 <div class="py-5">
     <div class="container">
         <div class="row">
@@ -16,12 +12,13 @@
                 <div class="bookmark-hovereffect">
                     <div class='bookmark-card-thumbnail-img'>
                         <a href="{{ bookmark.url }}" draggable="false">
-                            <img class="img-responsive bookmark-thumbnail" src="{{ bookmark.thumbnail_url }}" draggable="false" />
+                            <img class="img-responsive bookmark-thumbnail" src="{{ bookmark.thumbnail_url }}"
+                                draggable="false" />
                         </a>
                     </div>
                     <div class="edit-button-overlays">
                         <p class="bookmark-edit-icons">
-                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon"></i>
+                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon" data-toggle="modal" data-target="#editBookmarkModal"></i>
                             <i class="far fa-trash-alt bookmark-edit-icons delete-icon"></i>
                             <i class="far fa-copy bookmark-edit-icons copy-icon"></i>
                             <i class="fas fa-arrows-alt bookmark-edit-icons move-icon"></i>
@@ -29,7 +26,7 @@
                     </div>
                 </div>
                 <div class='bookmark-card-title'>
-                    <a href="{{ bookmark.url }}" draggable="false">
+                    <a class='bookmark-url' href="{{ bookmark.url }}" draggable="false">
                         <h3 class="bookmark-title">{{ bookmark.title }}</h3>
                     </a>
                 </div>
@@ -37,5 +34,34 @@
             {% endfor %}
         </div>
     </div>
+    
+    <div class="modal fade" id="editBookmarkModal" tabindex="-1" role="dialog" aria-labelledby="editBookMarkCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LongTitle">Edit Bookmark</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group"> <input type="text" class="form-control" placeholder="Title"
+                                id="edit-title" name="Title" required="required"> </div>
+                        <div class="form-group"> <input type="text" class="form-control" id="edit-url" name="URL"
+                                placeholder="URL" required="required"> </div>
+                        <div class="form-group"> <input type="text" class="form-control" placeholder="Thumbnail URL"
+                                id="edit-thumbnail" name="Thumbnail URL" required="required"> <small
+                                class="form-text text-muted text-right"></small> </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div>
+
         {% endblock %}
