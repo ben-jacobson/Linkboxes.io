@@ -48,7 +48,7 @@ class Bookmark(models.Model):
     title = models.CharField(max_length=512, blank=False)
     thumbnail_url = models.CharField(max_length=2048, blank=True)
     url = models.CharField(max_length=2048)
-    _list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='list')     # ManyToOne - List can have multiple BookMarks, but a BookMark can only be associated with one list. 
+    _list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='bookmarks')     # ManyToOne - List can have multiple BookMarks, but a BookMark can only be associated with one list. 
 
     def save(self, *args, **kwargs):
         if not self.thumbnail_url:

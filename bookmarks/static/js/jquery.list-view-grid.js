@@ -21,15 +21,7 @@ $(function () {
     $('.thumbnail-sortable').sortable('disable'); // start in disabled state   
 });
 
-/*
-For displaying and hiding the edit lightbox
-*/
 
-$('.open-button').click(function () {
-    if ($('.edit-form').css('display') == 'none') {
-        $('.edit-form').css('display', 'block');
-    }
-    else {
-        $('.edit-form').css('display', 'none');
-    }
-});
+/* 
+    Our modal dialog box for editing bookmarks requires us to modify the submit button on the fly
+*/

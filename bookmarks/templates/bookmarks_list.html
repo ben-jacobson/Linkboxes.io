@@ -18,7 +18,7 @@
                     </div>
                     <div class="edit-button-overlays">
                         <p class="bookmark-edit-icons">
-                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon" data-toggle="modal" data-target="#editBookmarkModal"></i>
+                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon" data-toggle="modal" data-target="#editBookmarkModal" data-bookmark-id='{{ bookmark.id }}'></i>
                             <i class="far fa-trash-alt bookmark-edit-icons delete-icon"></i>
                             <i class="far fa-copy bookmark-edit-icons copy-icon"></i>
                             <i class="fas fa-arrows-alt bookmark-edit-icons move-icon"></i>
@@ -46,13 +46,11 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="form-group"> <input type="text" class="form-control" placeholder="Title"
-                                id="edit-title" name="Title" required="required"> </div>
-                        <div class="form-group"> <input type="text" class="form-control" id="edit-url" name="URL"
-                                placeholder="URL" required="required"> </div>
-                        <div class="form-group"> <input type="text" class="form-control" placeholder="Thumbnail URL"
-                                id="edit-thumbnail" name="Thumbnail URL" required="required"> <small
-                                class="form-text text-muted text-right"></small> </div>
+                        <div class="form-group"> <input type="text" class="form-control" placeholder="Title" id="edit-title" name="Title" required="required"> </div>
+                        <div class="form-group"> <input type="text" class="form-control" id="edit-url" name="URL" placeholder="URL" required="required"> </div>
+                        <div class="form-group"> <input type="text" class="form-control" placeholder="Thumbnail URL" id="edit-thumbnail" name="Thumbnail URL" required="required"> 
+                            <small class="form-text text-muted text-right"></small> 
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
