@@ -10,7 +10,7 @@ router.register(r'Lists', ListViewSet)
 #router.register(r'Bookmarks', BookmarkViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('api/', include(router.urls), name='api'),
     #path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     path('admin/', admin.site.urls),

@@ -5,7 +5,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bookmark
         exclude = ['_list']
-
+        
 class ListSerializer(serializers.ModelSerializer):
     bookmarks = BookmarkSerializer(many=True)
 

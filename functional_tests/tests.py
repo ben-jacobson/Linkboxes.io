@@ -54,7 +54,7 @@ class LayoutAndStylingTest(FunctionalTest):
         page_h1 = self.browser.find_element_by_id('main-header') # will find the first one on the page
         self.assertEqual(page_h1.text, self.home_page_main_header)
 
-        self.fail('finish the test - put in something to test that the stylesheet was loaded correctly, e.g check that something is centered')
+        self.fail('There is no test to ensure style sheets were loaded correctly')
 
 class BookMarkViewPage(FunctionalTest):
     def test_view_bookmarks_list_view_read_only(self):
@@ -114,7 +114,8 @@ class BookMarkViewPage(FunctionalTest):
         # Test that user now sees the first card appear in the list in the second position
         bookmark_elems_after_drop = self.browser.find_elements_by_class_name('bookmark-card') # recapture this data as the order will have changed
         second_bookmark_title = bookmark_elems_after_drop[1].find_element_by_tag_name('h3').text # the second element
-        
+        self.assertEqual(second_bookmark_title, second_bookmark_title) # placeholder        
+
         # Test will only fail because of the ActionEvent bug described above. 
         #self.assertEqual(second_bookmark_title, self.test_bookmarks[0].title)
 
