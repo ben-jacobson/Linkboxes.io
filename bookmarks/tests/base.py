@@ -9,7 +9,6 @@ import random, string
 
 '''
 
-
 def create_test_bookmark(   bookmarks_list, 
                             title='Testing ASDF',
                             thumbnail_url='https://via.placeholder.com/320x200', 
@@ -47,6 +46,14 @@ class test_objects_mixin():
     A lot of these test classes have the same setUp method, created a quick mixin for DRY purposes
     '''
     def setUp(self):
-        self.test_user = User.objects.create_user('Joe Bloggs', 'joe@bloggs.com', 'joepassword')
+        # store these in variables so that we can login as expected
+        self.test_user_name = 'JoeBloggs'
+        self.test_user_email = 'joe@bloggs.com'
+        self.test_user_pass = 'joepassword'
+
+        self.test_user = User.objects.create_user(self.test_user_name, self.test_user_name, self.test_user_pass)
         self.test_bookmarks_list = create_test_bookmarks_list(self.test_user)
         self.test_bookmark = create_test_bookmark(self.test_bookmarks_list)
+
+    def authenticate(self, username, password):
+        return self.client.login(username=username, password=password)

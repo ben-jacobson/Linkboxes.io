@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, ListView
 from bookmarks.models import List, Bookmark
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer#, BookmarkSerializer
 
 '''
@@ -40,12 +40,27 @@ Django Rest Framework Views
 
 '''
 
-# have created our own version of viewsets.ModelViewSet
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    """
+    Object-level permission to only allow owners of an object to edit it.
+    Assumes the model instance has an `owner` attribute.
+    """
 
-class ListViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Instance must have an attribute named `owner`.
+        return obj.owner == request.user
+
+class ListViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
     """
     API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed at once.
     """
+    permission_classes = [IsOwnerOrReadOnly]
+
     queryset = List.objects.all()
     serializer_class = ListSerializer
     lookup_field = 'url_id' 

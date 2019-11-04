@@ -26,7 +26,7 @@ def encode_url_id(encode_string):
     return hashids.encode(6, 666)                                           # encode it, 6's because hail satan    
 
 class List(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='list_owner')
     title = models.CharField(max_length=512, blank=False)
     url_id = models.SlugField(max_length=5, blank=False, unique=True, editable=False)
 

@@ -13,13 +13,7 @@ class DRFSerailizerTests(test_objects_mixin, TestCase):
         response = self.client.get(f'/api/Lists/', content_type='application/json')
         self.assertNotEqual(response.status_code, 200, msg="api allows a list view")
 
-    def test_ListSerializer_requires_authentication(self):
-        url_id = self.test_bookmarks_list.url_id
-
-        response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
-        self.assertNotEqual(response.status_code, 200, msg="api doesn't require any authetication to access")
-
-    def test_ListSerializer_returns_data(self):
+    def test_ListSerializer_returns_readonly_data_without_authentication(self):
         url_id = self.test_bookmarks_list.url_id
         response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
     
@@ -48,33 +42,4 @@ class DRFSerailizerTests(test_objects_mixin, TestCase):
 
     def test_BookmarkSerializer_excludes_list_foreign_key(self):
         response = self.client.get(f'/api/Lists/{self.test_bookmarks_list.url_id}/', content_type='application/json')
-        self.assertNotIn('_list', response.data['bookmarks'][0])
-
-
-    def test_can_update_list_with_edit_endpoint(self):
-        # capture some of the info up front for comparison
-        url_id = self.test_bookmarks_list.url_id
-        old_title = self.test_bookmarks_list.title
-    
-        # update the data with the update endpoint # curl -i -H "Content-Type:application/json" -X PUT http://localhost:8000/api/Lists/g8hjz/ -d '{"title": "The new title1"}'        
-        response = self.client.put(
-            f'/api/Lists/{url_id}/',
-            content_type='application/json',
-            data='{"title": "Changed the title to XYZ"}',
-        )
-
-        self.assertEquals(response.status_code, 200)
-       
-        # check that the data has changed
-        response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
-        self.assertNotEqual(response.data['title'], old_title)
-        self.assertEqual(response.data['title'], "Changed the title to XYZ")        
-
-    def test_can_update_bookmark_with_edit_endpoint(self):
-        self.fail('finish the test')
-
-    def test_can_only_update_list_with_authenticated_user(self):
-        self.fail('finish the test')
-
-    def test_can_only_update_bookmarks_with_authenticated_user(self):
-        self.fail('finish the test')
+        self.assertNotIn('_list', response.data['bookmarks'][0])        

@@ -7,7 +7,6 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'Lists', ListViewSet)
-#router.register(r'Bookmarks', BookmarkViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls), name='api'),
