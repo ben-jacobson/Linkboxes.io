@@ -6,13 +6,24 @@ class DRFSerailizerTests(test_objects_mixin, TestCase):
         response = self.client.get(f'/api/', content_type='json')
         self.assertNotEqual(response.status_code, 200, msg='browsable api view is available to the public')
 
-    def test_ListSerializer_returns_data(self):
+    def test_api_view_does_not_allow_list(self):
+        '''
+        Unit Test- when visiting /api/Lists, it should not allow you to view a list of all bookmarks
+        '''
+        response = self.client.get(f'/api/Lists/', content_type='json')
+        self.assertNotEqual(response.status_code, 200, msg="api allows a list view")
+
+    def test_ListSerializer_requires_authentication(self):
         url_id = self.test_bookmarks_list.url_id
 
         response = self.client.get(f'/api/Lists/{url_id}/', content_type='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.status_code, 200, msg="api doesn't require any authetication to access")
 
-        self.assertEqual(response.data['title'], 'My Test Bookmarks')
+    def test_ListSerializer_returns_data(self):
+        url_id = self.test_bookmarks_list.url_id
+        response = self.client.get(f'/api/Lists/{url_id}/', content_type='json')
+    
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['url_id'], url_id)
 
     def test_ListSerializer_returns_bookmark_list(self):

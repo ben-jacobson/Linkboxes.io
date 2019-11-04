@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, ListView
 from bookmarks.models import List, Bookmark
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from .serializers import ListSerializer#, BookmarkSerializer
 
 '''
@@ -40,18 +40,12 @@ Django Rest Framework Views
 
 '''
 
-class ListViewSet(viewsets.ModelViewSet):
+viewsets.ModelViewSet
+
+class ListViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
-    API endpoint that allows Lists to be viewed or edited.
+    API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed at once.
     """
     queryset = List.objects.all()
     serializer_class = ListSerializer
-    lookup_field = 'url_id'
-
-'''class BookmarkViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows Lists to be viewed or edited.
-    """
-    queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerializer
-'''
+    lookup_field = 'url_id' 
