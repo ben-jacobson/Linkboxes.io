@@ -40,9 +40,9 @@ Django Rest Framework Views
 
 '''
 
-viewsets.ModelViewSet
+# have created our own version of viewsets.ModelViewSet
 
-class ListViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class ListViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed at once.
     """
