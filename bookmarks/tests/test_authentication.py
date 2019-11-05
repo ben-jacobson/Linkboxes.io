@@ -81,16 +81,26 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
 
 
 class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
-    def test_BookmarkSerializer_returns_data_with_authentication(self):
+    def test_BookmarkSerializer_403s_without_authentication(self):
         '''
-        Unit Test - Test that you can still view data when authenticated
+        Unit Test - without authentication, the api view should 403
         '''
-        '''self.authenticate(username=self.test_user_name, password=self.test_user_pass)
-        url_id = self.test_bookmarks_list.url_id
-        response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
-    
+        bookmark_id = self.test_bookmark.id
+        response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_BookmarkSerializer_returns_read_only_data_if_authenticated(self):
+        '''
+        Unit Test - with authentication, user can view their own data
+        '''
+        # authenticate()
+        bookmark_id = self.test_bookmark.id
+        response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['url_id'], url_id)'''
+        self.assertEqual(response.data['title'], self.test_bookmark.id)
+        
+    def test_BookmarkSerializer_403s_when_attempting_to_view_other_data(self):
+        # authenticate()
         self.fail('finish the test')
 
     def test_can_update_bookmark_via_put_request_with_authenticated_user(self):
@@ -120,7 +130,7 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         '''
         self.fail('finish the test')
 
-    def test_can_not_update_bookmark_without_authenticated_user(self):    
+    def test_cannot_update_bookmark_without_authenticated_user(self):    
         '''
         Unit Test - test that you cannot update any lists if you aren't logged in, even if you own them
         '''

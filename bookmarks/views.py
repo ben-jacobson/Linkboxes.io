@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, ListView
 from bookmarks.models import List, Bookmark
 
 from rest_framework import viewsets, generics, permissions
-from .serializers import ListSerializer#, BookmarkSerializer
+from .serializers import ListSerializer, BookmarkSerializer
 
 '''
 
@@ -33,14 +33,13 @@ class BookmarkListView(ListView):
         context['list_name'] = List.objects.get(url_id=self.kwargs['slug']).title
         return context
 
-
 '''
 
 Django Rest Framework Views
 
 '''
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsListOwnerOrReadOnly(permissions.BasePermission):
     """
     Object-level permission to only allow owners of an object to edit it.
     Assumes the model instance has an `owner` attribute.
@@ -55,12 +54,36 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         # Instance must have an attribute named `owner`.
         return obj.owner == request.user
 
+class IsBookmarkOwner(permissions.BasePermission):
+    """
+    Object-level permission to only allow owners of an object to read and edit it.
+    Looks at the objects foreign key owner to determine who is allowed to read and edit
+    """
+
+    def has_object_permission(self, request, view, obj):
+        #print(obj['data']['id'])
+        #print(vars(obj))
+
+        # Bookmark is owned by a List, uses the List user to determine ownership.
+        #return obj.owner == request.user        
+        return True # just for our initial serialiser tests
+
+
 class ListViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
-    """
-    API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed at once.
-    """
-    permission_classes = [IsOwnerOrReadOnly]
+    '''
+    API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed in a list.
+    '''
+    permission_classes = [IsListOwnerOrReadOnly]
 
     queryset = List.objects.all()
     serializer_class = ListSerializer
     lookup_field = 'url_id' 
+
+class BookmarkViewSet(viewsets.ModelViewSet):
+    '''
+    API endpoint that allows  Bookmarks to be retrieved, but does not allow all bookmarks to be viewed in a list.
+    '''
+    permission_classes = [IsBookmarkOwner]
+
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerializer
