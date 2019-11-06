@@ -55,28 +55,29 @@ class BookmarkSerializerTests(test_objects_mixin, TestCase):
         Unit Test- when visiting /api/Bookmark, it should not allow you to view a list of all Lists
         '''
         response = self.client.get(f'/api/Bookmark/', content_type='application/json')
-        self.assertNotEqual(response.status_code, 200)
-
-    def test_ListSerializer_returns_bookmark_list(self):
-        create_test_bookmark(self.test_bookmarks_list, title='my other test')
-
-        url_id = self.test_bookmarks_list.url_id
-        response = self.client.get(f'/api/Bookmark/{url_id}/', content_type='application/json')
-
-        self.assertEqual(len(response.data['bookmarks']), 2)
-        self.assertEqual(response.data['bookmarks'][0]['title'], self.test_bookmark.title)
-        self.assertEqual(response.data['bookmarks'][1]['title'], 'my other test')
+        self.assertEqual(response.status_code, 404)
         
     def test_ListSerializer_excludes_owner(self):
-        url_id = self.test_bookmarks_list.url_id
-        response = self.client.get(f'/api/Bookmark/{url_id}/', content_type='application/json')
+        '''
+        Unit Test- when visiting /api/Bookmark, it should not show you the owner
+        '''
+        response = self.client.get(f'/api/Bookmark/{self.test_bookmark.id}/', content_type='application/json')
         self.assertNotIn('owner', response.data)
+        self.fail('finish the test')
 
     def test_ListSerializer_excludes_id(self):
-        url_id = self.test_bookmarks_list.url_id
-        response = self.client.get(f'/api/Bookmark/{url_id}/', content_type='application/json')
-        self.assertNotIn('id', response.data)        
+        '''
+        Unit Test- when visiting /api/Bookmark, it should not show you the id
+        '''
+        response = self.client.get(f'/api/Bookmark/{self.test_bookmark.id}/', content_type='application/json')
+        self.assertNotIn('id', response.data)  
+        self.fail('finish the test')
 
     def test_BookmarkSerializer_includes_list_foreign_key(self):
-        response = self.client.get(f'/api/Bookmark/{self.test_bookmarks_list.url_id}/', content_type='application/json')
-        self.assertIn('_list', response.data['bookmarks'][0])        
+        '''
+        Unit Test- when visiting /api/Bookmark, it should show you the list that it belongs to
+        '''        
+        response = self.client.get(f'/api/Bookmark/{self.test_bookmark.id}/', content_type='application/json')
+        self.assertIn('_list', response.data)  
+        self.fail('finish the test')
+

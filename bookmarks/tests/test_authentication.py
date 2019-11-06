@@ -89,68 +89,71 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-    def test_BookmarkSerializer_returns_read_only_data_if_authenticated(self):
+    def test_BookmarkSerializer_returns_data_if_authenticated(self):
         '''
         Unit Test - with authentication, user can view their own data
         '''
-        # authenticate()
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
         bookmark_id = self.test_bookmark.id
         response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['title'], self.test_bookmark.id)
+        self.assertEqual(response.data['title'], self.test_bookmark.title)
         
     def test_BookmarkSerializer_403s_when_attempting_to_view_other_data(self):
-        # authenticate()
-        self.fail('finish the test')
+        '''
+        Unit Test - If authenticated, can we view other people's data?
+        '''
+        # Create a second user and authenticate
+        second_test_user_name = 'JimboJones'
+        second_test_user_pass = 'oopsmyshirtfelloff'
+        User.objects.create_user(second_test_user_name, 'badboy@springfield.com', second_test_user_pass)
+        self.authenticate(username=second_test_user_name, password=second_test_user_pass) # authenticate as the second test user
+
+        # attempt to view the data of another user
+        bookmark_id = self.test_bookmark.id
+        response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
+        self.assertEqual(response.status_code, 403)
 
     def test_can_update_bookmark_via_put_request_with_authenticated_user(self):
         '''
-        Unit Test - test that you can update your own list when you are logged in
+        Unit Test - test that you can update your own bookmark when you are logged in
         '''
         self.authenticate(username=self.test_user_name, password=self.test_user_pass)
 
-        '''
         # capture some of the info up front for comparison
-        url_id = self.test_bookmarks_list.url_id
-        old_title = self.test_bookmarks_list.title
+        bookmark_id = self.test_bookmark.id
+        old_title = self.test_bookmark.title
     
-        # update the data with the update endpoint # curl -i -H "Content-Type:application/json" -X PUT http://localhost:8000/api/Lists/g8hjz/ -d '{"title": "The new title1"}'        
-        response = self.client.put(
-            f'/api/Lists/{url_id}/',
+        # update the data with the update endpoint # curl -i -H "Content-Type:application/json" -X PUT http://localhost:8000/api/Bookmark/1/ -d '{"title": "The new title1"}'        
+        response = self.client.patch(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Bookmark/{bookmark_id}/',
             content_type='application/json',
             data='{"title": "Changed the title to XYZ"}',
         )
-
         self.assertEquals(response.status_code, 200)
        
         # check that the data has changed
-        response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
+        response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
         self.assertNotEqual(response.data['title'], old_title)
         self.assertEqual(response.data['title'], "Changed the title to XYZ")        
-        '''
-        self.fail('finish the test')
-
+        
     def test_cannot_update_bookmark_without_authenticated_user(self):    
         '''
         Unit Test - test that you cannot update any lists if you aren't logged in, even if you own them
         '''
-        '''
         # attempt to update the data with the update endpoint # curl -i -H "Content-Type:application/json" -X PUT http://localhost:8000/api/Lists/g8hjz/ -d '{"title": "The new title1"}'        
-        response = self.client.put(
-            f'/api/Lists/{self.test_bookmarks_list.url_id}/',
+        response = self.client.patch(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Bookmark/{self.test_bookmark.id}/',
             content_type='application/json',
             data='{"title": "Changed the title to XYZ"}',
         )
 
         # since we didn't authenticate, check that the response is denied
         self.assertEquals(response.status_code, 403)
-        '''
-        self.fail('finish the test')
        
     def test_can_only_update_owned_list(self):
         '''
         Unit Test - test that you can only update lists that you own when logged in
-        '''
         '''
         # create another user and authenticate as them
         second_test_user_name = 'JimboJones'
@@ -159,13 +162,11 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         self.authenticate(username=second_test_user_name, password=second_test_user_pass) # authenticate as the first users
 
         # attempt to update the data of another user. The test_bookmarks list is not owned by them. 
-        response = self.client.put(
-            f'/api/Lists/{self.test_bookmarks_list.url_id}/',
+        response = self.client.patch(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Bookmark/{self.test_bookmark.id}/',
             content_type='application/json',
             data='{"title": "Changed the title to XYZ"}',
         )
 
         # Should deny the response response is denied
         self.assertEquals(response.status_code, 403)
-        '''
-        self.fail('finish the test')

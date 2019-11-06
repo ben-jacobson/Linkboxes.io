@@ -61,14 +61,10 @@ class IsBookmarkOwner(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        #print(obj['data']['id'])
-        #print(vars(obj))
-
         # Bookmark is owned by a List, uses the List user to determine ownership.
-        #return obj.owner == request.user        
-        return True # just for our initial serialiser tests
-
-
+        list_owner = List.objects.get(id=obj._list_id).owner
+        return list_owner == request.user        
+        
 class ListViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
     '''
     API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed in a list.
@@ -79,7 +75,7 @@ class ListViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
     serializer_class = ListSerializer
     lookup_field = 'url_id' 
 
-class BookmarkViewSet(viewsets.ModelViewSet):
+class BookmarkViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
     '''
     API endpoint that allows  Bookmarks to be retrieved, but does not allow all bookmarks to be viewed in a list.
     '''
