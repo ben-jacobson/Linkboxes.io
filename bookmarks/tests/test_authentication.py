@@ -12,7 +12,7 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
 
     def test_ListSerializer_returns_data_with_authentication(self):
         '''
-        Unit Test - Test that you can still view data when authenticated
+        Unit Test - Test that you can view List data when authenticated
         '''
         self.authenticate(username=self.test_user_name, password=self.test_user_pass)
         url_id = self.test_bookmarks_list.url_id
@@ -61,7 +61,7 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
        
     def test_can_only_update_owned_list(self):
         '''
-        Unit Test - test that you can only update lists that you own when logged in
+        Unit Test - test that you can only update lists that you own
         '''
         # create another user and authenticate as them
         second_test_user_name = 'JimboJones'
@@ -81,7 +81,7 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
 
 
 class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
-    def test_BookmarkSerializer_403s_without_authentication(self):
+    def test_BookmarkSerializer_retrieve_403s_without_authentication(self):
         '''
         Unit Test - without authentication, the api view should 403
         '''
@@ -89,7 +89,7 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         response = self.client.get(f'/api/Bookmark/{bookmark_id}/', content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-    def test_BookmarkSerializer_returns_data_if_authenticated(self):
+    def test_BookmarkSerializer_retrievess_data_if_authenticated(self):
         '''
         Unit Test - with authentication, user can view their own data
         '''
@@ -99,7 +99,7 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['title'], self.test_bookmark.title)
         
-    def test_BookmarkSerializer_403s_when_attempting_to_view_other_data(self):
+    def test_BookmarkSerializer_403s_when_attempting_to_retrieve_data_owned_by_other_user(self):
         '''
         Unit Test - If authenticated, can we view other people's data?
         '''

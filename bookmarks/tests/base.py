@@ -57,3 +57,6 @@ class test_objects_mixin():
 
     def authenticate(self, username, password):
         return self.client.login(username=username, password=password)
+
+    def log_out(self):
+        return self.log_out()

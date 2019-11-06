@@ -12,7 +12,7 @@ class ListSerializerTests(test_objects_mixin, TestCase):
 
     def test_api_list_view_is_not_viewable(self):
         '''
-        Unit Test- when visiting /api/Lists, it should not allow you to view a list of all Lists
+        Unit Test - when visiting /api/Lists, it should not allow you to view a list of all Lists
         '''
         response = self.client.get(f'/api/Lists/', content_type='application/json')
         self.assertNotEqual(response.status_code, 200, msg="api allows a list view")
@@ -44,11 +44,6 @@ class ListSerializerTests(test_objects_mixin, TestCase):
         response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
         self.assertNotIn('id', response.data)        
 
-    def test_BookmarkSerializer_excludes_list_foreign_key(self):
-        response = self.client.get(f'/api/Lists/{self.test_bookmarks_list.url_id}/', content_type='application/json')
-        self.assertNotIn('_list', response.data['bookmarks'][0])        
-
-
 class BookmarkSerializerTests(test_objects_mixin, TestCase): 
     def test_api_list_view_is_not_viewable(self):
         '''
@@ -57,27 +52,11 @@ class BookmarkSerializerTests(test_objects_mixin, TestCase):
         response = self.client.get(f'/api/Bookmark/', content_type='application/json')
         self.assertEqual(response.status_code, 404)
         
-    def test_ListSerializer_excludes_owner(self):
+    def test_ListSerializer_shows_foreign_key(self):
         '''
         Unit Test- when visiting /api/Bookmark, it should not show you the owner
         '''
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
         response = self.client.get(f'/api/Bookmark/{self.test_bookmark.id}/', content_type='application/json')
-        self.assertNotIn('owner', response.data)
-        self.fail('finish the test')
-
-    def test_ListSerializer_excludes_id(self):
-        '''
-        Unit Test- when visiting /api/Bookmark, it should not show you the id
-        '''
-        response = self.client.get(f'/api/Bookmark/{self.test_bookmark.id}/', content_type='application/json')
-        self.assertNotIn('id', response.data)  
-        self.fail('finish the test')
-
-    def test_BookmarkSerializer_includes_list_foreign_key(self):
-        '''
-        Unit Test- when visiting /api/Bookmark, it should show you the list that it belongs to
-        '''        
-        response = self.client.get(f'/api/Bookmark/{self.test_bookmark.id}/', content_type='application/json')
-        self.assertIn('_list', response.data)  
-        self.fail('finish the test')
-
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('_list', response.data)
