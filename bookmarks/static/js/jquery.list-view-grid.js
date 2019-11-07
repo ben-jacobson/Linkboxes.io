@@ -18,18 +18,37 @@ $('.move-icon').mouseleave(function () {
     Our modal dialog box for editing bookmarks requires us to modify the submit button on the fly
 */
 
+function populate_bookmark_form(bookmark_data) {
+    // console.log('updating the form to include the bookmark data');
+    // console.log(bookmark_data);
+    $('#edit-title').attr('placeholder', bookmark_data['title']);
+    $('#edit-url').attr('placeholder', bookmark_data['url']);
+    $('#edit-thumbnail').attr('placeholder', bookmark_data['thumbnail_url']);
+}
+
+function update_bookmark(id) {
+    console.log('run the ajax request to the update endpoint')
+}
+
 $('.edit-icon').click(function(e) {
     var bookmark_id = $(e.target).attr('data-bookmark-id');
-    
-    // test code for testing json ajax - returns a JSON obj with the bookmarks data
+    var list_slug = $(e.target).attr('data-list-slug'); // should we change this to inherit from the parent? 
+
+    // AJAX request to retrieve the bookmarks data from the api
     $.ajax({ 
         type: 'GET', 
-        url: '/api/Lists/g8hjz', 
-        // data:  { get_param: '' }, 
+        url: '/api/Lists/g8hjz',    // todo - get this data off the page somehow
         success: function (data) {
-            console.log(data); 
+            bookmark_data = data['bookmarks'].filter(function(bookmark) {
+                return bookmark['id'] == bookmark_id;
+            })[0];
+            populate_bookmark_form(bookmark_data);
         }
-    });          
+    });
+    
+    // register an event to listen to the edit icon button being pressed and trigger update_bookmark
+    // $('#save-button')
+    //console.log(list_slug);
 });
 
 /*
@@ -42,6 +61,5 @@ $(function () {
         placeholderClass: 'col-sm-6 col-md-6' // tells us how big the placeholder blank needs to be
     });
 
-    $('.thumbnail-sortable').sortable('disable'); // start in disabled state   
-    
+    $('.thumbnail-sortable').sortable('disable'); // start in disabled state    
 });

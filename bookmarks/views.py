@@ -30,6 +30,7 @@ class BookmarkListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['list_slug'] = List.objects.get(url_id=self.kwargs['slug']).url_id
         context['list_name'] = List.objects.get(url_id=self.kwargs['slug']).title
         return context
 

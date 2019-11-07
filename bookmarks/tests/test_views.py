@@ -37,12 +37,21 @@ class BookMarkViewTests(test_objects_mixin, TestCase):
 
     def test_returns_context_data_page_title(self):
         '''
-        Unit Test - The view returns some context data, namely the title of the list. Does it return the correct data?
+        Unit Test - The view returns some context data, including the title of the list. Does it return the correct data?
         '''
         test_url_slug = self.test_bookmarks_list.url_id
         test_list_title = self.test_bookmarks_list.title
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': test_url_slug}))
         self.assertEqual(response.context['list_name'], test_list_title) # todo, the page title may change later e.g to include branding
+
+    def test_returns_context_data_page_slug(self):
+        '''
+        Unit Test - The view returns some context data, including the slug of the list. Does it return the correct data?
+        '''
+        test_url_slug = self.test_bookmarks_list.url_id
+        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': test_url_slug}))
+        self.assertEqual(response.context['list_slug'], test_url_slug)
+
 
     def test_slug_returns_valid_context(self):
         '''
