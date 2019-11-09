@@ -8,7 +8,7 @@
         </div>
         <div id='thumbnail-container' class='row thumbnail-sortable'>
             {% for bookmark in bookmarks_list %}
-            <div class="bookmark-card col-sm-6 col-md-6">
+            <div class="bookmark-card col-sm-6 col-md-6" data-bookmark-id='{{ bookmark.id }}' data-list-slug='{{ list_slug }}'>
                 <div class="bookmark-hovereffect">
                     <div class='bookmark-card-thumbnail-img'>
                         <a href="{{ bookmark.url }}" draggable="false">
@@ -18,7 +18,7 @@
                     </div>
                     <div class="edit-button-overlays">
                         <p class="bookmark-edit-icons">
-                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon" data-toggle="modal" data-target="#editBookmarkModal" data-bookmark-id='{{ bookmark.id }}' data-list-slug='{{ list_slug }}'></i>
+                            <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon" data-toggle="modal" data-target="#editBookmarkModal"></i>
                             <i class="far fa-trash-alt bookmark-edit-icons delete-icon"></i>
                             <i class="far fa-copy bookmark-edit-icons copy-icon"></i>
                             <i class="fas fa-arrows-alt bookmark-edit-icons move-icon"></i>
@@ -54,8 +54,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button id="edit-modal-close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="edit-modal-save" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

@@ -19,8 +19,6 @@ $('.move-icon').mouseleave(function () {
 */
 
 function populate_bookmark_form(bookmark_data) {
-    // console.log('updating the form to include the bookmark data');
-    // console.log(bookmark_data);
     $('#edit-title').attr('placeholder', bookmark_data['title']);
     $('#edit-url').attr('placeholder', bookmark_data['url']);
     $('#edit-thumbnail').attr('placeholder', bookmark_data['thumbnail_url']);
@@ -30,14 +28,19 @@ function update_bookmark(id) {
     console.log('run the ajax request to the update endpoint')
 }
 
+// Click the edit button
 $('.edit-icon').click(function(e) {
-    var bookmark_id = $(e.target).attr('data-bookmark-id');
-    var list_slug = $(e.target).attr('data-list-slug'); // should we change this to inherit from the parent? 
+    var bookmark_id = $(e.target).closest('.bookmark-card').attr('data-bookmark-id');
+    var list_slug = $(e.target).closest('.bookmark-card').attr('data-list-slug');
+
+    // put the bookmark id and list slug data into the modal so that the save method can read it
+    $('#editBookmarkModal').attr('data-bookmark-id', bookmark_id);
+    $('#editBookmarkModal').attr('data-list-slug', list_slug);
 
     // AJAX request to retrieve the bookmarks data from the api
     $.ajax({ 
         type: 'GET', 
-        url: '/api/Lists/g8hjz',    // todo - get this data off the page somehow
+        url: '/api/Lists/' + list_slug + '/',    // todo - get this data off the page somehow
         success: function (data) {
             bookmark_data = data['bookmarks'].filter(function(bookmark) {
                 return bookmark['id'] == bookmark_id;
@@ -45,10 +48,35 @@ $('.edit-icon').click(function(e) {
             populate_bookmark_form(bookmark_data);
         }
     });
-    
-    // register an event to listen to the edit icon button being pressed and trigger update_bookmark
-    // $('#save-button')
-    //console.log(list_slug);
+});
+
+// When the modal dialog box is open, click the save button
+$('#edit-modal-save').click(function(e) {
+    var bookmark_id = $(e.target).closest('#editBookmarkModal').attr('data-bookmark-id');
+    //var list_slug = $(e.target).closest('#editBookmarkModal').attr('data-list-slug');
+
+    // put the data into a json obj
+
+    // run the ajax request to save the data
+    $.ajax({ 
+        type: 'PATCH', 
+        url: '/api/Bookmark/' + bookmark_id + '/',    // todo - get this data off the page somehow
+        data: {'title': 'Changed the title to XYZ'},
+        success: function (data) {
+            console.log('saved');
+        }
+    });    
+})
+
+// Click the delete button
+$('.delete-icon').click(function(e) {
+    var bookmark_elem = $(e.target).closest('.bookmark-card');
+    var bookmark_id = bookmark_elem.attr('data-bookmark-id');
+    var list_slug = $(e.target).closest('.bookmark-card').attr('data-list-slug');
+
+    $(bookmark_elem).remove();
+
+    // run ajax request
 });
 
 /*
