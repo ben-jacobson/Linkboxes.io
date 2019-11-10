@@ -1,8 +1,5 @@
 from django.forms import ModelForm, CharField
 from django.forms.fields import TextInput
-#from django.core.exceptions import ValidationError
-#from BaseException import ValueError
-
 from bookmarks.models import Bookmark
 
 class BookmarkEditForm(ModelForm):
@@ -13,9 +10,6 @@ class BookmarkEditForm(ModelForm):
     class Meta:
         model = Bookmark
         fields = ('title', 'url', 'thumbnail_url', )
-        '''error_messages = {
-            'text': {'required': EMPTY_ITEM_ERROR}
-        }'''
 
     def save(self):
         raise ValueError('Form Saving Is Disabled')

@@ -79,7 +79,7 @@ class ListViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
     serializer_class = ListSerializer
     lookup_field = 'url_id' 
 
-class BookmarkViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
+class BookmarkViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     '''
     API endpoint that allows  Bookmarks to be retrieved, but does not allow all bookmarks to be viewed in a list.
     '''

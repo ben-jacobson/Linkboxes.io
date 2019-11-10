@@ -43,7 +43,7 @@ $('.edit-icon').click(function(e) {
         url: '/api/Lists/' + list_slug + '/',    // todo - get this data off the page somehow
         success: function (data) {
             bookmark_data = data['bookmarks'].filter(function(bookmark) {
-                return bookmark['id'] == bookmark_id;
+                return bookmark['id'] == bookmark_id;  // return True/False
             })[0];
             populate_bookmark_form(bookmark_data);
         }
