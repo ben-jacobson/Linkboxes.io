@@ -19,9 +19,9 @@ $('.move-icon').mouseleave(function () {
 */
 
 function populate_bookmark_form(bookmark_data) {
-    $('#edit-title').attr('placeholder', bookmark_data['title']);
-    $('#edit-url').attr('placeholder', bookmark_data['url']);
-    $('#edit-thumbnail').attr('placeholder', bookmark_data['thumbnail_url']);
+    $('#edit-title').attr('value', bookmark_data['title']);
+    $('#edit-url').attr('value', bookmark_data['url']);
+    $('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);
 }
 
 function update_bookmark(id) {
@@ -53,20 +53,32 @@ $('.edit-icon').click(function(e) {
 // When the modal dialog box is open, click the save button
 $('#edit-modal-save').click(function(e) {
     var bookmark_id = $(e.target).closest('#editBookmarkModal').attr('data-bookmark-id');
-    //var list_slug = $(e.target).closest('#editBookmarkModal').attr('data-list-slug');
+    var csrfToken =  $('input[name="csrfmiddlewaretoken"]').attr('value');
 
-    // put the data into a json obj
+    // Read the form data and put the data into a JSON obj
+    var json_data = {
+        'title':         $('#edit-title').val(), 
+        'url':           $('#edit-url').val(),
+        'thumbnail_url': $('#edit-thumbnail').val(),
+    };
 
-    // run the ajax request to save the data
-    $.ajax({ 
-        type: 'PATCH', 
-        url: '/api/Bookmark/' + bookmark_id + '/',    // todo - get this data off the page somehow
-        data: {'title': 'Changed the title to XYZ'},
-        success: function (data) {
-            console.log('saved');
+    // set up the AJAX request
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrfToken);
         }
     });    
-})
+
+    // run the AJAX request to save the data
+    $.ajax({ 
+        type: 'PATCH',        
+        url: '/api/Bookmark/' + bookmark_id + '/',    // todo - get this data off the page somehow
+        data: json_data,
+        success: function (data) {
+            console.log('saved, close the window and update the page');
+        }
+    });    
+}) 
 
 // Click the delete button
 $('.delete-icon').click(function(e) {

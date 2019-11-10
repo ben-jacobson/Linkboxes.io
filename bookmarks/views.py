@@ -1,5 +1,6 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, FormView, ListView
 from bookmarks.models import List, Bookmark
+from bookmarks.forms import BookmarkEditForm
 
 from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
@@ -19,7 +20,9 @@ class LoginView(TemplateView):
 class SignupView(TemplateView):
     template_name = 'signup.html'
 
-class BookmarkListView(ListView):
+
+class BookmarkListView(FormView, ListView): # unsure if okay to mix class based views like this? Tests pass fine however. 
+    form_class = BookmarkEditForm
     template_name= 'bookmarks_list.html'
     model = List
     context_object_name = 'bookmarks_list'

@@ -124,7 +124,7 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         bookmark_id = self.test_bookmark.id
         old_title = self.test_bookmark.title
     
-        # update the data with the update endpoint # curl -i -H "Content-Type:application/json" -X PUT http://localhost:8000/api/Bookmark/1/ -d '{"title": "The new title1"}'        
+        # update the data with the update endpoint # curl -i -H "Content-Type:application/json" -X PATCH http://localhost:8000/api/Bookmark/1/ -d '{"title": "The new title1"}'        
         response = self.client.patch(   # will go with patch to avoid updating other fields for now. 
             f'/api/Bookmark/{bookmark_id}/',
             content_type='application/json',
