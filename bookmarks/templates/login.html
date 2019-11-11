@@ -14,9 +14,17 @@
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <div class="col-md-12">
-                    <form class="">
-                        <div class="form-group"> <label>Email address</label> <input type="email" class="form-control" placeholder="Enter email"> </div>
-                        <div class="form-group"> <label>Password</label> <input type="password" class="form-control" placeholder="Password"> </div> <button type="submit" class="btn btn-primary">Login</button>
+                    <form id="login">                    
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}                    
+                        {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field.errors }}{{ hidden_field }}
+                        {% endfor %}                      
+                        {% for field in form.visible_fields %}
+                        <div class='form-group'>
+                            {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
+                        {% endfor %}  
+                        <button type="submit" class="btn btn-primary">Login</button>
                     </form>
                 </div>
             </div>

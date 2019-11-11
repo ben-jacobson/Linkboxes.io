@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, FormView, ListView
+from django.contrib.auth.views import LoginView
+
 from bookmarks.models import List, Bookmark
-from bookmarks.forms import BookmarkEditForm
+from bookmarks.forms import BookmarkEditForm, LoginForm
 
 from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
@@ -14,10 +16,11 @@ Django Standard Views
 class HomePageView(TemplateView):
     template_name = 'home.html'
 
-class LoginView(TemplateView):
+class UserLoginView(LoginView):
+    form_class = LoginForm
     template_name = 'login.html'
 
-class SignupView(TemplateView):
+class UserSignupView(TemplateView):
     template_name = 'signup.html'
 
 
@@ -50,7 +53,7 @@ class IsListOwnerOrReadOnly(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any request,
+        # Read permissions are allowed to any safe request for Lists,
         # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -65,7 +68,7 @@ class IsBookmarkOwner(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Bookmark is owned by a List, uses the List user to determine ownership.
+        # Bookmark is owned by a List, uses the List user to determine ownership. Safe methods are conditionally allowed based on user
         list_owner = List.objects.get(id=obj._list_id).owner
         return list_owner == request.user        
         

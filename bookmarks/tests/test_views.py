@@ -2,6 +2,8 @@ from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list
 from django.urls import reverse
 
+from bookmarks.forms import BookmarkEditForm, LoginForm
+
 class HomePageTest(TestCase):
     def test_uses_correct_template(self):
         '''
@@ -18,13 +20,9 @@ class LoginTest(TestCase):
         response = self.client.get(reverse('login'))
         self.assertTemplateUsed(response, 'login.html')
 
-class SignupTest(TestCase):
-    def test_uses_correct_template(self):
-        '''
-        Unit Test - Does the sign up view use the correct template?
-        '''
-        response = self.client.get(reverse('signup'))
-        self.assertTemplateUsed(response, 'signup.html')
+    def test_page_uses_item_form(self):
+        response = self.client.get(reverse('login'))
+        self.assertIsInstance(response.context['form'], LoginForm)    
 
 class BookMarkViewTests(test_objects_mixin, TestCase): 
     def test_uses_correct_template(self):
@@ -79,5 +77,9 @@ class BookMarkViewTests(test_objects_mixin, TestCase):
 
         self.assertNotContains(response, invalid_link_one.title)
         self.assertNotContains(response, invalid_link_two.title)
+
+    def test_page_uses_item_form(self):
+        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
+        self.assertIsInstance(response.context['form'], BookmarkEditForm)        
         
  
