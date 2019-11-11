@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .base import test_objects_mixin
 from django.contrib.auth.models import User
-from bookmarks.models import Bookmark#, List
+from bookmarks.models import Bookmark, List
 
 class ListAuthenticationTests(test_objects_mixin, TestCase):
     def test_authenticate_method(self):
@@ -79,6 +79,35 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
 
         # Should deny the response response is denied
         self.assertEquals(response.status_code, 403)
+
+    def test_list_delete_method_with_authentication(self):
+        # The user is logged in
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
+        
+        # attempt the DELETE method
+        response = self.client.delete(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Lists/{self.test_bookmarks_list.url_id}/',
+        )
+
+        # did we get the correct status code in return?
+        self.assertEquals(response.status_code, 204) # 200 is ideal, but 204 is fine. 
+
+        # now look up the data, there should be zero results for that particular ID
+        with self.assertRaises(Bookmark.DoesNotExist):
+            Bookmark.objects.get(url=self.test_bookmarks_list.url_id)
+        
+    def test_list_delete_method_without_authentication(self):
+        # The user is not logged in and attempts the DELETE method
+        response = self.client.delete(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Lists/{self.test_bookmarks_list.url_id}/',
+        )
+
+        # did we get the correct status code in return?
+        self.assertEquals(response.status_code, 403)  
+
+        # now look up the data, there should still be results for that particular ID
+        test_query = List.objects.get(url_id=self.test_bookmarks_list.url_id)
+        self.assertEqual(test_query.title, self.test_bookmarks_list.title)        
 
 
 class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
@@ -185,7 +214,6 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         self.assertEquals(response.status_code, 204) # 200 is ideal, but 204 is fine. 
 
         # now look up the data, there should be zero results for that particular ID
-        # with bookmarks.models.Bookmark.DoesNotExist
         with self.assertRaises(Bookmark.DoesNotExist):
             Bookmark.objects.get(id=self.test_bookmark.id)
         
@@ -199,6 +227,5 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         self.assertEquals(response.status_code, 403)  
 
         # now look up the data, there should still be results for that particular ID
-        # with bookmarks.models.Bookmark.DoesNotExist
         test_query = Bookmark.objects.get(id=self.test_bookmark.id)
         self.assertEqual(test_query.title, self.test_bookmark.title)

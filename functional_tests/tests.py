@@ -124,3 +124,9 @@ class BookMarkViewPage(FunctionalTest):
 
         # user logs in and sees his list of bookmark lists
         self.fail('finish the test')
+
+    def test_delete_button(self):
+        self.fail('finish the test')
+
+    def test_edit_button(self):
+        self.fail('finish the test')

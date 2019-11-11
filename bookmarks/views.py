@@ -69,7 +69,7 @@ class IsBookmarkOwner(permissions.BasePermission):
         list_owner = List.objects.get(id=obj._list_id).owner
         return list_owner == request.user        
         
-class ListViewSet(generics.RetrieveUpdateAPIView, viewsets.GenericViewSet):
+class ListViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     '''
     API endpoint that allows Lists to be retrieved, but does not allow all lists to be viewed in a list.
     '''
