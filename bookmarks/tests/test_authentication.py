@@ -109,6 +109,24 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
         test_query = List.objects.get(url_id=self.test_bookmarks_list.url_id)
         self.assertEqual(test_query.title, self.test_bookmarks_list.title)        
 
+    def test_can_only_delete_owned_list(self):
+        # authenticate as a different user. 
+        second_test_user_name = 'JimboJones'
+        second_test_user_pass = 'oopsmyshirtfelloff'
+        User.objects.create_user(second_test_user_name, 'badboy@springfield.com', second_test_user_pass)
+        self.authenticate(username=second_test_user_name, password=second_test_user_pass) # authenticate as the first users
+
+        response = self.client.delete(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Lists/{self.test_bookmarks_list.url_id}/',
+        )
+
+        # did we get the correct status code in return?
+        self.assertEquals(response.status_code, 403)  
+
+        # now look up the data, there should still be results for that particular ID
+        test_query = List.objects.get(url_id=self.test_bookmarks_list.url_id)
+        self.assertEqual(test_query.title, self.test_bookmarks_list.title)  
+
 
 class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
     def test_BookmarkSerializer_retrieve_403s_without_authentication(self):
@@ -229,3 +247,21 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         # now look up the data, there should still be results for that particular ID
         test_query = Bookmark.objects.get(id=self.test_bookmark.id)
         self.assertEqual(test_query.title, self.test_bookmark.title)
+
+    def test_can_only_delete_owned_bookmarks(self):
+        # authenticate as a different user. 
+        second_test_user_name = 'JimboJones'
+        second_test_user_pass = 'oopsmyshirtfelloff'
+        User.objects.create_user(second_test_user_name, 'badboy@springfield.com', second_test_user_pass)
+        self.authenticate(username=second_test_user_name, password=second_test_user_pass) # authenticate as the first users
+
+        response = self.client.delete(   # will go with patch to avoid updating other fields for now. 
+            f'/api/Bookmark/{self.test_bookmark.id}/',
+        )
+
+        # did we get the correct forbidden status code in return?
+        self.assertEquals(response.status_code, 403)  
+
+        # now look up the data, there should still be results for that particular ID
+        test_query = Bookmark.objects.get(id=self.test_bookmark.id)
+        self.assertEqual(test_query.title, self.test_bookmark.title)        
