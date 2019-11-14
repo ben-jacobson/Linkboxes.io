@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
-from bookmarks.views import HomePageView, UserLoginView, UserSignupView, BookmarkListView
+
+from bookmarks.views import HomePageView, UserLoginView, UserSignupView, BookmarkListView, LinkBoardsListView
 from bookmarks.views import ListViewSet, BookmarkViewSet
 
 from rest_framework import routers
@@ -17,7 +18,8 @@ urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
     path('login', UserLoginView.as_view(), name='login'),
     path('signup', UserSignupView.as_view(), name='signup'),
-    path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
-]
 
+    path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
+    path('list-boards/', LinkBoardsListView.as_view(), name='linkboards-listview'),
+]
 

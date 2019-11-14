@@ -1,11 +1,14 @@
 from django.views.generic import TemplateView, FormView, ListView
-from django.contrib.auth.views import LoginView
+#from django.contrib.auth.views import LoginView
 
 from bookmarks.models import List, Bookmark
-from bookmarks.forms import BookmarkEditForm, LoginForm
+from bookmarks.forms import BookmarkEditForm#, UserLoginForm
 
 from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
+
+from django.contrib.auth.views import LoginView
+from bookmarks.forms import UserLoginForm
 
 '''
 
@@ -16,17 +19,16 @@ Django Standard Views
 class HomePageView(TemplateView):
     template_name = 'home.html'
 
-class UserLoginView(LoginView):
-    form_class = LoginForm
-    template_name = 'login.html'
+class UserLoginView(LoginView):  
+    # redirect url is set in SETTINGS.py
+    authentication_form = UserLoginForm
 
 class UserSignupView(TemplateView):
     template_name = 'signup.html'
 
-
 class BookmarkListView(FormView, ListView): # unsure if okay to mix class based views like this? Tests pass fine however. 
     form_class = BookmarkEditForm
-    template_name= 'bookmarks_list.html'
+    template_name = 'bookmarks_list.html'
     model = List
     context_object_name = 'bookmarks_list'
 
@@ -39,6 +41,9 @@ class BookmarkListView(FormView, ListView): # unsure if okay to mix class based 
         context['list_slug'] = List.objects.get(url_id=self.kwargs['slug']).url_id
         context['list_name'] = List.objects.get(url_id=self.kwargs['slug']).title
         return context
+
+class LinkBoardsListView(ListView):
+    template_name = 'linkboards_list.html'
 
 '''
 

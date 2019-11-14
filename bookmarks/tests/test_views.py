@@ -2,7 +2,7 @@ from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list
 from django.urls import reverse
 
-from bookmarks.forms import BookmarkEditForm, LoginForm
+from bookmarks.forms import BookmarkEditForm, UserLoginForm
 
 class HomePageTest(TestCase):
     def test_uses_correct_template(self):
@@ -18,11 +18,11 @@ class LoginTest(TestCase):
         Unit Test - Does the login view use the correct template?
         '''
         response = self.client.get(reverse('login'))
-        self.assertTemplateUsed(response, 'login.html')
+        self.assertTemplateUsed(response, 'registration/login.html')
 
     def test_page_uses_item_form(self):
         response = self.client.get(reverse('login'))
-        self.assertIsInstance(response.context['form'], LoginForm)    
+        self.assertIsInstance(response.context['form'], UserLoginForm)    
 
 class BookMarkViewTests(test_objects_mixin, TestCase): 
     def test_uses_correct_template(self):

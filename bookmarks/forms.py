@@ -17,6 +17,6 @@ class BookmarkEditForm(ModelForm):
         raise ValueError('Form Saving Is Disabled')
 
 
-class LoginForm(AuthenticationForm):
+class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'Email', 'autofocus': True}), label='Email address')
     password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password', }), label="Password", strip=False)
