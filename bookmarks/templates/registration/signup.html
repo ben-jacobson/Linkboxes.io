@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block page-title %}Sign Up{% endblock %}
+
+{% block main-content %}
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Sign Up</h1>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="col-md-12">
+                    <form id='signup' method='post'>
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}                    
+                        {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field.errors }}{{ hidden_field }}
+                        {% endfor %}                      
+                        {% for field in form.visible_fields %}
+                        <div class='form-group'>
+                            {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
+                        {% endfor %}  
+                        <button type="submit" class="btn btn-primary">Sign Up</button>                        
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row"></div>
+    </div>
+</div>
+{% endblock %}

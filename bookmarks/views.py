@@ -1,5 +1,7 @@
-from django.views.generic import TemplateView, FormView, ListView
+from django.views.generic import TemplateView, FormView, ListView, CreateView
 #from django.contrib.auth.views import LoginView
+from django.urls import reverse
+
 
 from bookmarks.models import List, Bookmark
 from bookmarks.forms import BookmarkEditForm#, UserLoginForm
@@ -8,7 +10,8 @@ from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
 
 from django.contrib.auth.views import LoginView
-from bookmarks.forms import UserLoginForm
+from bookmarks.forms import UserLoginForm, UserSignUpForm
+from django.contrib.auth.models import User
 
 '''
 
@@ -23,8 +26,13 @@ class UserLoginView(LoginView):
     # redirect url is set in SETTINGS.py
     authentication_form = UserLoginForm
 
-class UserSignupView(TemplateView):
-    template_name = 'signup.html'
+class UserSignupView(CreateView):
+    model = User
+    template_name = 'registration/signup.html'
+    form_class = UserSignUpForm
+
+    def get_success_url(self):
+        return reverse('linkboards-listview')
 
 class BookmarkListView(FormView, ListView): # unsure if okay to mix class based views like this? Tests pass fine however. 
     form_class = BookmarkEditForm
@@ -44,7 +52,12 @@ class BookmarkListView(FormView, ListView): # unsure if okay to mix class based 
 
 class LinkBoardsListView(ListView):
     template_name = 'linkboards_list.html'
+    model = List
+    context_object_name = 'linkboards'
 
+    def get_queryset(self):
+        return List.objects.filter(owner=self.request.user.id)
+    
 '''
 
 Django Rest Framework Views

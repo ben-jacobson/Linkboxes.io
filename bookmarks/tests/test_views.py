@@ -2,9 +2,11 @@ from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list
 from django.urls import reverse
 
-from bookmarks.forms import BookmarkEditForm, UserLoginForm
+from bookmarks.forms import BookmarkEditForm, UserLoginForm, UserSignUpForm
+from django.contrib.auth.models import User
 
-class HomePageTest(TestCase):
+
+class HomePageTest(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
         '''
         Unit Test - Does the home page view use the correct template?
@@ -12,7 +14,7 @@ class HomePageTest(TestCase):
         response = self.client.get(reverse('home'))
         self.assertTemplateUsed(response, 'home.html')
 
-class LoginTest(TestCase):
+class LoginTest(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
         '''
         Unit Test - Does the login view use the correct template?
@@ -22,9 +24,35 @@ class LoginTest(TestCase):
 
     def test_page_uses_item_form(self):
         response = self.client.get(reverse('login'))
-        self.assertIsInstance(response.context['form'], UserLoginForm)    
+        self.assertIsInstance(response.context['form'], UserLoginForm)  
 
-class BookMarkViewTests(test_objects_mixin, TestCase): 
+class SignUpTest(test_objects_mixin, TestCase):
+    def test_uses_correct_template(self):
+        '''
+        Unit Test - Does the login view use the correct template?
+        '''
+        response = self.client.get(reverse('signup'))
+        self.assertTemplateUsed(response, 'registration/signup.html')
+
+    def test_page_uses_item_form(self):
+        response = self.client.get(reverse('signup'))
+        self.assertIsInstance(response.context['form'], UserSignUpForm) 
+    
+    def test_signup_creates_new_users(self):
+        test_username = 'test@test.com'
+        test_password = 'testing123'
+
+        # sign up the user
+        signup_data = {'first_name': 'Test', 'last_name': 'Testerson', 'username': test_username, 'password': test_password, 'verify_password': test_password}
+        response = self.client.post(reverse('signup'), data=signup_data)
+        self.assertRedirects(response, expected_url=reverse('linkboards-listview'))
+
+        # test looking up that user in the DB
+        test_user_lookup = User.objects.get(username=test_username)
+        self.assertEqual(test_user_lookup.username, test_username)
+
+
+class BookmarkListViewTests(test_objects_mixin, TestCase): 
     def test_uses_correct_template(self):
         '''
         Unit Test - Does the listview use the correct template? Also tests the url_id functionality works
@@ -82,4 +110,28 @@ class BookMarkViewTests(test_objects_mixin, TestCase):
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
         self.assertIsInstance(response.context['form'], BookmarkEditForm)        
         
- 
+class LinkBoardViewTests(test_objects_mixin, TestCase):
+    def test_uses_correct_template(self):
+        '''
+        Unit Test - Does the listview use the correct template? Also tests the url_id functionality works
+        '''
+        response = self.client.get(reverse('linkboards-listview'))
+        self.assertTemplateUsed(response, 'linkboards_list.html')
+
+    def test_returns_query_set_when_logged_in(self):
+        '''
+        Unit Test - The view returns some context data, including the title of the list. Does it return the correct data?
+        '''
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
+        test_list_title = self.test_bookmarks_list.title
+        response = self.client.get(reverse('linkboards-listview'))
+        query_set = response.context['linkboards']
+        self.assertEqual(test_list_title, query_set[0].title)
+
+    def test_returns_no_data_when_not_logged_in(self):
+        '''
+        Unit Test - The view returns some context data, including the title of the list. Does it return the correct data?
+        '''
+        response = self.client.get(reverse('linkboards-listview'))
+        query_set = response.context['linkboards']
+        self.assertEqual(len(query_set), 0)        

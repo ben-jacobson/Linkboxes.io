@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .base import test_objects_mixin
-from bookmarks.forms import BookmarkEditForm, UserLoginForm
+from bookmarks.forms import BookmarkEditForm, UserLoginForm, UserSignUpForm
 
 class BookmarkEditFormTests(test_objects_mixin, TestCase):
     def test_form_renders_item_text_input(self):
@@ -37,4 +37,23 @@ class UserLoginFormTest(test_objects_mixin, TestCase):
         form = UserLoginForm(data={'username': '', 'password': self.test_user_pass})
         self.assertFalse(form.is_valid())
 
+class UserSignUpFormTest(test_objects_mixin, TestCase):
+    def test_form_renders_item_text_input(self):
+        form = UserSignUpForm()
+        self.assertIn('id="id_username', form.as_p())
+        self.assertIn('id="id_password', form.as_p())
+
+    def test_form_validation_for_blank_items(self):
+        form = UserSignUpForm()
+        self.assertFalse(form.is_valid()) 
+        
+    def test_valid_form(self):
+        form = UserSignUpForm(data={'first_name': 'Joe', 'last_name': 'Bloggs', 'username': 'test@testerson.com.au', 'password': "AsDf1234!", 'verify_password': 'AsDf1234!'})
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form = UserSignUpForm(data={'username': self.test_user_name, 'password': ''})
+        self.assertFalse(form.is_valid())
+        form = UserSignUpForm(data={'username': '', 'password': self.test_user_pass})
+        self.assertFalse(form.is_valid())
 

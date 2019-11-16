@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+
+{% block page-title %}Your Link Boards{% endblock %} 
+
+{% block main-content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <ul>
+                {% for linkboard in linkboards %}
+                <p>{{ linkboard.title }}</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
