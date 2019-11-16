@@ -8,7 +8,7 @@
         <div class="col-md-12 text-center">
             <ul>
                 {% for linkboard in linkboards %}
-                <p>{{ linkboard.title }}</p>
+                    <a href='/{{ linkboard.url_id }}'><p>{{ linkboard.title }}</p></a>
                 {% endfor %}
             </ul>
         </div>

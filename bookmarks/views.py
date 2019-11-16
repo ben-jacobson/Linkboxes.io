@@ -26,6 +26,9 @@ class UserLoginView(LoginView):
     # redirect url is set in SETTINGS.py
     authentication_form = UserLoginForm
 
+    def get_success_url(self):
+        return reverse('linkboards-listview')
+    
 class UserSignupView(CreateView):
     model = User
     template_name = 'registration/signup.html'
