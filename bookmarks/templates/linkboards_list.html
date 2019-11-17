@@ -1,16 +1,26 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
-{% block page-title %}Your Link Boards{% endblock %} 
+{% block page-title %}Your Link Boards{% endblock %}
 
 {% block main-content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <ul>
-                {% for linkboard in linkboards %}
-                    <a href='/{{ linkboard.url_id }}'><p>{{ linkboard.title }}</p></a>
-                {% endfor %}
-            </ul>
+<div class="py-5">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Link Boards</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul>
+                    {% for linkboard in linkboards %}
+                    <a href='/{{ linkboard.url_id }}'>
+                        <p>{{ linkboard.title }}</p>
+                    </a>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </div>

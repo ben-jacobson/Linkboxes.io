@@ -18,6 +18,8 @@ $('.move-icon').mouseleave(function () {
     Our modal dialog box for editing bookmarks requires us to modify the submit button on the fly
 */
 
+// Helper functions
+
 function populate_bookmark_form(bookmark_data) {
     $('#edit-title').attr('value', bookmark_data['title']);
     $('#edit-url').attr('value', bookmark_data['url']);
@@ -27,6 +29,40 @@ function populate_bookmark_form(bookmark_data) {
 function update_bookmark(id) {
     console.log('run the ajax request to the update endpoint')
 }
+
+
+// Click the add button
+
+$('.add-icon').click(function(e) {
+    var thumbnail_container = $('#thumbnail-container');
+    var list_slug = $(thumbnail_container).attr('data-list-slug');
+
+    var new_card_html = `
+        <div class='bookmark-card col-sm-6 col-md-6' data-bookmark-id='1000' data-list-slug='` + list_slug + `'>
+            <div class='bookmark-hovereffect'>
+                <div class='bookmark-card-thumbnail-img'>
+                    <a href='#' draggable='false'>
+                        <img class='img-responsive bookmark-thumbnail' src='https://picsum.photos/id/1023/640/480' draggable='false' />
+                    </a>
+                </div>
+                <div class='edit-button-overlays'>
+                    <p class='bookmark-edit-icons'>
+                        <i class='fas fa-pencil-alt bookmark-edit-icons edit-icon' data-toggle='modal' data-target='#editBookmarkModal'></i>
+                        <i class='far fa-trash-alt bookmark-edit-icons delete-icon'></i>
+                        <i class='far fa-copy bookmark-edit-icons copy-icon'></i>
+                        <i class='fas fa-arrows-alt bookmark-edit-icons move-icon'></i>
+                    </p>
+                </div>
+            </div>
+            <div class='bookmark-card-title'>
+                <a class='bookmark-url' href='#' draggable='false'>
+                    <h3 class='bookmark-title'>New Bookmark</h3>
+                </a>
+            </div>
+        </div>`;
+
+    $(thumbnail_container).append(new_card_html);
+});
 
 // Click the edit button
 $('.edit-icon').click(function(e) {

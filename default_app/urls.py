@@ -20,6 +20,6 @@ urlpatterns = [
     path('signup', UserSignupView.as_view(), name='signup'),
 
     path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
-    path('list-boards/', LinkBoardsListView.as_view(), name='linkboards-listview'),
+    path('linkboards/', LinkBoardsListView.as_view(), name='linkboards-listview'),
 ]
 
