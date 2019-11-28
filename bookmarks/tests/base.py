@@ -2,13 +2,6 @@ from django.contrib.auth.models import User
 from bookmarks.models import Bookmark, List
 import random, string
 
-'''
-    title = models.CharField(max_length=512, blank=False)    
-    thumbnail_url = models.URLField(max_length=2048, blank=False)
-    url = models.URLField(max_length=2048, default='/no_thumbnail.jpg')
-
-'''
-
 def create_test_bookmark(   bookmarks_list, 
                             title='Testing ASDF',
                             thumbnail_url='https://via.placeholder.com/320x200', 

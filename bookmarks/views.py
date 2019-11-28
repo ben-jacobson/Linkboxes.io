@@ -1,10 +1,12 @@
-from django.views.generic import TemplateView, FormView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView#, FormView
 #from django.contrib.auth.views import LoginView
 from django.urls import reverse
 
 
 from bookmarks.models import List, Bookmark
-from bookmarks.forms import BookmarkEditForm#, UserLoginForm
+from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm
+
+from django.http import HttpResponseForbidden
 
 from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
@@ -37,20 +39,42 @@ class UserSignupView(CreateView):
     def get_success_url(self):
         return reverse('linkboards-listview')
 
-class BookmarkListView(FormView, ListView): # unsure if okay to mix class based views like this? Tests pass fine however. 
-    form_class = BookmarkEditForm
+class BookmarkListView(CreateView, ListView): # FormView unsure if okay to mix class based views like this? Tests pass fine however. 
+    form_class = BookmarkCreateForm     # there are two forms on this page, the create form uses the POST method by default in Django, the second is just UI so is passed as a context object below. 
     template_name = 'bookmarks_list.html'
     model = List
     context_object_name = 'bookmarks_list'
+    
+    def post(self, request, *args, **kwargs):
+        # We need to overwrite our post method to check authentication and that the user is correct
+        form = self.get_form()
+        list_obj = List.objects.get(url_id=self.kwargs['slug'])
+
+        if request.user != list_obj.owner:  # prevent user from modifying lists they don't own
+            return HttpResponseForbidden()
+            
+        if form.data['list_id'] != list_obj.url_id:  # to stop users from injecting into lists other than ones on this page
+            return HttpResponseForbidden()
+   
+        return super().post(request, *args, **kwargs)
+
+    def get_initial(self):  # this is how you prepopulate form data on runtime
+        return {'list_id': self.kwargs['slug']}
+
+    def get_success_url(self):
+        return reverse('bookmarks-listview', kwargs={'slug': self.kwargs['slug']})
 
     def get_queryset(self):
         query_set = Bookmark.objects.filter(_list__url_id=self.kwargs['slug'])
         return query_set
 
     def get_context_data(self, **kwargs):
+        # kwargs['edit_bookmark_form'] = BookmarkEditForm   # This is how the parent method does it, 
         context = super().get_context_data(**kwargs)
-        context['list_slug'] = List.objects.get(url_id=self.kwargs['slug']).url_id
-        context['list_name'] = List.objects.get(url_id=self.kwargs['slug']).title
+        list_obj = List.objects.get(url_id=self.kwargs['slug'])
+        context['list_slug'] = list_obj.url_id
+        context['list_name'] = list_obj.title
+        context['edit_bookmark_form'] = BookmarkEditForm 
         return context
 
 class LinkBoardsListView(ListView):

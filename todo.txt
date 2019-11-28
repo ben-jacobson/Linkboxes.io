@@ -12,3 +12,5 @@ TODO list
 - We should come up with better terminology for List. It's not user friendly
 
 - On Sign up, the verify password field has not yet been set up
+
+- The form that creates the new bookmark, what happens when we try to create a bookmark for another user? 

@@ -1,22 +1,40 @@
 from django.test import TestCase
 from .base import test_objects_mixin
-from bookmarks.forms import BookmarkEditForm, UserLoginForm, UserSignUpForm
+from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, UserLoginForm, UserSignUpForm
+from bookmarks.models import Bookmark
 
 class BookmarkEditFormTests(test_objects_mixin, TestCase):
-    def test_form_renders_item_text_input(self):
+    def test_edit_form_renders_item_text_input(self):
         form = BookmarkEditForm()
         self.assertIn('placeholder="Title', form.as_p())
         self.assertIn('placeholder="URL', form.as_p())
         self.assertIn('placeholder="Thumbnail URL', form.as_p())
 
-    def test_form_validation_for_blank_items(self):
+    def test_edit_form_validation_for_blank_items(self):
         form = BookmarkEditForm()
         self.assertFalse(form.is_valid())
         
-    def test_form_save_raises_error(self):
+    def test_edit_form_save_raises_error(self):
         with self.assertRaisesMessage(expected_exception=ValueError, expected_message='Form Saving Is Disabled'):
             BookmarkEditForm().save()
 
+class BookmarkCreateFormTests(test_objects_mixin, TestCase):
+    def test_create_form_renders_item_text_input(self):
+        form = BookmarkCreateForm()
+        self.assertIn('placeholder="Title', form.as_p())
+        self.assertIn('placeholder="URL', form.as_p())
+        self.assertIn('placeholder="Thumbnail URL', form.as_p())
+
+    def test_create_form_validation_for_blank_items(self):
+        form = BookmarkCreateForm()
+        self.assertFalse(form.is_valid())
+        
+    def test_create_form_save(self):
+        test_item_title = 'This is our test form object'
+        BookmarkCreateForm(data={'title': test_item_title, 'url': 'www.google.com', 'thumbnail_url': 'www.google.com', 'list_id': self.test_bookmarks_list.url_id}).save()
+        returned_bookmark = Bookmark.objects.get(title=test_item_title)
+        self.assertEquals(returned_bookmark.title, test_item_title)
+        
 class UserLoginFormTest(test_objects_mixin, TestCase):
     def test_form_renders_item_text_input(self):
         form = UserLoginForm()

@@ -1,7 +1,8 @@
 from django.test import TestCase
-from .base import test_objects_mixin
+from .base import test_objects_mixin, create_test_bookmarks_list
 from django.contrib.auth.models import User
 from bookmarks.models import Bookmark, List
+from django.urls import reverse
 
 class ListAuthenticationTests(test_objects_mixin, TestCase):
     def test_authenticate_method(self):
@@ -126,7 +127,6 @@ class ListAuthenticationTests(test_objects_mixin, TestCase):
         # now look up the data, there should still be results for that particular ID
         test_query = List.objects.get(url_id=self.test_bookmarks_list.url_id)
         self.assertEqual(test_query.title, self.test_bookmarks_list.title)  
-
 
 class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
     def test_BookmarkSerializer_retrieve_403s_without_authentication(self):
@@ -265,3 +265,60 @@ class BookmarkAuthenticationTests(test_objects_mixin, TestCase):
         # now look up the data, there should still be results for that particular ID
         test_query = Bookmark.objects.get(id=self.test_bookmark.id)
         self.assertEqual(test_query.title, self.test_bookmark.title)        
+
+
+class CreateNewBookmarkAuthenticationTests(test_objects_mixin, TestCase):
+    def test_create_new_bookmark_with_post_method_after_logging_in(self):
+        '''
+        Unit Test - POSTing to the listview will create another bookmark in that list, but only if you are authenticated as the right user
+        '''
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
+        new_bookmark_item_title = 'Hello, this is my new item'
+        response = self.client.post(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}), data={'title': new_bookmark_item_title, 'url': 'www.google.com', 'thumbnail_url': 'www.google.com', 'list_id': self.test_bookmarks_list.url_id})
+        self.assertRedirects(response, expected_url=reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id})) # does the page redirect to the correct place?
+        self.assertEquals(new_bookmark_item_title, Bookmark.objects.get(title=new_bookmark_item_title).title) # can the object be found in the database? 
+        self.assertEquals(self.test_bookmarks_list.owner, Bookmark.objects.get(title=new_bookmark_item_title)._list.owner) # does the owner match? 
+
+    def test_create_new_bookmark_with_post_method_without_logging_in(self):
+        '''
+        Unit Test - POSTing to the listview of another user will not create another bookmark in the list, because you are not authenticated as them
+        '''
+        post_data = {'title': 'Hello, this is my new item', 'url': 'www.google.com', 'thumbnail_url': 'www.google.com', 'list_id': self.test_bookmarks_list.url_id}        
+        response = self.client.post(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}), data=post_data)
+        self.assertEquals(response.status_code, 403) # do we get a forbidden response
+
+    def test_create_new_bookmark_with_injecting_list_not_owned_by_user(self):
+        '''
+        Unit Test - POSTing to the listview of another user will not create another bookmark in the list, because you are not authenticated as them
+        '''
+        # create a new user and a new bookmark list to go with it
+        new_test_user = User.objects.create_user('imauser@users.com', 'imauser@users.com', 'bestPasswordEva') # create a new user
+        new_test_bookmarks_list = create_test_bookmarks_list(new_test_user) # create a test bookmark with the new user
+
+        # authenticate as the old user 
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass) 
+
+        # while authenticated as the old user, try to update a bookmark that belongs to the new user by injecting into the post data
+        post_data = {'title': 'Hello, this is my new item', 'url': 'www.google.com', 'thumbnail_url': 'www.google.com', 'list_id': new_test_bookmarks_list.url_id} # url_id differs from the page we look up
+        response = self.client.post(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}), data=post_data)
+        
+        # we should get a forbidden response
+        self.assertEquals(response.status_code, 403)
+
+    def test_create_new_bookmark_injecting_other_list_owned_by_user(self):
+        '''
+        Unit Test - Using your browsers development tools, you can insert a different list id into the hidden field of the form, the server should respond with a forbidden code
+        '''
+        # Create a new list and authenticate as that user
+        new_test_bookmarks_list = create_test_bookmarks_list(self.test_user)
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass) 
+
+        # the owners are the same
+        self.assertEqual(new_test_bookmarks_list.owner, self.test_bookmarks_list.owner)
+
+        # attempt to update lists owned by you, by injecting into the post data
+        post_data = {'title': 'Hello, this is my new item', 'url': 'www.google.com', 'thumbnail_url': 'www.google.com', 'list_id': new_test_bookmarks_list.url_id}
+        response = self.client.post(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}), data=post_data)
+        
+        # we should get a forbidden response
+        self.assertEquals(response.status_code, 403) # do we get a forbidden response

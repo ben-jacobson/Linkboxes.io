@@ -2,9 +2,8 @@ from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list
 from django.urls import reverse
 
-from bookmarks.forms import BookmarkEditForm, UserLoginForm, UserSignUpForm
+from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, UserLoginForm, UserSignUpForm
 from django.contrib.auth.models import User
-
 
 class HomePageTest(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
@@ -87,7 +86,6 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
         '''
         Unit Test - if we enter a known slug, will it return only those bookmarks and nothing else? Also tests that the correct context_object_name is set. 
         '''
-
         # create some test bookmarks we don't expecte to see in the response
         invalid_list = create_test_bookmarks_list(self.test_user, title='We dont want to see bookmarks from this list')
         invalid_link_one = create_test_bookmark(invalid_list, 'invalid link 1')
@@ -110,10 +108,19 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
         self.assertNotContains(response, invalid_link_one.title)
         self.assertNotContains(response, invalid_link_two.title)
 
-    def test_page_uses_item_form(self):
+    def test_page_has_create_form(self):
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
-        self.assertIsInstance(response.context['form'], BookmarkEditForm)        
+        self.assertIsInstance(response.context['form'], BookmarkCreateForm)  
+
+    def test_page_has_edit_form(self):
+        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
+        self.assertEquals(response.context['edit_bookmark_form'], BookmarkEditForm)     # was assertIsInstance when we used a form object    
         
+    def test_page_create_form_populates_initial_value(self):
+        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
+        page_form = response.context['form']
+        self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])        
+
 class LinkBoardViewTests(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
         '''

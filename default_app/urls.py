@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 
-from bookmarks.views import HomePageView, UserLoginView, UserSignupView, BookmarkListView, LinkBoardsListView
-from bookmarks.views import ListViewSet, BookmarkViewSet
+from bookmarks.views import HomePageView, UserLoginView, UserSignupView, BookmarkListView, LinkBoardsListView, ListViewSet, BookmarkViewSet
 
 from rest_framework import routers
 
