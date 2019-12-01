@@ -100,7 +100,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#LOGIN_REDIRECT_URL = 'home'
+#LOGIN_REDIRECT_URL = 'home' # for this, we've defied success urls in the views
+LOGOUT_REDIRECT_URL = 'home' # this however is global
+
 
 # Settings for DRF
 

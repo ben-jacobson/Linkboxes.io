@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, ListView, CreateView#, FormView
-#from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView
 from django.urls import reverse
 
 

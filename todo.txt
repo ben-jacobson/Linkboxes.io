@@ -14,3 +14,5 @@ TODO list
 - On Sign up, the verify password field has not yet been set up
 
 - The form that creates the new bookmark, what happens when we try to create a bookmark for another user? 
+
+- Test to see what injection someone can do with our input. E.g could they input some javascript into the page title? Django has autoescaping to resolve this
