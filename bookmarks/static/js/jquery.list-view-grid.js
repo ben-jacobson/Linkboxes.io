@@ -79,8 +79,17 @@ $('#edit-modal-save').click(function(e) {
         success: function (data) {
             console.log('saved, close the window and update the page');
         }
-    });    
-}) 
+    });   
+    
+    // update the page and close the modal. 
+    $('#editBookmarkModal').modal('toggle');
+
+    // we still have the json data available, use that to update the page element itself, rather than force a refresh. 
+    var bookmark_elem = $('div[class*="bookmark-card"][data-bookmark-id="' + bookmark_id + '"]'); // find the element
+    bookmark_elem.find('h3').html(json_data['title']); // update the title
+    bookmark_elem.find('a').attr('href', json_data['url']); // update all hyperlinks found on page (normally 2)
+    bookmark_elem.find('img.bookmark-thumbnail').attr('src', json_data['thumbnail_url']); // update the image thumbnail 
+}); 
 
 // Click the delete button
 $('.delete-icon').click(function(e) {

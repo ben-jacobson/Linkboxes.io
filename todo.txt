@@ -1,11 +1,8 @@
 TODO list
 
-- The owner of bookmarks.com wants $300K for the site. Maybe we call our service Bokmarks.com or some other misspelling of the service.
-- Alternative name - linkboard
-
 - Probably a good idea to use a Captcha to ensure people can't just use a bot to create their own pages. We have space for 60M bookmark lists
 
-- Re-Look at our save method for the hashing function, can we catch other exceptions and maybe do some logging? How can we test this a bit more for robustness 
+- Re-Look at our list save method for the url_id hashing function, can we catch other exceptions and maybe do some logging? How can we test this a bit more for robustness 
 
 - In your deployment script, alter Debug=False and disable the admin registrations
 
@@ -13,6 +10,27 @@ TODO list
 
 - On Sign up, the verify password field has not yet been set up
 
-- The form that creates the new bookmark, what happens when we try to create a bookmark for another user? 
-
 - Test to see what injection someone can do with our input. E.g could they input some javascript into the page title? Django has autoescaping to resolve this
+
+
+
+Proof of Concept requirements - For first initial deployment
+-Has some sort of identifying brand which matches the domain name
+-Has a home page explaining how to use the service
+/-Can sign up and create a login/user id
+-Shows 'signed in as' identifier in right hand corner
+/-Can log in / log out
+-Can create lists when logged in, can't create lists when not logged in
+-Can modify their lists when logged in, can't modify lists when not logged in
+    -Edit button edits the link in real time
+    -Delete button deletes the link in real time
+    /-Create button creates a new link, doesn't have to be real time
+    -Copy button puts the url on the clipboard
+    -User can drag and drop the items in the list to customise order, preference is stored in the database
+    /-Simple text entry for link creation is fine
+-Mobile friendly
+-Functional and Unit testing in place (within reason)
+
+Bugs
+
+-After you edit a page, it seems to update all A hrefs on the page? Or at least when clicking on another edit icon it shows there. How come? 
