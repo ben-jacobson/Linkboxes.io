@@ -29,6 +29,11 @@ class LoginTest(test_objects_mixin, TestCase):
         response = self.client.post(reverse('login'), data={'username': self.test_user_name, 'password': self.test_user_pass})
         self.assertRedirects(response, expected_url=reverse('linkboards-listview'))
 
+class LogoutTest(TestCase):
+    def test_logout_view(self):
+        response = self.client.get(reverse('logout'))
+        self.assertRedirects(response, expected_url=reverse('home'))
+
 class SignUpTest(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
         '''
