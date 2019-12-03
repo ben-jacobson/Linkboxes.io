@@ -22,12 +22,13 @@ Proof of Concept requirements - For first initial deployment
 /-Can log in / log out
 -Can create lists when logged in, can't create lists when not logged in
 -Can modify their lists when logged in, can't modify lists when not logged in
-    -Edit button edits the link in real time
-    -Delete button deletes the link in real time
+    /-Edit button edits the link in real time
+    /-Delete button deletes the link in real time
     /-Create button creates a new link, doesn't have to be real time
     -Copy button puts the url on the clipboard
     -User can drag and drop the items in the list to customise order, preference is stored in the database
     /-Simple text entry for link creation is fine
+    -Creating a link without a thumbnail will user a placeholder
 -Mobile friendly
 -Functional and Unit testing in place (within reason)
 

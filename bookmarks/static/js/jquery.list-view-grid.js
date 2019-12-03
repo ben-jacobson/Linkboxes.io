@@ -31,7 +31,6 @@ $('.edit-icon').click(function(e) {
     $('#editBookmarkModal').attr('data-list-slug', list_slug);
 
     // AJAX request to retrieve the bookmarks data from the api
-
     $.ajax({ 
         type: 'GET', 
         url: '/api/Lists/' + list_slug + '/',
@@ -60,7 +59,7 @@ $('#edit-modal-save').click(function(e) {
         'thumbnail_url': $('#edit-thumbnail').val(),
     };
 
-    // set up the AJAX request
+    // set up the AJAX request, inject the CSRF token
     $.ajaxSetup({
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-CSRFToken', csrfToken);
@@ -70,7 +69,7 @@ $('#edit-modal-save').click(function(e) {
     // run the AJAX request to save the data
     $.ajax({ 
         type: 'PATCH',        
-        url: '/api/Bookmark/' + bookmark_id + '/',    // todo - get this data off the page somehow
+        url: '/api/Bookmark/' + bookmark_id + '/',    
         data: json_data,
         success: function (data) {
             // update the page and close the modal. 
@@ -89,11 +88,25 @@ $('#edit-modal-save').click(function(e) {
 $('.delete-icon').click(function(e) {
     var bookmark_elem = $(e.target).closest('.bookmark-card');
     var bookmark_id = bookmark_elem.attr('data-bookmark-id');
-    var list_slug = $(e.target).closest('.bookmark-card').attr('data-list-slug');
+    var csrfToken =  $('input[name="csrfmiddlewaretoken"]').attr('value');
 
-    $(bookmark_elem).remove();
+    // set up the AJAX request, inject the CSRF token
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        }
+    });   
 
-    // run ajax request
+    // AJAX request to delete the bookmarks data from the api
+    $.ajax({ 
+        type: 'DELETE', 
+        url: '/api/Bookmark/' + bookmark_id + '/',    
+        success: function () {
+            // update the page remove the element from the screen
+            $(bookmark_elem).remove();
+        }
+    });
+
 });
 
 /*
