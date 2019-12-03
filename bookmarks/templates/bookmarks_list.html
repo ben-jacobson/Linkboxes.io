@@ -82,7 +82,7 @@
     </div>
 
     <div class="modal fade" id="createBookmarkModal" tabindex="-1" role="dialog"
-        aria-labelledby="editBookMarkCenterTitle" aria-hidden="true">
+        aria-labelledby="createBookMarkCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -91,7 +91,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id='edit-form' action='/{{ list_slug }}' method='POST'>
+                <form id='create-form' action='/{{ list_slug }}' method='POST'>
 
                     <div class="modal-body">
                         {% csrf_token %}
@@ -105,9 +105,9 @@
                         {% endfor %}
                     </div>
                     <div class="modal-footer">
-                        <button id="edit-modal-close" type="button" class="btn btn-secondary"
+                        <button id="create-modal-close" type="button" class="btn btn-secondary"
                             data-dismiss="modal">Cancel</button>
-                        <input type='submit' id="edit-modal-save" value='Save' class="btn btn-primary" />
+                        <input type='submit' id="create-modal-save" value='Save' class="btn btn-primary" />
                     </div>
                 </form>
 

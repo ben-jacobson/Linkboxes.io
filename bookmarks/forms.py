@@ -6,15 +6,14 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth.models import User
 
 class BookmarkFormMixin(ModelForm):
-    title = CharField(widget=TextInput(attrs={'id': 'edit-title', 'class': 'form-control', 'placeholder': 'Title',}), label='Title')
-    url = CharField(widget=TextInput(attrs={'id': 'edit-url', 'class': 'form-control', 'placeholder': 'URL',}), label='URL')
-    thumbnail_url = CharField(widget=TextInput(attrs={'id': 'edit-thumbnail', 'class': 'form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL')
-
     class Meta:
         model = Bookmark
         fields = ('title', 'url', 'thumbnail_url', )
 
-class BookmarkCreateForm(BookmarkFormMixin): 
+class BookmarkCreateForm(BookmarkFormMixin):
+    title = CharField(widget=TextInput(attrs={'id': 'create-title', 'class': 'form-control', 'placeholder': 'Title',}), label='Title')
+    url = CharField(widget=TextInput(attrs={'id': 'create-url', 'class': 'form-control', 'placeholder': 'URL',}), label='URL')
+    thumbnail_url = CharField(widget=TextInput(attrs={'id': 'create-thumbnail', 'class': 'form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL')
     list_id = CharField(widget=HiddenInput())
 
     def save(self):
@@ -23,6 +22,9 @@ class BookmarkCreateForm(BookmarkFormMixin):
         super().save()
 
 class BookmarkEditForm(BookmarkFormMixin):
+    title = CharField(widget=TextInput(attrs={'id': 'edit-title', 'class': 'form-control', 'placeholder': 'Title',}), label='Title')
+    url = CharField(widget=TextInput(attrs={'id': 'edit-url', 'class': 'form-control', 'placeholder': 'URL',}), label='URL')
+    thumbnail_url = CharField(widget=TextInput(attrs={'id': 'edit-thumbnail', 'class': 'form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL')
     def save(self):
         raise ValueError('Form Saving Is Disabled') # we have some JQuery code to do this via an API call.
 

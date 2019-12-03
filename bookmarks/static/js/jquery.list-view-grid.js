@@ -18,36 +18,32 @@ $('.move-icon').mouseleave(function () {
     Our modal dialog box for editing bookmarks requires us to modify the submit button on the fly
 */
 
-// Helper functions
-
-function populate_bookmark_form(bookmark_data) {
-    $('#edit-title').attr('value', bookmark_data['title']);
-    $('#edit-url').attr('value', bookmark_data['url']);
-    $('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);
-}
-
-function update_bookmark(id) {
-    console.log('run the ajax request to the update endpoint')
-}
-
 // Click the edit button
 $('.edit-icon').click(function(e) {
     var bookmark_id = $(e.target).closest('.bookmark-card').attr('data-bookmark-id');
     var list_slug = $(e.target).closest('.bookmark-card').attr('data-list-slug');
+
+    // First thing is that the DOM on Chrome and Firefox won't allow you to overwrite form values after user entry. This is a a workaround
+    $('#edit-form').trigger("reset");
 
     // put the bookmark id and list slug data into the modal so that the save method can read it
     $('#editBookmarkModal').attr('data-bookmark-id', bookmark_id);
     $('#editBookmarkModal').attr('data-list-slug', list_slug);
 
     // AJAX request to retrieve the bookmarks data from the api
+
     $.ajax({ 
         type: 'GET', 
-        url: '/api/Lists/' + list_slug + '/',    // todo - get this data off the page somehow
+        url: '/api/Lists/' + list_slug + '/',
         success: function (data) {
             bookmark_data = data['bookmarks'].filter(function(bookmark) {
                 return bookmark['id'] == bookmark_id;  // return True/False
             })[0];
-            populate_bookmark_form(bookmark_data);
+
+            // update the modal form data
+            $('#edit-title').attr('value', bookmark_data['title']);
+            $('#edit-url').attr('value', bookmark_data['url']);
+            $('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);            
         }
     });
 });
@@ -77,18 +73,16 @@ $('#edit-modal-save').click(function(e) {
         url: '/api/Bookmark/' + bookmark_id + '/',    // todo - get this data off the page somehow
         data: json_data,
         success: function (data) {
-            console.log('saved, close the window and update the page');
+            // update the page and close the modal. 
+            $('#editBookmarkModal').modal('toggle');
+
+            // we still have the json data available, use that to update the page element itself, rather than force a refresh. 
+            var bookmark_elem = $('div[class*="bookmark-card"][data-bookmark-id="' + bookmark_id + '"]'); // find the element
+            bookmark_elem.find('h3').html(json_data['title']); // update the title
+            bookmark_elem.find('a').attr('href', json_data['url']); // update all hyperlinks found on page (normally 2)
+            bookmark_elem.find('img.bookmark-thumbnail').attr('src', json_data['thumbnail_url']); // update the image thumbnail 
         }
     });   
-    
-    // update the page and close the modal. 
-    $('#editBookmarkModal').modal('toggle');
-
-    // we still have the json data available, use that to update the page element itself, rather than force a refresh. 
-    var bookmark_elem = $('div[class*="bookmark-card"][data-bookmark-id="' + bookmark_id + '"]'); // find the element
-    bookmark_elem.find('h3').html(json_data['title']); // update the title
-    bookmark_elem.find('a').attr('href', json_data['url']); // update all hyperlinks found on page (normally 2)
-    bookmark_elem.find('img.bookmark-thumbnail').attr('src', json_data['thumbnail_url']); // update the image thumbnail 
 }); 
 
 // Click the delete button
