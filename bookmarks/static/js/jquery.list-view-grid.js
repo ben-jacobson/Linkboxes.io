@@ -18,7 +18,7 @@ $('.move-icon').mouseleave(function () {
     Our modal dialog box for editing bookmarks requires us to modify the submit button on the fly
 */
 
-// Click the edit button
+// event when user clicks the edit button
 $('.edit-icon').click(function(e) {
     var bookmark_id = $(e.target).closest('.bookmark-card').attr('data-bookmark-id');
     var list_slug = $(e.target).closest('.bookmark-card').attr('data-list-slug');
@@ -47,7 +47,7 @@ $('.edit-icon').click(function(e) {
     });
 });
 
-// When the modal dialog box is open, click the save button
+// event when user clicks the save button in the edit modal.
 $('#edit-modal-save').click(function(e) {
     var bookmark_id = $(e.target).closest('#editBookmarkModal').attr('data-bookmark-id');
     var csrfToken =  $('input[name="csrfmiddlewaretoken"]').attr('value');
@@ -84,7 +84,7 @@ $('#edit-modal-save').click(function(e) {
     });   
 }); 
 
-// Click the delete button
+// event when user clicks the delete button
 $('.delete-icon').click(function(e) {
     var bookmark_elem = $(e.target).closest('.bookmark-card');
     var bookmark_id = bookmark_elem.attr('data-bookmark-id');
@@ -107,6 +107,15 @@ $('.delete-icon').click(function(e) {
         }
     });
 
+});
+
+// event when user clicks the copy icon
+$('.copy-icon').click(function(e) {
+    //var bookmark_id = $(e.target).closest('.bookmark-card').attr('data-bookmark-id');
+    //var bookmark_url = $(e.target).closest('.bookmark-card').find('a')[0].attr('href', json_data['url']); // update all hyperlinks found on page (normally 2)
+
+    alert('Feature coming soon');
+    // get the data from the element on page, not from the server - this is a resource saving exercise
 });
 
 /*
