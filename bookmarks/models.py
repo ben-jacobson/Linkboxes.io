@@ -41,6 +41,38 @@ class List(models.Model):
         ### checking for collision is automatic, because field is set to be unique so should raise an IntegrityError if any issues
         super(List, self).save(*args, **kwargs) 
 
+    '''def reorder_bookmarks(self, related_bookmarks):
+        pass
+
+    def check_duplicate_bookmark_ordering(self):
+        return False # pass for now
+
+    def refresh_bookmark_ordering(self):
+    '''
+    # Helper function, called on model save, if the ordering bookmarks has changed at all, or is invalid, this function will re-order them.
+    '''
+        related_bookmarks = self.bookmarks.all()
+        order_map = [] 
+
+        # create an array of the ordering
+        for bookmark in related_bookmarks:
+            print(f'Before - {bookmark.order}: {bookmark.title}')
+            order_map.append(bookmark.order)
+        
+            # on the way, if we encounter any zero orders, set a flag to re_order 
+            if bookmark.order == 0: 
+                self.reorder_bookmarks(related_bookmarks)
+
+        # check if any duplicates in the values, if so - reorder
+        if self.check_duplicate_bookmark_ordering() == True: ### #USE SET() if len(listOfElems) == len(set(listOfElems)):
+
+            self.reorder_bookmarks(related_bookmarks)
+
+        # Debug only - output the new ordering
+        print('')
+        for bookmark in related_bookmarks:
+            print(f'After - {bookmark.order}: {bookmark.title}')'''
+
     def __str__(self):
         return self.title
 
@@ -48,12 +80,17 @@ class Bookmark(models.Model):
     title = models.CharField(max_length=512, blank=False)
     thumbnail_url = models.CharField(max_length=2048, blank=True)
     url = models.CharField(max_length=2048)
+    #order = models.PositiveIntegerField(default=0)    # determines which order does the bookmark appear on page? 
     _list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='bookmarks')     # ManyToOne - List can have multiple BookMarks, but a BookMark can only be associated with one list. 
 
     def save(self, *args, **kwargs):
+        # insert the default thumbnail url
         if not self.thumbnail_url:
             self.thumbnail_url = '/no_thumbnail.jpg'        # for some reason, plugging in default= into the model.Charfield didn't work..
         super(Bookmark, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        order_with_respect_to = '_list'

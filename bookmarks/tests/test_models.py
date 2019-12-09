@@ -85,6 +85,20 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         with self.assertRaises(ValidationError):
             test_bookmark_with_long_url.full_clean()
 
+    def test_order_auto_increment(self):
+        '''
+        Unit Test - upon save, the autofield should create a unique value that increments from the last value
+        '''
+        increment_test_bookmarks = []
+
+        for i in range(10):
+            increment_test_bookmarks.append(Bookmark(title=f'Bookmark {i+1}', thumbnail_url='www.google.com', url='www.google.com', _list=self.test_bookmarks_list).save())
+            #if i > 0: # prevent from going out of bounds
+            #    self.assertEqual(increment_test_bookmarks[i] - 1, increment_test_bookmarks[i-1]) # test that the new bookmark order is 1 larger than the previous one. 
+        
+        self.fail('finish the test')
+        #self.test_bookmarks_list.refresh_bookmark_ordering()
+
 class ListModelTests(test_objects_mixin, TestCase): 
     def test_create_bookmark_list(self):
         '''
@@ -163,6 +177,20 @@ class ListModelTests(test_objects_mixin, TestCase):
         # they should be the same
         self.assertEqual(url_first_save, url_second_save)          
 
+    def test_bookmark_order_with_respect_to_list(self):
+        # create a range of 9 new bookmarks, to be added to the 1 existing test = 10 in total
+        for i in range(9):
+            new_bookmark = Bookmark(title=f'Bookmark {i+1}', thumbnail_url='www.google.com', url='www.google.com', _list=self.test_bookmarks_list)
+            new_bookmark.save()
+
+        # check that the ordering is accurate
+        self.assertEqual([i for i in self.test_bookmarks_list.get_bookmark_order()], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+        # rearrange the order and re-test
+        new_order = [10, 2, 1, 3, 5, 6, 9, 7, 4, 8]
+        self.test_bookmarks_list.set_bookmark_order(new_order)
+        self.assertEqual([i for i in self.test_bookmarks_list.get_bookmark_order()], new_order)
+    
 class UserModelTests(test_objects_mixin, TestCase): 
     def test_create_user(self):
         '''

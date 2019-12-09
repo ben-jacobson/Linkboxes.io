@@ -15,12 +15,7 @@
     - Mobile friendly
     - Complete set of unit testing (do a quick audit even)
     - Complete set of functional tests (within reason)
-
-# TODO list
     - In your deployment script, alter Debug=False and disable the admin registrations
-    - We should come up with better terminology for List. It's not user friendly
-    - Test to see what injection someone can do with our input. E.g could they input some javascript into the page title? Django has autoescaping to resolve this
-
 
 # Known Bugs
     UNRESOLVED- try logging in after signing up, it can create an error. unless it has something to do with me being logged into admin page?
@@ -35,4 +30,6 @@
     - Probably a good idea to use a Captcha to ensure people can't just use a bot to create their own pages. We have space for 60M bookmark lists
     - Re-Look at our list save method for the url_id hashing function, can we catch other exceptions and maybe do some logging? How can we test this a bit more for robustness 
     - On Sign up, the verify password field has not yet been set up
-    - Can we create any automated testing for our JQuery code? What about the GUI aspect such as drag and drop, etc. 
+    - Can we create any automated testing for our JQuery code? What about the GUI aspect such as drag and drop, etc.
+    - Test to see what injection someone can do with our input. E.g could they input some javascript into the page title? Django has autoescaping to resolve this
+     - We should come up with better terminology for List. It's not user friendly
