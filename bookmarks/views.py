@@ -2,7 +2,6 @@ from django.views.generic import TemplateView, ListView, CreateView#, FormView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
 
-
 from bookmarks.models import List, Bookmark
 from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm
 
@@ -10,6 +9,7 @@ from django.http import HttpResponseForbidden
 
 from rest_framework import viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
+from rest_framework.decorators import action
 
 from django.contrib.auth.views import LoginView
 from bookmarks.forms import UserLoginForm, UserSignUpForm
@@ -126,6 +126,12 @@ class ListViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet
     queryset = List.objects.all()
     serializer_class = ListSerializer
     lookup_field = 'url_id' 
+
+    @action(methods=['post'], detail=True)  # we can call this method when re-ordering bookmarks via API calls
+    def reorder(self, request, pk=None): # takes a list of the new order as the argument
+        #list_obj = List.objects.get(url_id=self.kwargs['slug'])
+        #list_obj.set_bookmark_order(new_order)
+        print('called reorder')
 
 class BookmarkViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     '''

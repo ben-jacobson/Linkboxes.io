@@ -86,7 +86,6 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': test_url_slug}))
         self.assertEqual(response.context['list_slug'], test_url_slug)
 
-
     def test_slug_returns_valid_context(self):
         '''
         Unit Test - if we enter a known slug, will it return only those bookmarks and nothing else? Also tests that the correct context_object_name is set. 
@@ -124,7 +123,13 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
     def test_page_create_form_populates_initial_value(self):
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
         page_form = response.context['form']
-        self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])        
+        self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])   
+
+    def test_reorder_api_endpoint_when_authenticated(self):
+        self.fail('finish the test')     
+
+    def test_reorder_api_endpoint_when_not_authenticated(self):
+        self.fail('finish the test')             
 
 class LinkBoardViewTests(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):

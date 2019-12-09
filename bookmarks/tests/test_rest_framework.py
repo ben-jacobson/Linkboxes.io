@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark
 
-class ListSerializerTests(test_objects_mixin, TestCase): 
+class ListEndpointTests(test_objects_mixin, TestCase): 
     def test_api_view_not_publicly_accessible(self):
         '''
         Unit Test - viewing the api root is not allowed
@@ -43,6 +43,14 @@ class ListSerializerTests(test_objects_mixin, TestCase):
         url_id = self.test_bookmarks_list.url_id
         response = self.client.get(f'/api/Lists/{url_id}/', content_type='application/json')
         self.assertNotIn('id', response.data)        
+
+    def test_reorder_api_endpoint_when_authenticated(self):
+        url_id = self.test_bookmarks_list.url_id
+        response = self.client.get(f'/api/Lists/{url_id}/reorder', content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+    def test_reorder_api_endpoint_when_not_authenticated(self):
+        self.fail('finish the test')  
 
 class BookmarkSerializerTests(test_objects_mixin, TestCase): 
     def test_api_list_view_is_not_viewable(self):
