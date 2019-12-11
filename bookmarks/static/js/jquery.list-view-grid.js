@@ -12,11 +12,20 @@ $('.move-icon').mouseleave(function () {
     $('.thumbnail-sortable').sortable('disable');
 });
 
-
-
-/* 
-    Our modal dialog box for editing bookmarks requires us to modify the submit button on the fly
+/*
+    UI events
 */
+
+// event when the user has finished re-arranging their icons
+$('.thumbnail-sortable').sortable().bind('sortupdate', function() {  // for some reason, binding something to sortupdate, makes the click and drag feature really clunky
+    console.log('trigger drop');
+    // get the order of the elements
+
+    // get their ID's
+
+    // Make the AJAX call for the update
+});
+
 
 // event when user clicks the edit button
 $('.edit-icon').click(function(e) {
