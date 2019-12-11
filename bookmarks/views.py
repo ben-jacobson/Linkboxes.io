@@ -7,9 +7,10 @@ from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm
 
 from django.http import HttpResponseForbidden
 
-from rest_framework import viewsets, generics, permissions
+from rest_framework import status, viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from django.contrib.auth.views import LoginView
 from bookmarks.forms import UserLoginForm, UserSignUpForm
@@ -127,11 +128,18 @@ class ListViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet
     serializer_class = ListSerializer
     lookup_field = 'url_id' 
 
-    @action(methods=['post'], detail=True)  # we can call this method when re-ordering bookmarks via API calls
-    def reorder(self, request, pk=None): # takes a list of the new order as the argument
-        #list_obj = List.objects.get(url_id=self.kwargs['slug'])
-        #list_obj.set_bookmark_order(new_order)
-        print('called reorder')
+    @action(detail=True, methods=['PATCH'])  # we can call this method when re-ordering bookmarks via API calls
+    def reorder(self, request, *args, **kwargs):
+        #list_obj = List.objects.get(url_id=self.kwargs['url_id'])
+        list_obj = self.get_object()
+
+        if list_obj.owner == request.user: # for some reason DRF @action decorator ignores the permission classes
+            new_order = request.data['new_order']
+            list_obj.set_bookmark_order(new_order)
+            return Response('status', status=status.HTTP_200_OK)
+        else:
+            return Response('status', status=status.HTTP_403_FORBIDDEN)
+
 
 class BookmarkViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet):
     '''

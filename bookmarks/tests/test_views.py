@@ -59,7 +59,6 @@ class SignUpTest(test_objects_mixin, TestCase):
         test_user_lookup = User.objects.get(username=test_username)
         self.assertEqual(test_user_lookup.username, test_username)
 
-
 class BookmarkListViewTests(test_objects_mixin, TestCase): 
     def test_uses_correct_template(self):
         '''
@@ -123,13 +122,7 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
     def test_page_create_form_populates_initial_value(self):
         response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
         page_form = response.context['form']
-        self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])   
-
-    def test_reorder_api_endpoint_when_authenticated(self):
-        self.fail('finish the test')     
-
-    def test_reorder_api_endpoint_when_not_authenticated(self):
-        self.fail('finish the test')             
+        self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])              
 
 class LinkBoardViewTests(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):

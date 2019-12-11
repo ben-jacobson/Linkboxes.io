@@ -85,20 +85,6 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         with self.assertRaises(ValidationError):
             test_bookmark_with_long_url.full_clean()
 
-    def test_order_auto_increment(self):
-        '''
-        Unit Test - upon save, the autofield should create a unique value that increments from the last value
-        '''
-        increment_test_bookmarks = []
-
-        for i in range(10):
-            increment_test_bookmarks.append(Bookmark(title=f'Bookmark {i+1}', thumbnail_url='www.google.com', url='www.google.com', _list=self.test_bookmarks_list).save())
-            #if i > 0: # prevent from going out of bounds
-            #    self.assertEqual(increment_test_bookmarks[i] - 1, increment_test_bookmarks[i-1]) # test that the new bookmark order is 1 larger than the previous one. 
-        
-        self.fail('finish the test')
-        #self.test_bookmarks_list.refresh_bookmark_ordering()
-
 class ListModelTests(test_objects_mixin, TestCase): 
     def test_create_bookmark_list(self):
         '''
