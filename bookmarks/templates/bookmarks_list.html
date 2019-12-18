@@ -11,7 +11,7 @@
                 <div class="col-md-12"><a class="add-icon btn btn-block btn-success" data-toggle="modal" data-target="#createBookmarkModal"><i class="fa fa-fw fa-1x py-1 fa-plus text-white"></i></a></div>
             </div>
         {% endif %}
-        <div id='thumbnail-container' class='row thumbnail-sortable' data-list-slug='{{ list_slug }}'>
+        <div id='thumbnail-container' class='row' data-list-slug='{{ list_slug }}'>
             {% for bookmark in bookmarks_list %}
             <div class="bookmark-card col-sm-6 col-md-6" data-bookmark-id='{{ bookmark.id }}'
                 data-list-slug='{{ list_slug }}'>

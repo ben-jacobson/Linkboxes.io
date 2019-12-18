@@ -2,30 +2,39 @@
     For enabling the list view drag and drop
 */
 
+// set up our sortable thumbnails
+var currently_sorting = false; 
+var thumbnails_sortable_elem = document.getElementById('thumbnail-container');
+var sortable_js = new Sortable(thumbnails_sortable_elem, {
+    disabled: true,         // start disabled, we use the move icons to make this work 
+    animation: 150,
+    ghostClass: 'sortable-drop-placeholder',
+    onStart: function() {
+        currently_sorting = true;
+    },
+    onUpdate: function() {
+        // save the new order
+        console.log('trigger update AJAX');
+        currently_sorting = false; 
+    },
+});
+
 // set an event - when you hover over the move icon, enables dragging and dropping
 $('.move-icon').mouseenter(function () {
-    $('.thumbnail-sortable').sortable('enable');
+    //console.log('enable sorting');
+    sortable_js.option("disabled", false);
 });
 
 // set an event - when you leave the move icon, disables dragging and dropping
 $('.move-icon').mouseleave(function () {
-    $('.thumbnail-sortable').sortable('disable');
+    // TODO - we only want to disable sorting if we are actually finished sorting.
+    //console.log('disable sorting');
+    sortable_js.option("disabled", true);      
 });
 
 /*
     UI events
 */
-
-// event when the user has finished re-arranging their icons
-$('.thumbnail-sortable').sortable().bind('sortupdate', function() {  // for some reason, binding something to sortupdate, makes the click and drag feature really clunky
-    console.log('trigger drop');
-    // get the order of the elements
-
-    // get their ID's
-
-    // Make the AJAX call for the update
-});
-
 
 // event when user clicks the edit button
 $('.edit-icon').click(function(e) {
@@ -125,17 +134,4 @@ $('.copy-icon').click(function(e) {
 
     alert('Feature coming soon');
     // get the data from the element on page, not from the server - this is a resource saving exercise
-});
-
-/*
-    Init code
-*/
-
-// set up our sortable and start up in disabled mode
-$(function () {
-    $('.thumbnail-sortable').sortable({
-        placeholderClass: 'col-sm-6 col-md-6' // tells us how big the placeholder blank needs to be
-    });
-
-    $('.thumbnail-sortable').sortable('disable'); // start in disabled state    
 });
