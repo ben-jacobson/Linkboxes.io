@@ -1,21 +1,48 @@
+/* 
+
+    Some Helper functions
+*/ 
+
+function ajax_request_set_new_list_order(list_id, new_order) {
+    var csrfToken =  $('input[name="csrfmiddlewaretoken"]').attr('value');
+    var json_data = JSON.stringify({'new_order': new_order});
+
+    // set up the AJAX request, inject the CSRF token
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        }   
+    });    
+
+    // run the AJAX request to save the data
+    $.ajax({ 
+        type: 'PATCH',        
+        url: '/api/Lists/' + list_id + '/reorder/',    
+        data: json_data,
+    }); 
+}
+
+
 /*
     For enabling the list view drag and drop
 */
 
 // set up our sortable thumbnails
-var currently_sorting = false; 
-var thumbnails_sortable_elem = document.getElementById('thumbnail-container');
+//var thumbnails_sortable_elem = document.getElementById('thumbnail-container');
+var thumbnails_sortable_elem = $('#thumbnail-container')[0];
 var sortable_js = new Sortable(thumbnails_sortable_elem, {
     disabled: true,         // start disabled, we use the move icons to make this work 
     animation: 150,
     ghostClass: 'sortable-drop-placeholder',
-    onStart: function() {
-        currently_sorting = true;
-    },
     onUpdate: function() {
-        // save the new order
-        console.log('trigger update AJAX');
-        currently_sorting = false; 
+        // get a list of bookmarks and extract the IDs
+        var new_order = [];
+        $('.bookmark-card').filter(function(e) {
+            //console.log(e.attr('data-bookmark-id'));
+            order = $(this).attr('data-bookmark-id');
+            new_order.push(parseInt(order));
+        });
+        ajax_request_set_new_list_order($('#thumbnail-container').attr('data-list-slug'), new_order);
     },
 });
 
@@ -31,6 +58,7 @@ $('.move-icon').mouseleave(function () {
     //console.log('disable sorting');
     sortable_js.option("disabled", true);      
 });
+
 
 /*
     UI events
@@ -124,7 +152,6 @@ $('.delete-icon').click(function(e) {
             $(bookmark_elem).remove();
         }
     });
-
 });
 
 // event when user clicks the copy icon

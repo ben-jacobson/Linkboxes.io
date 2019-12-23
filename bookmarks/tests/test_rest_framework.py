@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark
 from bookmarks.models import Bookmark
+from json import dumps
 
 class ListEndpointTests(test_objects_mixin, TestCase): 
     def test_api_view_not_publicly_accessible(self):
@@ -74,13 +75,15 @@ class ListEndpointTests(test_objects_mixin, TestCase):
             new_test_bookmarks.append(Bookmark(title=f'Bookmark {i+1}', thumbnail_url='www.google.com', url='www.google.com', _list=self.test_bookmarks_list).save())
 
         # our new order
-        new_order = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        new_order = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1] # array of indexes to be changed into a string
 
         # run the post method to see how this responds
         url_id = self.test_bookmarks_list.url_id
-        response = self.client.patch(
+        json_data = dumps({'new_order': new_order})     # should be equivalent to JS JSON.stringify?
+
+        self.client.patch(
             f'/api/Lists/{url_id}/reorder/', 
-            data={'new_order': new_order}, 
+            data=json_data, 
             content_type='application/json' # this request will not work without this. 
         )
 

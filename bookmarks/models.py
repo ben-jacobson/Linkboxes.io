@@ -41,38 +41,6 @@ class List(models.Model):
         ### checking for collision is automatic, because field is set to be unique so should raise an IntegrityError if any issues
         super(List, self).save(*args, **kwargs) 
 
-    '''def reorder_bookmarks(self, related_bookmarks):
-        pass
-
-    def check_duplicate_bookmark_ordering(self):
-        return False # pass for now
-
-    def refresh_bookmark_ordering(self):
-    '''
-    # Helper function, called on model save, if the ordering bookmarks has changed at all, or is invalid, this function will re-order them.
-    '''
-        related_bookmarks = self.bookmarks.all()
-        order_map = [] 
-
-        # create an array of the ordering
-        for bookmark in related_bookmarks:
-            print(f'Before - {bookmark.order}: {bookmark.title}')
-            order_map.append(bookmark.order)
-        
-            # on the way, if we encounter any zero orders, set a flag to re_order 
-            if bookmark.order == 0: 
-                self.reorder_bookmarks(related_bookmarks)
-
-        # check if any duplicates in the values, if so - reorder
-        if self.check_duplicate_bookmark_ordering() == True: ### #USE SET() if len(listOfElems) == len(set(listOfElems)):
-
-            self.reorder_bookmarks(related_bookmarks)
-
-        # Debug only - output the new ordering
-        print('')
-        for bookmark in related_bookmarks:
-            print(f'After - {bookmark.order}: {bookmark.title}')'''
-
     def __str__(self):
         return self.title
 

@@ -3,7 +3,7 @@ from .models import Bookmark, List
 
 class BookmarkInline(admin.TabularInline):
     model = Bookmark
-    list_display = ('id', 'title', 'thumbnail_url', 'url')
+    list_display = ('id', 'title', 'thumbnail_url', 'url', )
     readonly_fields = ('id',)
 
 @admin.register(List)

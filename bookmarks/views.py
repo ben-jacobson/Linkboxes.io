@@ -16,6 +16,8 @@ from django.contrib.auth.views import LoginView
 from bookmarks.forms import UserLoginForm, UserSignUpForm
 from django.contrib.auth.models import User
 
+from json import loads
+
 '''
 
 Django Standard Views
@@ -130,11 +132,11 @@ class ListViewSet(generics.RetrieveUpdateDestroyAPIView, viewsets.GenericViewSet
 
     @action(detail=True, methods=['PATCH'])  # we can call this method when re-ordering bookmarks via API calls
     def reorder(self, request, *args, **kwargs):
-        #list_obj = List.objects.get(url_id=self.kwargs['url_id'])
         list_obj = self.get_object()
 
         if list_obj.owner == request.user: # for some reason DRF @action decorator ignores the permission classes
-            new_order = request.data['new_order']
+            request_body = loads(request.body)
+            new_order = request_body['new_order']
             list_obj.set_bookmark_order(new_order)
             return Response('status', status=status.HTTP_200_OK)
         else:
