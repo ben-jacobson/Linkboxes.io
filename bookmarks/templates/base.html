@@ -3,16 +3,17 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/bootstrap-4.3.1.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/list-view-grid-sort.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/list-view-grid.css' %}" type="text/css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.3.1.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/list-view-grid-sort.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/list-view-grid.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/linkboard-list-view.css' %}" type="text/css" />
     <title>{% block page-title %}{% endblock %}</title>
 </head>
 
@@ -56,16 +57,16 @@
                             class="btn btn-primary ml-3">Subscribe</button>
                     </form>
                 </div>
-                <div class="col-4 col-md-1 align-self-center">
+                <!-- div class="col-4 col-md-1 align-self-center">
                     <a href="#">
                         <i class="fab fa-facebook-f text-muted fa-2x"></i>
                     </a>
-                </div>
+                <div>
                 <div class="col-4 col-md-1 align-self-center">
                     <a href="#">
                         <i class="fab fa-twitter text-muted fa-2x"></i>
                     </a>
-                </div>
+                </div -->
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3 text-center">
@@ -78,8 +79,7 @@
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/Sortable.js' %}"></script>
-    <script src="{% static 'js/jquery.list-view-grid.js' %}"></script>
+    {% block page-specific-js %}{% endblock %}
 </body>
 
 </html>

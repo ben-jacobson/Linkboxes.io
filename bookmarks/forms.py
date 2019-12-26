@@ -28,6 +28,15 @@ class BookmarkEditForm(BookmarkFormMixin):
     def save(self):
         raise ValueError('Form Saving Is Disabled') # we have some JQuery code to do this via an API call.
 
+class LinkBoardEditTitleForm(ModelForm):
+    ''' 
+    #On the /Linkboards/ page or on the ListView, use this form to edit the title
+    '''
+    title = CharField(widget=TextInput(attrs={'id': 'board-title', 'class': 'form-control', 'placeholder': '',}), label='Name')
+    class Meta:
+        model = List
+        fields = ('title', )
+
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'Email', 'autofocus': True}), label='Email address')
     password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password', }), label="Password", strip=False)

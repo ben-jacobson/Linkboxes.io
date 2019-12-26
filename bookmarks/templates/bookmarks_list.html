@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %} {% block page-title %}{{ list_name }}{% endblock %} {% block main-content %}
 <div class="py-5">
     <div class="container">
@@ -116,4 +118,10 @@
     </div>
 
     <div>
-        {% endblock %}
+{% endblock %}
+
+{% block page-specific-js %}
+{% load static %}
+    <script src="{% static 'js/Sortable.js' %}"></script>
+    <script src="{% static 'js/jquery.list-view-grid.js' %}"></script>
+{% endblock %}

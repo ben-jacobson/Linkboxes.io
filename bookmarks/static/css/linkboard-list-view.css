@@ -1,0 +1,20 @@
+/*
+    LinkBoard ListView
+*/
+
+.link-board-edit-icon, .link-board-delete-icon {
+    color: darkslategray; 
+    cursor: pointer;
+}
+
+.linkboard-list-title-col, .linkboard-list-edit-col, .linkboard-list-delete-col  {
+    vertical-align: baseline; 
+}
+
+.linkboard-list-edit-col, .linkboard-list-delete-col  {
+    padding-right: 15px;
+}
+
+.linkboard-list-title-col {
+    padding-right: 50px;
+}

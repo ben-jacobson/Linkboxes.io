@@ -1,6 +1,5 @@
 /* 
-
-    Some Helper functions
+    Helper functions
 */ 
 
 function ajax_request_set_new_list_order(list_id, new_order) {
@@ -22,29 +21,37 @@ function ajax_request_set_new_list_order(list_id, new_order) {
     }); 
 }
 
+/*
+    Global Variables
+*/
+var sortable_js = null;
 
 /*
     For enabling the list view drag and drop
 */
 
-// set up our sortable thumbnails
-//var thumbnails_sortable_elem = document.getElementById('thumbnail-container');
-var thumbnails_sortable_elem = $('#thumbnail-container')[0];
-var sortable_js = new Sortable(thumbnails_sortable_elem, {
-    disabled: true,         // start disabled, we use the move icons to make this work 
-    animation: 150,
-    ghostClass: 'sortable-drop-placeholder',
-    onUpdate: function() {
-        // get a list of bookmarks and extract the IDs
-        var new_order = [];
-        $('.bookmark-card').filter(function(e) {
-            //console.log(e.attr('data-bookmark-id'));
-            order = $(this).attr('data-bookmark-id');
-            new_order.push(parseInt(order));
-        });
-        ajax_request_set_new_list_order($('#thumbnail-container').attr('data-list-slug'), new_order);
-    },
+$(document).ready(function() { 
+    // set up our sortable thumbnails
+    sortable_js = new Sortable($('#thumbnail-container')[0], {
+        disabled: true,         // start disabled, we use the move icons to make this work 
+        animation: 150,
+        ghostClass: 'sortable-drop-placeholder',
+        onUpdate: function() {
+            // get a list of bookmarks and extract the IDs
+            var new_order = [];
+            $('.bookmark-card').filter(function(e) {
+                //console.log(e.attr('data-bookmark-id'));
+                order = $(this).attr('data-bookmark-id');
+                new_order.push(parseInt(order));
+            });
+            ajax_request_set_new_list_order($('#thumbnail-container').attr('data-list-slug'), new_order);
+        },
+    });
 });
+
+/*
+    UI events
+*/
 
 // set an event - when you hover over the move icon, enables dragging and dropping
 $('.move-icon').mouseenter(function () {
@@ -58,11 +65,6 @@ $('.move-icon').mouseleave(function () {
     //console.log('disable sorting');
     sortable_js.option("disabled", true);      
 });
-
-
-/*
-    UI events
-*/
 
 // event when user clicks the edit button
 $('.edit-icon').click(function(e) {
@@ -134,7 +136,7 @@ $('#edit-modal-save').click(function(e) {
 $('.delete-icon').click(function(e) {
     var bookmark_elem = $(e.target).closest('.bookmark-card');
     var bookmark_id = bookmark_elem.attr('data-bookmark-id');
-    var csrfToken =  $('input[name="csrfmiddlewaretoken"]').attr('value');
+    var csrfToken = $('input[name="csrfmiddlewaretoken"]').attr('value');
 
     // set up the AJAX request, inject the CSRF token
     $.ajaxSetup({

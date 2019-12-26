@@ -4,7 +4,6 @@
 
 {% block main-content %}
 <div class="py-5">
-
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -12,16 +11,56 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 text-center">
-                <ul>
+            <div class="col-md-6">
+                <table>
                     {% for linkboard in linkboards %}
-                    <a href='/{{ linkboard.url_id }}'>
-                        <p>{{ linkboard.title }}</p>
-                    </a>
+                    <tr data-list-slug='{{ linkboard.url_id }}' data-list-name='{{ linkboard.title }}'>
+                        <th class='linkboard-list-title-col'><a href='/{{ linkboard.url_id }}'>{{ linkboard.title }}</a></th>
+                        <th class='linkboard-list-edit-col'><i class='fas fa-pencil-alt link-board-edit-icon' data-toggle="modal" data-target="#editLinkBoardModal"></i></th>
+                        <th class='linkboard-list-delete-col'><i class='far fa-trash-alt link-board-delete-icon'></i></th>
+                    </tr>
                     {% endfor %}
-                </ul>
+                </table>
+            </div>
+            <div class='col-md-6'>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editLinkBoardModal" tabindex="-1" role="dialog" aria-labelledby="editLinkBoardCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="LongTitle">Rename Linkboard</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id='rename-linkboard-form' action='{{ request.path }}' method='POST'> 
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field.errors }}{{ hidden_field }}
+                    {% endfor %}
+                    {% for field in form.visible_fields %}
+                    <div class='form-group'>
+                        {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
+                    {% endfor %}                        
+                </div>
+                <div class="modal-footer">
+                    <button id="create-modal-close" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cancel</button>
+                    <input type='submit' id="edit-modal-save" value='Save' class="btn btn-primary" />            
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page-specific-js %}
+{% load static %}
+    <script src="{% static 'js/jquery.linkboard-listview.js' %}"></script>
 {% endblock %}
