@@ -4,7 +4,8 @@
     /- Can sign up and create a login/user id
     /- Can log in / log out
     - Can create lists when logged in, can't create lists when not logged in
-        - LinkBoard page must have an add and delete function. When empty it have a message saying "add a page now"
+        / - LinkBoard page must have an add and delete function. When empty it have a message saying "add a page now"
+        - Linkboard page needs an add button. 
     - Can modify their lists when logged in, can't modify lists when not logged in
         /- Edit button edits the link in real time
         /- Delete button deletes the link in real time

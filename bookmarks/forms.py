@@ -32,7 +32,7 @@ class LinkBoardEditTitleForm(ModelForm):
     ''' 
     #On the /Linkboards/ page or on the ListView, use this form to edit the title
     '''
-    title = CharField(widget=TextInput(attrs={'id': 'board-title', 'class': 'form-control', 'placeholder': '',}), label='Name')
+    title = CharField(widget=TextInput(attrs={'id': 'edit-board-title', 'class': 'form-control', 'placeholder': '',}), label='Name')
     class Meta:
         model = List
         fields = ('title', )
