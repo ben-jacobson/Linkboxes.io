@@ -28,7 +28,28 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="CreateLinkBoardModal" tabindex="-1" role="dialog" aria-labelledby="createLinkBoardCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Linkboard</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <div class="modal-body">
+                    <form id='create-linkboard-form' action='{{ request.path }}' method='POST'> 
+                        <p>Test</p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="create-modal-close" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cancel</button>
+                    <button id="create-modal-save" type="button" class="btn btn-primary">Create</button>
+                </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="editLinkBoardModal" tabindex="-1" role="dialog" aria-labelledby="editLinkBoardCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="dialog">
@@ -39,24 +60,24 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id='rename-linkboard-form' action='{{ request.path }}' method='POST'> 
                 <div class="modal-body">
+                    <form id='rename-linkboard-form'> 
                     {% csrf_token %}
-                    {{ form.non_field_errors }}
+                    {{ form.non_field_errors }} 
                     {% for hidden_field in form.hidden_fields %}
                     {{ hidden_field.errors }}{{ hidden_field }}
                     {% endfor %}
                     {% for field in form.visible_fields %}
                     <div class='form-group'>
                         {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
-                    {% endfor %}                        
+                    {% endfor %}     
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="create-modal-close" type="button" class="btn btn-secondary"
+                    <button id="edit-modal-close" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Cancel</button>
-                    <input type='submit' id="edit-modal-save" value='Save' class="btn btn-primary" />            
+                    <button id="edit-modal-save" type="button" class="btn btn-primary">Save</button>
                 </div>
-            </form>
         </div>
     </div>
 </div>

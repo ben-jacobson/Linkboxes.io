@@ -124,7 +124,7 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
         page_form = response.context['form']
         self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])              
 
-class LinkBoardViewTests(test_objects_mixin, TestCase):
+class LinkBoardListViewTests(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
         '''
         Unit Test - Does the listview use the correct template? Also tests the url_id functionality works
@@ -132,20 +132,69 @@ class LinkBoardViewTests(test_objects_mixin, TestCase):
         response = self.client.get(reverse('linkboards-listview'))
         self.assertTemplateUsed(response, 'linkboards_list.html')
 
-    def test_returns_query_set_when_logged_in(self):
+    def test_post_data_creates_new_linkboard_when_authenticated(self):
         '''
-        Unit Test - The view returns some context data, including the title of the list. Does it return the correct data?
+        Unit Test - When a user is authenticated, sending a POST request to the linkboards page should create a link Linkboard
         '''
-        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
-        test_list_title = self.test_bookmarks_list.title
-        response = self.client.get(reverse('linkboards-listview'))
-        query_set = response.context['linkboards']
-        self.assertEqual(test_list_title, query_set[0].title)
+        self.fail('finish the test')
 
-    def test_returns_no_data_when_not_logged_in(self):
+    def test_post_data_returns_error_when_not_authenticated(self):
         '''
-        Unit Test - The view returns some context data, including the title of the list. Does it return the correct data?
+        Unit Test - When no user is authenticated, sending a POST request should return 403 Forbidden
+        '''        
+        self.fail('finish the test')
+
+    def test_get_returns_only_linkboards_from_authenticated_user(self):
         '''
+        Unit Test - When a user is authenticated, sending a GET request to the linkboards page should only return a set of linkboards belonging to that user
+        '''        
+        second_test_user = User.objects.create_user("Invalid User", "InvalidUser@gotmail.com", "IamInvalid")
+
+        test_list_one = self.test_bookmarks_list # belongs to the authenitcated user
+        test_list_two = create_test_bookmarks_list(second_test_user, title="Should not appear") # belongs to a different user
+
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
         response = self.client.get(reverse('linkboards-listview'))
         query_set = response.context['linkboards']
-        self.assertEqual(len(query_set), 0)        
+
+        self.assertEqual(len(query_set), 1)
+        self.assertEqual(test_list_one.title, query_set[0].title) # there should only be one result
+
+    def test_get_redirects_to_login_page_when_not_authenticated(self):
+        '''
+        Unit Test - When a user is not authenticated, sending a GET request to the linkboards page should redirect the user to a loging page
+        '''        
+        response = self.client.get(reverse('linkboards-listview'))
+        self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards/')
+
+    def test_delete_data_deletes_a_linkboard_when_authenticated(self):
+        '''
+        Unit Test - When a user is authenticated, sending a DELETE request for a specific linkboards should delete the linkboard
+        '''
+        self.fail('finish the test')
+
+    def test_delete_data_returns_error_when_not_authenticated(self):
+        '''
+        Unit Test - When no user is authenticated, sending a DELETE request should return 403 Forbidden
+        '''        
+        self.fail('finish the test')
+
+    def test_page_has_create_form(self):
+        '''
+        Unit Test - The page should have two forms, test that the create form is present
+        '''        
+        self.fail('finish the test')
+        '''        
+        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
+        self.assertIsInstance(response.context['form'], BookmarkCreateForm)  '''
+
+    def test_page_has_edit_form(self):
+        '''
+        Unit Test - The page should have two forms, test that the edit form is present
+        '''                
+        self.fail('finish the test')
+        '''        
+        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
+        self.assertEquals(response.context['edit_bookmark_form'], BookmarkEditForm)     # was assertIsInstance when we used a form object    '''
+
+        

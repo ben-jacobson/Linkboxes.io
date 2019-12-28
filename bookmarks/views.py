@@ -1,5 +1,6 @@
-from django.views.generic import TemplateView, ListView, CreateView, FormView
+from django.views.generic import TemplateView, ListView, CreateView#, FormView
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
 from bookmarks.models import List, Bookmark
@@ -42,7 +43,7 @@ class UserSignupView(CreateView):
     def get_success_url(self):
         return reverse('linkboards-listview')
 
-class BookmarkListView(CreateView, ListView): # FormView unsure if okay to mix class based views like this? Tests pass fine however. 
+class BookmarkListView(CreateView, ListView):         
     form_class = BookmarkCreateForm     # there are two forms on this page, the create form uses the POST method by default in Django, the second is just UI so is passed as a context object below. 
     template_name = 'bookmarks_list.html'
     model = List
@@ -80,60 +81,17 @@ class BookmarkListView(CreateView, ListView): # FormView unsure if okay to mix c
         context['edit_bookmark_form'] = BookmarkEditForm 
         return context
 
-class LinkBoardsListView(FormView, ListView):
+class LinkBoardsListView(LoginRequiredMixin, CreateView, ListView):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
     template_name = 'linkboards_list.html'
     model = List
     context_object_name = 'linkboards'
-    form_class = LinkBoardEditTitleForm
+    form_class = LinkBoardEditTitleForm # for creating new LinkBoards
 
     def get_queryset(self):
         return List.objects.filter(owner=self.request.user.id)
-
-    def get_success_url(self):
-        return reverse('linkboards-listview')    
-
-    def post(self, request, *args, **kwargs):
-        # the way this view works is that we use the formview to render a form with the CSRF token, 
-        # but the pages AJAX request to DRF does the update work. 
-        # so the server doesn't need to do anything except return a 204. 
-        # I haven't tried returning a 200 yet because this may mess with the AJAX request since there is no return data
-        return HttpResponse(status=204)
-
-'''class LinkBoardsListView(ModelFormMixin, ListView):
-    form_class = LinkBoardEditTitleForm
-    template_name = 'linkboards_list.html'
-    model = List
-    context_object_name = 'linkboards'
-
-    def get_success_url(self):
-        return reverse('linkboards-listview')
-
-    def get_object(self,queryset=None):  
-        queryset = List.objects.filter(owner=self.request.user.id)
-        return super(LinkBoardsListView, self).get_object(queryset))
-
-    def get_context_data(self, **kwargs):
-
-        context = ModelFormMixin.get_context_data(**kwargs)
-        context = ListView.get_context_data(**context)
-        return context
-
-    def get_queryset(self):
-        return List.objects.filter(owner=self.request.user.id)
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, this is for the edit LinkBoard form
-        """
-        form = self.get_form()
-        self.form = form
-
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-'''
 
 '''
 

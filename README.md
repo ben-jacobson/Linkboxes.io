@@ -20,10 +20,11 @@
     - In your deployment script, alter Debug=False and disable the admin registrations
 
 # Known Bugs
-    UNRESOLVED- try logging in after signing up, it can create an error. unless it has something to do with me being logged into admin page?
-    UNRESOLVED - Links without a HTTP prefix does not hyperlink correctly. A check should happen server side
-    FIXED - After you edit a page, it seems to update all A hrefs on the page? Or at least when clicking on another edit icon it shows there. How come? 
-    UNRESOLVED - when editing a bookmark, pressing enter does nothing
+    - Try logging in after signing up, it can create an error. unless it has something to do with me being logged into admin page?
+    - Links without a HTTP prefix does not hyperlink correctly. A check should happen server side
+    - FIXED - After you edit a page, it seems to update all A hrefs on the page? Or at least when clicking on another edit icon it shows there. How come? 
+    - FIXED - when editing a bookmark, pressing enter does nothing
+    - FIXED - pressing enter when editing a linkboard has some strange behaviour
 
 
 # Features to implement in future releases

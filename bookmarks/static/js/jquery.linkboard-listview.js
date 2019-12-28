@@ -1,22 +1,27 @@
-$(document).ready(function() { 
+/*
+    Create linkboard events
+*/
 
-});
 
+
+/*
+    Edit linkboard events
+*/
 
 // user clicks the edit icon next to their linkboard
-$('.link-board-edit-icon').click(function(e) {
+$('.link-board-edit-icon').click(function(event) {
     // when clicking the edit icon, populate the placeholer
-    var list_name = $(e.target).closest('tr').attr('data-list-name');
+    var list_name = $(event.target).closest('tr').attr('data-list-name');
     $('#rename-linkboard-form').trigger("reset");
     $('#edit-board-title').attr('value', list_name);
 
     // populate a data field so that the modal save knows list it is operating on
-    var list_slug = $(e.target).closest('tr').attr('data-list-slug');
+    var list_slug = $(event.target).closest('tr').attr('data-list-slug');
     $('#editLinkBoardModal').attr('data-list-slug', list_slug);
 });
 
 // In the edit modal, user clicks the save button
-$('#edit-modal-save').click(function(e) {
+function rename_bookmark() {
     // get the list slug
     var list_slug = $("#editLinkBoardModal").attr('data-list-slug');    
 
@@ -49,20 +54,32 @@ $('#edit-modal-save').click(function(e) {
             linkboard_title_elem.find('a').html(json_data['title']);
         }
     }); 
-});
+    
+    return false; // to stop the browser from redirecting.
+}
 
+// on the rename modal, if the user clicks the save button, or presses enter, trigger the rename_bookmark event
+$('#edit-modal-save').click(rename_bookmark);   
+$('#rename-linkboard-form').submit(rename_bookmark);
 
-$('.link-board-delete-icon').click(function(e) {
+/*
+    Delete linkboard events
+*/
+
+// when the user clicks the delete icon, the modal is activated and populated
+$('.link-board-delete-icon').click(function(event) {
     // find which list we are deleting
-    var list_slug = $(e.target).closest('tr').attr('data-list-slug');
+    var list_slug = $(event.target).closest('tr').attr('data-list-slug');
     $('#confirmDeleteLinkBoardModal').attr('data-list-slug', list_slug);
 
     // populate the modal title
-    var list_name = $(e.target).closest('tr').attr('data-list-name');
+    var list_name = $(event.target).closest('tr').attr('data-list-name');
     $('h5.modal-title').html("Are your sure you want to delete '" + list_name + "'");
 }); 
 
-$('#delete-modal-confirm').click(function(e) {
+
+// when the confirm delete modal is on screen, if the user clicks confirm or presses enter, delete the bookmark
+$('#delete-modal-confirm').click(function() {
     // find which list we are deleting
     var list_slug = $("#confirmDeleteLinkBoardModal").attr('data-list-slug');    
 
@@ -83,6 +100,15 @@ $('#delete-modal-confirm').click(function(e) {
             $('tr[data-list-slug="' + list_slug + '"]').remove();
         }
     });
-
 }); 
+
+// if the user presses the enter key when the modal is active
+$('#confirmDeleteLinkBoardModal').on('keypress', function (event) {  
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    var keycode_enter = 13; 
+
+    if (keycode == keycode_enter) {
+        $('#delete-modal-confirm').click();   
+    }
+});
 

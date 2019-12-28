@@ -130,7 +130,19 @@ $('#edit-modal-save').click(function(e) {
             bookmark_elem.find('img.bookmark-thumbnail').attr('src', json_data['thumbnail_url']); // update the image thumbnail 
         }
     });   
+
+    return false; // to stop the browser from redirecting.
 }); 
+
+// if the user presses the enter key when the modal is active
+$('#editBookmarkModal').on('keypress', function (event) {  
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    var keycode_enter = 13; 
+
+    if (keycode == keycode_enter) {
+        $('#edit-modal-save').click();   
+    }
+});
 
 // event when user clicks the delete button
 $('.delete-icon').click(function(e) {
