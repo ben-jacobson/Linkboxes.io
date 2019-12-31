@@ -1,8 +1,9 @@
-from django.forms import ModelForm, CharField, PasswordInput
+from django.forms import ModelForm, CharField, PasswordInput, EmailField, EmailInput
 from django.forms.fields import TextInput, HiddenInput
-from bookmarks.models import Bookmark, List
+from django.contrib.auth.forms import UserCreationForm, UsernameField
+from django.contrib.auth import password_validation
 
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from bookmarks.models import Bookmark, List
 from django.contrib.auth.models import User
 
 class BookmarkFormMixin(ModelForm):
@@ -28,35 +29,35 @@ class BookmarkEditForm(BookmarkFormMixin):
     def save(self):
         raise ValueError('Form Saving Is Disabled') # we have some JQuery code to do this via an API call.
 
-class LinkboardFormMixin(ModelForm):
+class LinkBoardEditForm(ModelForm):
+    ''' 
+    On the /Linkboards/ page or on the ListView, use this form to edit the title
+    '''
+    title = CharField(widget=TextInput(attrs={'id': 'edit-board-title', 'class': 'form-control',}), label='Name')
+
     class Meta:
         model = List
         fields = ('title', )
 
-class LinkBoardEditTitleForm(LinkboardFormMixin):
-    ''' 
-    On the /Linkboards/ page or on the ListView, use this form to edit the title
-    '''
-    title = CharField(widget=TextInput(attrs={'id': 'edit-board-title', 'class': 'form-control', 'placeholder': '',}), label='Name')
-
-class LinkBoardCreateTitleForm(LinkboardFormMixin):
+class LinkBoardCreateForm(ModelForm):
     ''' 
     On the /Linkboards/ page or on the ListView, use this form to create a new linkboard
     '''
-    title = CharField(widget=TextInput(attrs={'id': 'create-board-title', 'class': 'form-control', 'placeholder': '',}), label='Name')
+    title = CharField(widget=TextInput(attrs={'id': 'create-board-title', 'class': 'form-control',}), label='Name')
 
-class UserLoginForm(AuthenticationForm):
-    username = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'Email', 'autofocus': True}), label='Email address')
-    password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password', }), label="Password", strip=False)
+    class Meta:
+        model = List
+        fields = ('title', )#, 'owner', )
 
-class UserSignUpForm(ModelForm):
-    first_name = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'text', 'placeholder': 'First Name', 'autofocus': True}), label='First Name')
-    last_name = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'text', 'placeholder': 'Last Name'}), label='Last Name')
-    username = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'Email'}), label='Email address')
-    password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password', }), label="Password", strip=False)
-    verify_password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Verify Password', }), label="Verify Password", strip=False)
-    field_order = ('first_name', 'last_name', 'username', 'password', 'verify_password')
+class UserSignUpForm(UserCreationForm):
+    first_name = CharField(widget=TextInput(attrs={'class': 'form-control', 'type': 'text', 'placeholder': 'First Name', 'autofocus': True}), label='First Name')
+    last_name = CharField(widget=TextInput(attrs={'class': 'form-control', 'type': 'text', 'placeholder': 'Last Name'}), label='Last Name')
+    username = EmailField(widget=EmailInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'Email'}), label='Email Address')
+    #username = UsernameField(widget=TextInput(attrs={'class': 'form-control', 'type': 'text', 'placeholder': 'Username'}), label='Username')
+    password1 = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password', }), label="Password", strip=False, help_text=password_validation.password_validators_help_text_html())
+    password2 = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Verify Password', }), label="Verify Password", strip=False, help_text="Enter the same password as before, for verification.")
+    field_order = ('first_name', 'last_name', 'username', )
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'password')    
+        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', )

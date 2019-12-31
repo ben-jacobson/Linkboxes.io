@@ -1,21 +1,20 @@
-from django.views.generic import TemplateView, ListView, CreateView#, FormView
+from django.views.generic import TemplateView, ListView, CreateView
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
 
 from bookmarks.models import List, Bookmark
-from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, LinkBoardEditTitleForm
 
-from django.http import HttpResponseForbidden, HttpResponse
+from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, LinkBoardEditForm, LinkBoardCreateForm, UserSignUpForm
+
+from django.http import HttpResponseForbidden
+from django.urls import reverse
 
 from rest_framework import status, viewsets, generics, permissions
 from .serializers import ListSerializer, BookmarkSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from django.contrib.auth.views import LoginView
-from bookmarks.forms import UserLoginForm, UserSignUpForm
-from django.contrib.auth.models import User
 
 from json import loads
 
@@ -29,9 +28,6 @@ class HomePageView(TemplateView):
     template_name = 'home.html'
 
 class UserLoginView(LoginView):  
-    # redirect url is set in SETTINGS.py
-    authentication_form = UserLoginForm
-
     def get_success_url(self):
         return reverse('linkboards-listview')
     
@@ -39,6 +35,11 @@ class UserSignupView(CreateView):
     model = User
     template_name = 'registration/signup.html'
     form_class = UserSignUpForm
+
+    def form_valid(self, form):
+        valid_form = super().form_valid(form)
+        login(self.request, self.object)
+        return valid_form
 
     def get_success_url(self):
         return reverse('linkboards-listview')
@@ -88,10 +89,24 @@ class LinkBoardsListView(LoginRequiredMixin, CreateView, ListView):
     template_name = 'linkboards_list.html'
     model = List
     context_object_name = 'linkboards'
-    form_class = LinkBoardEditTitleForm # for creating new LinkBoards
+    form_class = LinkBoardCreateForm 
 
     def get_queryset(self):
         return List.objects.filter(owner=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)        
+        context['edit_linkboard_form'] = LinkBoardEditForm  # add in our LinkBoardEditForm
+        return context
+
+    def get_success_url(self):
+        return reverse('linkboards-listview')   
+
+    def form_valid(self, form):
+        # Overriding form valid so as to automatically assign the user. 
+        form.instance.owner = self.request.user
+        return super(LinkBoardsListView, self).form_valid(form)
+
 
 '''
 

@@ -90,6 +90,36 @@ class ListEndpointTests(test_objects_mixin, TestCase):
         # sending the request should re-order the bookmarks
         self.assertEqual([i for i in self.test_bookmarks_list.get_bookmark_order()], new_order)
 
+    def test_delete_data_deletes_a_linkboard_when_authenticated(self):
+        '''
+        Unit Test - When a user is authenticated, sending a DELETE request for a specific linkboards should delete the linkboard
+        '''
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass) # this user owns the test_bookmarks_list
+        url_id = self.test_bookmarks_list.url_id
+
+        # don't authenticate and make the request
+        response = self.client.delete(
+            f'/api/Lists/{url_id}/', 
+            content_type='application/json' 
+        )
+
+        self.assertEqual(response.status_code, 204) 
+
+    def test_delete_data_returns_error_when_not_authenticated(self):
+        '''
+        Unit Test - When no user is authenticated, sending a DELETE request should return 403 Forbidden
+        '''   
+        url_id = self.test_bookmarks_list.url_id
+
+        # don't authenticate and make the request
+        response = self.client.delete(
+            f'/api/Lists/{url_id}/', 
+            content_type='application/json' 
+        )
+
+        self.assertEqual(response.status_code, 403) # since we aren't authenticated, it should fail
+
+
 class BookmarkSerializerTests(test_objects_mixin, TestCase): 
     def test_api_list_view_is_not_viewable(self):
         '''

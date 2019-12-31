@@ -20,8 +20,10 @@
     - In your deployment script, alter Debug=False and disable the admin registrations
 
 # Known Bugs
-    - Try logging in after signing up, it can create an error. unless it has something to do with me being logged into admin page?
-    - Links without a HTTP prefix does not hyperlink correctly. A check should happen server side
+    - Signup page does not log user in
+    - Try logging in after signing up, it can create an error. unless it has something to do with me being logged into admin 
+    - Bookmarks without a HTTP prefix does not hyperlink correctly. A check should happen server side
+    - FIXED - The Backend doesn't care what user you are, creating a new linkboard for any user is possible no matter who you are logged in as.
     - FIXED - After you edit a page, it seems to update all A hrefs on the page? Or at least when clicking on another edit icon it shows there. How come? 
     - FIXED - when editing a bookmark, pressing enter does nothing
     - FIXED - pressing enter when editing a linkboard has some strange behaviour

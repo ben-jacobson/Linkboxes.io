@@ -1,8 +1,11 @@
 from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list
 from django.urls import reverse
+from bookmarks.models import List
 
-from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, UserLoginForm, UserSignUpForm
+from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, UserSignUpForm, LinkBoardCreateForm, LinkBoardEditForm
+from django.contrib.auth.forms import AuthenticationForm
+
 from django.contrib.auth.models import User
 
 class HomePageTest(test_objects_mixin, TestCase):
@@ -23,7 +26,7 @@ class LoginTest(test_objects_mixin, TestCase):
 
     def test_page_uses_item_form(self):
         response = self.client.get(reverse('login'))
-        self.assertIsInstance(response.context['form'], UserLoginForm)  
+        self.assertIsInstance(response.context['form'], AuthenticationForm)  
 
     def test_login_page_redirects_after_login(self):
         response = self.client.post(reverse('login'), data={'username': self.test_user_name, 'password': self.test_user_pass})
@@ -48,11 +51,13 @@ class SignUpTest(test_objects_mixin, TestCase):
     
     def test_signup_creates_new_users(self):
         test_username = 'test@test.com'
-        test_password = 'testing123'
+        test_password = 'C0mpl1c8tedpassword1234!'
 
         # sign up the user
-        signup_data = {'first_name': 'Test', 'last_name': 'Testerson', 'username': test_username, 'password': test_password, 'verify_password': test_password}
+        signup_data = {'first_name': 'Test', 'last_name': 'Testerson', 'username': test_username, 'password1': test_password, 'password2': test_password}
         response = self.client.post(reverse('signup'), data=signup_data)
+
+        # user should redirect to their linkboards page
         self.assertRedirects(response, expected_url=reverse('linkboards-listview'))
 
         # test looking up that user in the DB
@@ -129,20 +134,70 @@ class LinkBoardListViewTests(test_objects_mixin, TestCase):
         '''
         Unit Test - Does the listview use the correct template? Also tests the url_id functionality works
         '''
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass) # to avoid the page redirecting to login page
+
         response = self.client.get(reverse('linkboards-listview'))
         self.assertTemplateUsed(response, 'linkboards_list.html')
 
-    def test_post_data_creates_new_linkboard_when_authenticated(self):
-        '''
-        Unit Test - When a user is authenticated, sending a POST request to the linkboards page should create a link Linkboard
-        '''
-        self.fail('finish the test')
+    def test_post_form_creates_new_linkboard_when_authenticated(self):
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
 
-    def test_post_data_returns_error_when_not_authenticated(self):
-        '''
-        Unit Test - When no user is authenticated, sending a POST request should return 403 Forbidden
-        '''        
-        self.fail('finish the test')
+        # create some test data
+        test_title = 'test via post method 1234'
+        test_data = {
+            'title': test_title,
+        }
+
+        response = self.client.post(
+            reverse('linkboards-listview'),
+            data = test_data,
+            #content_type='application/json' ,
+        )
+
+        self.assertRedirects(response, expected_url=reverse('linkboards-listview'))
+        self.assertEqual(List.objects.get(title=test_title).title, test_title)
+                
+    def test_post_form_returns_forbidden_when_not_authenticated(self):
+        # create some test data
+        test_title = 'test via post method 1234'
+        test_data = {
+            'title': test_title,
+            'owner': self.test_user.id
+        }
+
+        response = self.client.post(
+            reverse('linkboards-listview'),
+            data = test_data,
+        )
+
+        # we should be redirected to a login page
+        self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards/')
+
+        # the list should not be found in the database
+        with self.assertRaises(List.DoesNotExist):
+            List.objects.get(title=test_title)
+
+    def test_post_form_cannot_create_lists_for_other_users(self):
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass) # authenttcate as a differnt user to the one we just created
+        another_test_user = User.objects.create_user("Tester McTesterson", "unittestlover53@hotmail.com", "I don't like testing")
+        
+        # create some test data
+        test_title = 'test via post method 1234'
+        test_data = {
+            'title': test_title,
+            'owner': another_test_user.id   # the form_valid method in the linkboard create view will overwrite this 
+        }
+
+        response = self.client.post(
+            reverse('linkboards-listview'),
+            data = test_data,
+        )
+
+        # The server will not raise a forbidden, it will create the list for the authenticated user
+        self.assertRedirects(response, expected_url=reverse('linkboards-listview'))
+        test_list_query = List.objects.get(title=test_title)
+        self.assertEqual(test_list_query.title, test_title)
+        self.assertEqual(test_list_query.owner, self.test_user)
 
     def test_get_returns_only_linkboards_from_authenticated_user(self):
         '''
@@ -151,7 +206,7 @@ class LinkBoardListViewTests(test_objects_mixin, TestCase):
         second_test_user = User.objects.create_user("Invalid User", "InvalidUser@gotmail.com", "IamInvalid")
 
         test_list_one = self.test_bookmarks_list # belongs to the authenitcated user
-        test_list_two = create_test_bookmarks_list(second_test_user, title="Should not appear") # belongs to a different user
+        create_test_bookmarks_list(second_test_user, title="Should not appear") # belongs to a different user
 
         self.authenticate(username=self.test_user_name, password=self.test_user_pass)
         response = self.client.get(reverse('linkboards-listview'))
@@ -166,35 +221,21 @@ class LinkBoardListViewTests(test_objects_mixin, TestCase):
         '''        
         response = self.client.get(reverse('linkboards-listview'))
         self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards/')
-
-    def test_delete_data_deletes_a_linkboard_when_authenticated(self):
-        '''
-        Unit Test - When a user is authenticated, sending a DELETE request for a specific linkboards should delete the linkboard
-        '''
-        self.fail('finish the test')
-
-    def test_delete_data_returns_error_when_not_authenticated(self):
-        '''
-        Unit Test - When no user is authenticated, sending a DELETE request should return 403 Forbidden
-        '''        
-        self.fail('finish the test')
-
+        
     def test_page_has_create_form(self):
         '''
         Unit Test - The page should have two forms, test that the create form is present
-        '''        
-        self.fail('finish the test')
-        '''        
-        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
-        self.assertIsInstance(response.context['form'], BookmarkCreateForm)  '''
+        ''' 
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
+        response = self.client.get(reverse('linkboards-listview'))
+        self.assertIsInstance(response.context['form'], LinkBoardCreateForm)  
 
     def test_page_has_edit_form(self):
         '''
         Unit Test - The page should have two forms, test that the edit form is present
         '''                
-        self.fail('finish the test')
-        '''        
-        response = self.client.get(reverse('bookmarks-listview', kwargs={'slug': self.test_bookmarks_list.url_id}))
-        self.assertEquals(response.context['edit_bookmark_form'], BookmarkEditForm)     # was assertIsInstance when we used a form object    '''
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass)
+        response = self.client.get(reverse('linkboards-listview'))
+        self.assertEquals(response.context['edit_linkboard_form'], LinkBoardEditForm) 
 
         

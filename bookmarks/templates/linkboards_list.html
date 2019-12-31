@@ -8,6 +8,7 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <h1>Link Boards</h1>
+                <a href='#' data-toggle="modal" data-target="#CreateLinkBoardModal">Create new linkboard</a>
             </div>
         </div>
         <div class="row">
@@ -37,16 +38,24 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form id='create-linkboard-form' action='{{ request.path }}' method='POST'>             
                 <div class="modal-body">
-                    <form id='create-linkboard-form' action='{{ request.path }}' method='POST'> 
-                        <p>Test</p>
-                    </form>
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field.errors }}{{ hidden_field }}
+                        {% endfor %}
+                        {% for field in form.visible_fields %}
+                        <div class='form-group'>
+                            {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
+                        {% endfor %}
                 </div>
                 <div class="modal-footer">
                     <button id="create-modal-close" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Cancel</button>
-                    <button id="create-modal-save" type="button" class="btn btn-primary">Create</button>
+                    <input type='submit' id="create-modal-save" value='Create' type="button" class="btn btn-primary" />
                 </div>
+            </form>
         </div>
     </div>
 </div>
@@ -63,11 +72,11 @@
                 <div class="modal-body">
                     <form id='rename-linkboard-form'> 
                     {% csrf_token %}
-                    {{ form.non_field_errors }} 
-                    {% for hidden_field in form.hidden_fields %}
+                    {{ edit_linkboard_form.non_field_errors }} 
+                    {% for hidden_field in edit_linkboard_form.hidden_fields %}
                     {{ hidden_field.errors }}{{ hidden_field }}
                     {% endfor %}
-                    {% for field in form.visible_fields %}
+                    {% for field in edit_linkboard_form.visible_fields %}
                     <div class='form-group'>
                         {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
                     {% endfor %}     

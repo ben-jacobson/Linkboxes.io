@@ -33,8 +33,8 @@ class List(models.Model):
     def save(self, *args, **kwargs):
         # on creation, the bookmarks list needs to create a 5 digit tinyurl for the page. We don't want this to run on every save because that will re-roll your urls
         # the tinyurl should be unique, so the algorithm needs to ensure there is no clash
-        # the algorithm used can be a string of the DD:MM:YYYY:HH:MM:SS:M + name of the page - made into a 5 digit hash
-        # the algorithm allows for 60M+ different combinations from 00000 to zzzzz. We'll outgrow our database bandwidth well before we run out of bookmark lists 
+        # the algorithm used can be a string of the DD:MM:YYYY:HH:MM:SS:M + name of the page - made into a 5 digit hash        # the algorithm allows for 60M+ different combinations from 00000 to zzzzz. We'll outgrow our database bandwidth well before we run out of bookmark lists 
+    
         if not self.url_id:
             self.url_id = encode_url_id(self.title)
         

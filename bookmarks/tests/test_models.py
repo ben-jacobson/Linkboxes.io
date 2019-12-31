@@ -92,6 +92,17 @@ class ListModelTests(test_objects_mixin, TestCase):
         '''   
         self.assertEquals(self.test_bookmarks_list, List.objects.get(title=self.test_bookmarks_list.title))
 
+    '''def test_model_assigns_list_owner_if_not_specified(self):
+        self.authenticate(username=self.test_user_name, password=self.test_user_pass) 
+
+        testing_title = "This List will automatically assign the owner as the authenticated user"
+
+        test_list_without_owner = List(
+            title=testing_title,
+        )
+        test_list_without_owner.save()
+        self.assertEqual(testing_title, List.objects.get(title=testing_title).title)''' # could not get this working
+
     def test_string_method_returns_title(self):
         '''
         Unit Test - str() method should return the title of the list

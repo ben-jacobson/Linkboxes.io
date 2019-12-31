@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .base import test_objects_mixin
-from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, UserLoginForm, UserSignUpForm
+from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, UserSignUpForm
+from django.contrib.auth.forms import AuthenticationForm
 from bookmarks.models import Bookmark
 
 class BookmarkEditFormTests(test_objects_mixin, TestCase):
@@ -37,22 +38,22 @@ class BookmarkCreateFormTests(test_objects_mixin, TestCase):
         
 class UserLoginFormTest(test_objects_mixin, TestCase):
     def test_form_renders_item_text_input(self):
-        form = UserLoginForm()
+        form = AuthenticationForm()
         self.assertIn('id="id_username', form.as_p())
         self.assertIn('id="id_password', form.as_p())
 
     def test_form_validation_for_blank_items(self):
-        form = UserLoginForm()
+        form = AuthenticationForm()
         self.assertFalse(form.is_valid()) 
         
     def test_valid_form(self):
-        form = UserLoginForm(data={'username': self.test_user_name, 'password': self.test_user_pass})
+        form = AuthenticationForm(data={'username': self.test_user_name, 'password': self.test_user_pass})
         self.assertTrue(form.is_valid())
 
     def test_invalid_form(self):
-        form = UserLoginForm(data={'username': self.test_user_name, 'password': ''})
+        form = AuthenticationForm(data={'username': self.test_user_name, 'password': ''})
         self.assertFalse(form.is_valid())
-        form = UserLoginForm(data={'username': '', 'password': self.test_user_pass})
+        form = AuthenticationForm(data={'username': '', 'password': self.test_user_pass})
         self.assertFalse(form.is_valid())
 
 class UserSignUpFormTest(test_objects_mixin, TestCase):
@@ -66,7 +67,7 @@ class UserSignUpFormTest(test_objects_mixin, TestCase):
         self.assertFalse(form.is_valid()) 
         
     def test_valid_form(self):
-        form = UserSignUpForm(data={'first_name': 'Joe', 'last_name': 'Bloggs', 'username': 'test@testerson.com.au', 'password': "AsDf1234!", 'verify_password': 'AsDf1234!'})
+        form = UserSignUpForm(data={'first_name': 'Joe', 'last_name': 'Bloggs', 'username': 'test@testerson.com.au', 'password1': "AsDf1234!", 'password2': 'AsDf1234!'})
         self.assertTrue(form.is_valid())
 
     def test_invalid_form(self):

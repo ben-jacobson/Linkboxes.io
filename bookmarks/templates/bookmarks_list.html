@@ -10,7 +10,9 @@
         </div>
         {% if user.is_authenticated %}
             <div class="row">
-                <div class="col-md-12"><a class="add-icon btn btn-block btn-success" data-toggle="modal" data-target="#createBookmarkModal"><i class="fa fa-fw fa-1x py-1 fa-plus text-white"></i></a></div>
+                <div class='col-md-4'></div>
+                <div class="col-md-4"><a class="add-icon btn btn-block btn-success" data-toggle="modal" data-target="#createBookmarkModal"><i class="fa fa-fw fa-1x py-1 fa-plus text-white"></i></a></div>
+                <div class='col-md-4'></div>
             </div>
         {% endif %}
         <div id='thumbnail-container' class='row' data-list-slug='{{ list_slug }}'>
@@ -45,9 +47,13 @@
             {% endfor %}
         </div>
         {% if user.is_authenticated %}
-            <div class="row">
-                <div class="col-md-12"><a class="add-icon btn btn-block btn-success" data-toggle="modal" data-target="#createBookmarkModal"><i class="fa fa-fw fa-1x py-1 fa-plus text-white"></i></a></div>
-            </div>
+            {% if bookmarks_list %}
+                <div class="row">
+                    <div class='col-md-4'></div>
+                    <div class="col-md-4"><a class="add-icon btn btn-block btn-success" data-toggle="modal" data-target="#createBookmarkModal"><i class="fa fa-fw fa-1x py-1 fa-plus text-white"></i></a></div>
+                    <div class='col-md-4'></div>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 

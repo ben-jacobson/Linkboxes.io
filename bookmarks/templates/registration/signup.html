@@ -22,7 +22,7 @@
                         {% endfor %}                      
                         {% for field in form.visible_fields %}
                         <div class='form-group'>
-                            {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
+                            {{ field.errors }}{{ field.label_tag }}{{ field }}</div>
                         {% endfor %}  
                         <button type="submit" class="btn btn-primary">Sign Up</button>                        
                     </form>
