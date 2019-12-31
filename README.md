@@ -12,7 +12,7 @@
         /- Create button creates a new link, doesn't have to be real time
         / - User can drag and drop the items in the list to customise order, preference is stored in the database
         /- Simple text entry for link creation is fine
-    - Creating a link without a thumbnail will insert a placeholder image    
+        - Creating a link without a thumbnail will insert a placeholder image    
     - Mobile friendly (Looks good so far, but there is an issue with the hover effect not working on mobile device (no such thing as hover?). Also login/logout button shouldn't collapse into the hamburger menu)
     - Complete set of unit testing (do a quick audit even)
     - Complete set of functional tests (within reason)

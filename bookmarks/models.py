@@ -45,10 +45,10 @@ class List(models.Model):
         return self.title
 
 class Bookmark(models.Model):
+    new_field = models.CharField(max_length=512, blank=True)
     title = models.CharField(max_length=512, blank=False)
     thumbnail_url = models.CharField(max_length=2048, blank=True)
     url = models.CharField(max_length=2048)
-    #order = models.PositiveIntegerField(default=0)    # determines which order does the bookmark appear on page? 
     _list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='bookmarks')     # ManyToOne - List can have multiple BookMarks, but a BookMark can only be associated with one list. 
 
     def save(self, *args, **kwargs):
