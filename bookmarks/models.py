@@ -45,7 +45,6 @@ class List(models.Model):
         return self.title
 
 class Bookmark(models.Model):
-    new_field = models.CharField(max_length=512, blank=True)
     title = models.CharField(max_length=512, blank=False)
     thumbnail_url = models.CharField(max_length=2048, blank=True)
     url = models.CharField(max_length=2048)
@@ -54,7 +53,7 @@ class Bookmark(models.Model):
     def save(self, *args, **kwargs):
         # insert the default thumbnail url
         if not self.thumbnail_url:
-            self.thumbnail_url = '/no_thumbnail.jpg'        # for some reason, plugging in default= into the model.Charfield didn't work..
+            self.thumbnail_url = 'https://bookmark-static.s3.amazonaws.com/no_thumbnail.jpg'        # for some reason, plugging in default= into the model.Charfield didn't work..
         super(Bookmark, self).save(*args, **kwargs)
 
     def __str__(self):
