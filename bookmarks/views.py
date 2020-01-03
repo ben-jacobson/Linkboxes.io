@@ -77,13 +77,19 @@ class BookmarkListView(CreateView, ListView):
         # kwargs['edit_bookmark_form'] = BookmarkEditForm   # This is how the parent method does it, 
         context = super().get_context_data(**kwargs)
         list_obj = List.objects.get(url_id=self.kwargs['slug'])
+
+        # test if the list owner is authenticated
+        if self.request.user == list_obj.owner:
+            context['owner_logged_in'] = True
+
+        # populate the remaining context objects
         context['list_slug'] = list_obj.url_id
         context['list_name'] = list_obj.title
         context['edit_bookmark_form'] = BookmarkEditForm 
         return context
 
 class LinkBoardsListView(LoginRequiredMixin, CreateView, ListView):
-    login_url = '/login/'
+    login_url = '/login'
     redirect_field_name = 'redirect_to'
 
     template_name = 'linkboards_list.html'

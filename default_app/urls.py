@@ -14,13 +14,13 @@ urlpatterns = [
     path('api/', include(router.urls), name='api'),
     #path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', HomePageView.as_view(), name='home'),
-    path('login/', UserLoginView.as_view(), name='login'),    
+    path('login', UserLoginView.as_view(), name='login'),    
     path('logout', LogoutView.as_view(), name='logout'),
-    path('signup/', UserSignupView.as_view(), name='signup'),
+    path('signup', UserSignupView.as_view(), name='signup'),
 
+    path('linkboards', LinkBoardsListView.as_view(), name='linkboards-listview'),
     path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
-    path('linkboards/', LinkBoardsListView.as_view(), name='linkboards-listview'),
 ]
 

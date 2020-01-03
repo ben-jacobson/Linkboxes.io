@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .base import test_objects_mixin, create_test_bookmark, create_test_bookmarks_list, create_test_junk_data
 
-from bookmarks.models import Bookmark, List
+from bookmarks.models import Bookmark, List, THUMBNAIL_IMAGE_HREF
 from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
@@ -62,7 +62,7 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         '''
         test_bookmark_without_image = create_test_bookmark(self.test_bookmarks_list, thumbnail_url='')
         test_bookmark_without_image.save()
-        self.assertEqual(test_bookmark_without_image.thumbnail_url, '/no_thumbnail.jpg')
+        self.assertEqual(test_bookmark_without_image.thumbnail_url, THUMBNAIL_IMAGE_HREF)
 
     def test_title_max_length(self):
         test_bookmark_with_long_title = create_test_bookmark(self.test_bookmarks_list, title=create_test_junk_data(MAX_TITLE_LEN + 1))

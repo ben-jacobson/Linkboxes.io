@@ -6,6 +6,8 @@ from hashids import Hashids
 
 #from django.core.exceptions import ValidationError
 
+THUMBNAIL_IMAGE_HREF = 'https://bookmark-static.s3.amazonaws.com/no_thumbnail.jpg'
+
 '''
 Models definition for Bookmarks
 
@@ -53,7 +55,7 @@ class Bookmark(models.Model):
     def save(self, *args, **kwargs):
         # insert the default thumbnail url
         if not self.thumbnail_url:
-            self.thumbnail_url = 'https://bookmark-static.s3.amazonaws.com/no_thumbnail.jpg'        # for some reason, plugging in default= into the model.Charfield didn't work..
+            self.thumbnail_url = THUMBNAIL_IMAGE_HREF        # for some reason, plugging in default= into the model.Charfield didn't work..
         super(Bookmark, self).save(*args, **kwargs)
 
     def __str__(self):

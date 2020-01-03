@@ -8,7 +8,12 @@
                 <h1>{{ list_name }}</h1>
             </div>
         </div>
-        {% if user.is_authenticated %}
+        {% if owner_logged_in %}
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h5><a href="{% url 'linkboards-listview' %}">Back to Linkboards List</a></h5>
+                </div>
+            </div>
             <div class="row">
                 <div class='col-md-4'></div>
                 <div class="col-md-4"><a class="add-icon btn btn-block btn-success" data-toggle="modal" data-target="#createBookmarkModal"><i class="fa fa-fw fa-1x py-1 fa-plus text-white"></i></a></div>
@@ -26,7 +31,7 @@
                                 draggable="false" />
                         </a>
                     </div>
-                    {% if user.is_authenticated %}
+                    {% if owner_logged_in %}
                     <div class="edit-button-overlays">
                         <p class="bookmark-edit-icons">
                             <i class="fas fa-pencil-alt bookmark-edit-icons edit-icon" data-toggle="modal"
@@ -46,7 +51,7 @@
             </div>
             {% endfor %}
         </div>
-        {% if user.is_authenticated %}
+        {% if owner_logged_in %}
             {% if bookmarks_list %}
                 <div class="row">
                     <div class='col-md-4'></div>

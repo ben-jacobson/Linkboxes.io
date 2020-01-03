@@ -13,19 +13,20 @@
         / - User can drag and drop the items in the list to customise order, preference is stored in the database
         /- Simple text entry for link creation is fine
         /- Creating a link without a thumbnail will insert a placeholder image    
-        - There should be a back button to let you go back to your linkboards
+        /- There should be a back button to let you go back to your linkboards
     - Mobile friendly (Looks good so far, but there is an issue with the hover effect not working on mobile device (no such thing as hover?). Also login/logout button shouldn't collapse into the hamburger menu)
-    - Complete set of unit testing (do a quick audit even)
-    - Complete set of functional tests (within reason)
-    - In your deployment script, alter Debug=False and disable the admin registrations
+    / - Complete set of unit testing (do a quick audit even)
+    / - Complete set of functional tests (within reason)
+    - In your deployment script, create a warning to alter Debug=False and disable the admin registrations
 
 # Known Bugs
-    - FIXED - Signup page does not log user in
-    - Bookmarks without a HTTP prefix does not hyperlink correctly. A check should happen server side
-    - FIXED - The Backend doesn't care what user you are, creating a new linkboard for any user is possible no matter who you are logged in as.
-    - FIXED - After you edit a page, it seems to update all A hrefs on the page? Or at least when clicking on another edit icon it shows there. How come? 
-    - FIXED - when editing a bookmark, pressing enter does nothing
-    - FIXED - pressing enter when editing a linkboard has some strange behaviour
+	- FIXED - Bookmarks Listview doesn't care who you are logged in as, login as another user and you can modify other peoples links.
+	- FIXED - Signup page does not log user in
+	- Bookmarks without a HTTP prefix does not hyperlink correctly. A check should happen server side
+	- FIXED - The Backend doesn't care what user you are, creating a new linkboard for any user is possible no matter who you are logged in as.
+	- FIXED - After you edit a page, it seems to update all A hrefs on the page? Or at least when clicking on another edit icon it shows there. How come? 
+	- FIXED - when editing a bookmark, pressing enter does nothing
+	- FIXED - pressing enter when editing a linkboard has some strange behaviour
 
 # Features to implement in future releases
     / - LinkBoard page should prompt login if not authenticated

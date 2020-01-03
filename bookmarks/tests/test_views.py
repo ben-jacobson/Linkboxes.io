@@ -171,7 +171,7 @@ class LinkBoardListViewTests(test_objects_mixin, TestCase):
         )
 
         # we should be redirected to a login page
-        self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards/')
+        self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards')
 
         # the list should not be found in the database
         with self.assertRaises(List.DoesNotExist):
@@ -220,7 +220,7 @@ class LinkBoardListViewTests(test_objects_mixin, TestCase):
         Unit Test - When a user is not authenticated, sending a GET request to the linkboards page should redirect the user to a loging page
         '''        
         response = self.client.get(reverse('linkboards-listview'))
-        self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards/')
+        self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=/linkboards')
         
     def test_page_has_create_form(self):
         '''
