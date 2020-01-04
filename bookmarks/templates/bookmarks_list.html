@@ -11,7 +11,7 @@
         {% if owner_logged_in %}
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h5><a href="{% url 'linkboards-listview' %}">Back to Linkboards List</a></h5>
+                    <h5><a href="{% url 'linkboards-listview' %}">Back to Linkboxes</a></h5>
                 </div>
             </div>
             <div class="row">
@@ -26,7 +26,7 @@
                 data-list-slug='{{ list_slug }}'>
                 <div class="bookmark-hovereffect">
                     <div class='bookmark-card-thumbnail-img'>
-                        <a href="{{ bookmark.url }}" draggable="false">
+                        <a href="{{ bookmark.url }}" rel="external" target="_blank" draggable="false">
                             <img class="img-responsive bookmark-thumbnail" src="{{ bookmark.thumbnail_url }}"
                                 draggable="false" />
                         </a>
@@ -44,7 +44,7 @@
                     {% endif %}
                 </div>
                 <div class='bookmark-card-title'>
-                    <a class='bookmark-url' href="{{ bookmark.url }}" draggable="false">
+                    <a class='bookmark-url' href="{{ bookmark.url }}" rel="external" target="_blank" draggable="false">
                         <h3 class="bookmark-title">{{ bookmark.title }}</h3>
                     </a>
                 </div>
@@ -67,7 +67,7 @@
         <div class="modal-dialog modal-dialog-centered" role="dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="LongTitle">Edit Bookmark</h5>
+                    <h5 class="modal-title" id="LongTitle">Edit Link</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -99,7 +99,7 @@
         <div class="modal-dialog modal-dialog-centered" role="dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="LongTitle">Create New Bookmark</h5>
+                    <h5 class="modal-title" id="LongTitle">Add Link</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -134,5 +134,5 @@
 {% block page-specific-js %}
 {% load static %}
     <script src="{% static 'js/Sortable.js' %}"></script>
-    <script src="{% static 'js/jquery.list-view-grid.js' %}"></script>
+    <script src="{% static 'js/jquery.bookmarks-listview.js' %}"></script>
 {% endblock %}

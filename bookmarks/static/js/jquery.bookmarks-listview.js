@@ -95,6 +95,20 @@ $('.edit-icon').click(function(e) {
     });
 });
 
+function update_bookmark_card_details(bookmark_id) {
+    // Reads bookmark data from the server via a GET request
+    $.ajax({ 
+        type: 'GET',        
+        url: '/api/Bookmark/' + bookmark_id + '/',    
+        success: function (data) {
+            var bookmark_elem = $('div[class*="bookmark-card"][data-bookmark-id="' + bookmark_id + '"]'); // find the element        
+            bookmark_elem.find('h3').html(data['title']); // update the title
+            bookmark_elem.find('a').attr('href', data['url']); // update all hyperlinks found on page (normally 2)
+            bookmark_elem.find('img.bookmark-thumbnail').attr('src', data['thumbnail_url']); // update the image thumbnail 
+        }
+    }); 
+}
+
 // event when user clicks the save button in the edit modal.
 $('#edit-modal-save').click(function(e) {
     var bookmark_id = $(e.target).closest('#editBookmarkModal').attr('data-bookmark-id');
@@ -122,12 +136,7 @@ $('#edit-modal-save').click(function(e) {
         success: function (data) {
             // update the page and close the modal. 
             $('#editBookmarkModal').modal('toggle');
-
-            // we still have the json data available, use that to update the page element itself, rather than force a refresh. 
-            var bookmark_elem = $('div[class*="bookmark-card"][data-bookmark-id="' + bookmark_id + '"]'); // find the element
-            bookmark_elem.find('h3').html(json_data['title']); // update the title
-            bookmark_elem.find('a').attr('href', json_data['url']); // update all hyperlinks found on page (normally 2)
-            bookmark_elem.find('img.bookmark-thumbnail').attr('src', json_data['thumbnail_url']); // update the image thumbnail 
+            update_bookmark_card_details(bookmark_id);
         }
     });   
 

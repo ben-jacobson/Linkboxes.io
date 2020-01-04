@@ -33,7 +33,6 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         with self.assertRaises(IntegrityError):
             test_bookmark.save()
 
-
     def test_create_bookmark_without_title_throws_validation_error(self):
         '''
         Unit Test - URL and Title are mandatory fields
@@ -84,6 +83,11 @@ class BookmarkModelTests(test_objects_mixin, TestCase):
         # does it raise exceptions on full_clean and save? 
         with self.assertRaises(ValidationError):
             test_bookmark_with_long_url.full_clean()
+
+    def test_add_http_if_url_doesnt_state(self):
+        test_bookmark_without_http_prefix = create_test_bookmark(self.test_bookmarks_list, url='awesomesite')
+        test_bookmark_without_http_prefix.save()
+        self.assertIn('//', test_bookmark_without_http_prefix.url)
 
 class ListModelTests(test_objects_mixin, TestCase): 
     def test_create_bookmark_list(self):

@@ -53,6 +53,10 @@ class Bookmark(models.Model):
     _list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='bookmarks')     # ManyToOne - List can have multiple BookMarks, but a BookMark can only be associated with one list. 
 
     def save(self, *args, **kwargs):
+        # ensure that the url is prefixed with a '//'. Note that we don't need to specify http or https, we can let the browser decide
+        if self.url and '//' not in self.url: # will only append if the user entered a url, because we dont want this code preventing validation errors from occuring when the user forgets to add their url
+            self.url = '//' + self.url
+
         # insert the default thumbnail url
         if not self.thumbnail_url:
             self.thumbnail_url = THUMBNAIL_IMAGE_HREF        # for some reason, plugging in default= into the model.Charfield didn't work..

@@ -20,7 +20,7 @@ urlpatterns = [
     path('logout', LogoutView.as_view(), name='logout'),
     path('signup', UserSignupView.as_view(), name='signup'),
 
-    path('linkboards', LinkBoardsListView.as_view(), name='linkboards-listview'),
+    path('mylinkboxes', LinkBoardsListView.as_view(), name='linkboards-listview'),
     path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
 ]
 
