@@ -16,6 +16,7 @@
 		/- There should be a back button to let you go back to your linkboards
 		/- If a user doesn't add a http:// prefix to their site, the app should add it.
 	/ - Complete set of unit testing (do a quick audit even)
+	/ - Top of page next to log out button should have a link to my linkboxes, only when logged in though
 	- In your deployment script, create a warning to alter Debug=False and disable the admin registrations
 
 # Features to implement in future releases
