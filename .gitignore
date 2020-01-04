@@ -2,5 +2,6 @@ db.sqlite3
 *.py[cod]
 *.vscode
 geckodriver.log
-
 bookmarks/migrations
+deploy/LinkboxesIO.pem
+deploy/server_secrets.json
