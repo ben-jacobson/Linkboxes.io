@@ -1,6 +1,6 @@
 # Proof of Concept requirements - For first initial deployment
-	- Has some sort of identifying brand which matches the domain name
-	- Has a home page explaining how to use the service
+	/- Has some sort of identifying brand which matches the domain name
+	/- Has a home page explaining how to use the service
 	/- Can sign up and create a login/user id
 	/- Can log in / log out
 	/- Can create lists when logged in, can't create lists when not logged in

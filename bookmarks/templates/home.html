@@ -1,12 +1,12 @@
-{% extends 'base.html' %} {% block page-title %}Welcome!{% endblock %} {% block main-content %}
+{% extends 'base.html' %} {% load static %} {% block page-title %}Linkboxes.io{% endblock %} {% block main-content %}
 <div class="py-5">
     <div class="container">
         <div class="row">
             <div class="px-lg-5 d-flex flex-column justify-content-center col-lg-6">
-                <h1>Tagline</h1>
-                <p class="mb-3 lead">Lorem ipsum dolor amet lyft before they sold out enamel pin beard raclette DIY. Street art kitsch mumblecore, plaid bushwick pork belly taxidermy. </p>
+                <h1>Linkboxes.io</h1>
+                <p class="mb-3 lead">Create lists of the great places you've been on the web. Share with your friends, or keep them a secret!</p>
             </div>
-            <div class="col-lg-6"> <img class="img-fluid d-block" src="https://static.pingendo.com/cover-moon.svg">
+            <div class="col-lg-6"> <img class="img-fluid d-block" src="{% static 'images/home-page-hero.png' %}">
             </div>
         </div>
     </div>
@@ -15,61 +15,62 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>Value Propositions</h1>
-            </div>
+                <a href="{% url 'signup' %}"><button type="button" class="btn-lg btn-success">Create a Linkbox now</button></a>
+            </div>        
         </div>
+
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 p-4">
                 <div class="row">
-                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-1.svg"> </div>
+                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="{% static 'images/save-for-later.png' %}"> </div>
                     <div class="col-9">
-                        <p class="lead mb-1"> <b>#1</b> </p>
-                        <p class="mb-0">Cold-pressed next level neutra cronut, swag glossier taiyaki ennui mixtape four dollar toast etsy fanny pack.</p>
+                        <p class="lead mb-1"> <b>Save links for later</b> </p>
+                        <p class="mb-0">A great way to keep a visual list of links to visit for later.</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 p-4">
                 <div class="row">
-                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-4.svg"> </div>
+                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="{% static 'images/access-anywhere.png' %}"> </div>
                     <div class="col-9">
-                        <p class="lead mb-1"> <b>#2</b> </p>
-                        <p class="mb-0">Affogato drinking vinegar knausgaard, pinterest bushwick roof party iPhone snackwave flannel forage listicle master cleanse meditation man braid. </p>
+                        <p class="lead mb-1"> <b>Access anywhere</b> </p>
+                        <p class="mb-0">View your linkboxes anywhere on any device.</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 p-4">
                 <div class="row">
-                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-2.svg"> </div>
+                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="{% static 'images/organised.png' %}"> </div>
                     <div class="col-9">
-                        <p class="lead mb-1"> <b>#3</b> </p>
-                        <p class="mb-0">Semiotics franzen bitters thundercats ethical locavore af, brooklyn lomo. Intelligentsia bitters letterpress portland</p>
+                        <p class="lead mb-1"> <b>Stay Organised</b> </p>
+                        <p class="mb-0">Great for keeping lists, like study resources or gift ideas. </p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 p-4">
                 <div class="row">
-                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-3.svg"> </div>
+                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="{% static 'images/intuitive.png' %}"> </div>
                     <div class="col-9">
-                        <p class="lead mb-1"> <b>#4</b> </p>
-                        <p class="mb-0">Pok pok master cleanse mlkshk before they sold out hell of photo booth synth 8-bit. </p>
+                        <p class="lead mb-1"> <b>No clunky app</b> </p>
+                        <p class="mb-0">Organise your links easily and intuitively.</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 p-4">
                 <div class="row">
-                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-1.svg"> </div>
+                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="{% static 'images/share.png' %}"> </div>
                     <div class="col-9">
-                        <p class="lead mb-1"> <b>#5</b> </p>
-                        <p class="mb-0">Meggings pinterest offal affogato authentic williamsburg palo santo mixtape helvetica skateboard chicharrones meh brooklyn sriracha.</p>
+                        <p class="lead mb-1"> <b>Share with your friends</b> </p>
+                        <p class="mb-0">Got a cool collection of places you want to share with friends?</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 p-4">
                 <div class="row">
-                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-4.svg"> </div>
+                    <div class="col-3 p-0 d-flex align-items-center"> <img class="img-fluid d-block" src="{% static 'images/private.png' %}"> </div>
                     <div class="col-9">
-                        <p class="lead mb-1"> <b>#6</b> </p>
-                        <p class="mb-0">Oh. You need a little dummy text for your mockup? How quaint. I bet you’re still using Bootstrap too…</p>
+                        <p class="lead mb-1"> <b>Private</b> </p>
+                        <p class="mb-0">Coming soon - set a pin code to keep your linkboxes private</p>
                     </div>
                 </div>
             </div>

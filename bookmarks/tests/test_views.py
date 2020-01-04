@@ -222,7 +222,6 @@ class LinkBoardListViewTests(test_objects_mixin, TestCase):
         response = self.client.get(reverse('linkboards-listview'))
         self.assertRedirects(response, expected_url=reverse('login') + '?redirect_to=' + reverse('linkboards-listview'))
 
-        
     def test_page_has_create_form(self):
         '''
         Unit Test - The page should have two forms, test that the create form is present
