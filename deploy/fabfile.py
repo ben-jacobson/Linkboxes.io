@@ -118,7 +118,7 @@ def _minify_js_and_css_static(site_folder):
     # maybe a bit risky, but minification occurs by overwriting the original js and css files
     # /home/ubuntu/sites/bookmarks/../static/css/
     run(f"yui-compressor -o '.css$:.css' {static_folder}css/*.css")
-    run(f"yui-compressor -o '.js$:.js' {static_folder}js/*.js")
+    #run(f"yui-compressor -o '.js$:.js' {static_folder}js/*.js") # throws an error
 
 def _delete_unneeded_files():
     # eg delete the deploy folder on the server

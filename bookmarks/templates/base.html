@@ -10,10 +10,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" />
-    <link rel="stylesheet" href="{% static 'css/bootstrap-4.3.1.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.3.1.min.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static 'css/list-view-grid-sort.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static 'css/list-view-grid.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static 'css/linkboard-list-view.css' %}" type="text/css" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155993788-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-155993788-1');
+    </script>
+
     <title>{% block page-title %}{% endblock %}</title>
 </head>
 

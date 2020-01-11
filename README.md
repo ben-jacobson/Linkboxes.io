@@ -20,8 +20,8 @@
 	- In your deployment script, create a warning to alter Debug=False and disable the admin registrations
 
 # Features to implement in future releases
-	- Mobile friendly (Looks good so far, but there is an issue with the hover effect not working on mobile device (no such thing as hover?). Also login/logout button shouldn't collapse into the hamburger menu)
 	- App should automatically source a thumbnail for the user
+	- Mobile friendly (Looks good so far, but there is an issue with the hover effect not working on mobile device (no such thing as hover?). Also login/logout button shouldn't collapse into the hamburger menu)
 	- Give users a slider to change the size of their thumbnails, e.g have 2,3,4,5 links per row
 	- Can we create any automated testing for our JQuery code? What about the GUI aspect such as drag and drop, etc.
 	- Create a set of functional tests	
@@ -34,6 +34,8 @@
 	/ - On Sign up, the verify password field has not yet been set up
 	- Test to see what injection someone can do with our input. E.g could they input some javascript into the page title? Django has autoescaping to resolve this
 	- Refactor the code to make use of the new LinkBoxes terminology
+	- Change Gunicorn and NGINX allowed hosts to only accept requests from linboxes.io
+	- We'll need an SSL
 
 # Known Bugs
 	- Site throws an error if you include a trailing '/' in front of URLs	
