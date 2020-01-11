@@ -43,20 +43,17 @@ def _config_nginx(server_secrets):
 
     run(f'sudo touch /etc/nginx/sites-available/{domain}')
 
-    ''' to add  so that static is cached on the server
-    location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
-        expires 30d;
-    }
-    '''
-
-
     nginx_listener = f"""
 server {{
     listen 80;
-    server_name {domain};  
+    server_name {domain}; 
+
+    gzip on;
+    gzip_types text/plain text/css text/js text/xml text/javascript application/javascript application/x-javascript application/json application/xml application/xml+rss;
 
     location /static {{
         alias /home/{env_user}/sites/static;        
+        expires 30d;
     }}
 
     location / {{
@@ -194,6 +191,9 @@ def initial_config():
         _config_nginx(server_secrets) 
         _reload_nginx()
         _config_server_to_load_gunicorn_on_startup(server_secrets)
+
+
+        'TODO - go to /etc/nginx/nginx.conf and uncomment the gzip settings. or maybe the sites-enabled file can be modified to take these settings?' 
 
 def deploy():
     server_secrets = _read_json_data_fromfile('server_secrets.json')
