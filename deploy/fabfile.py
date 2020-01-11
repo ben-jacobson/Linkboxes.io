@@ -53,7 +53,7 @@ server {{
 
     location /static {{
         alias /home/{env_user}/sites/static;        
-        expires 30d;
+        expires 365d;
     }}
 
     location / {{
