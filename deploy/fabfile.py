@@ -43,6 +43,13 @@ def _config_nginx(server_secrets):
 
     run(f'sudo touch /etc/nginx/sites-available/{domain}')
 
+    ''' to add  so that static is cached on the server
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+        expires 30d;
+    }
+    '''
+
+
     nginx_listener = f"""
 server {{
     listen 80;
