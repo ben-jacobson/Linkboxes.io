@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from bookmarks.models import List, Bookmark
+from bookmarks.models import List, Bookmark, THUMBNAIL_IMAGE_HREF
 
 from bookmarks.forms import BookmarkEditForm, BookmarkCreateForm, LinkBoardEditForm, LinkBoardCreateForm, UserSignUpForm
 
@@ -85,7 +85,8 @@ class BookmarkListView(CreateView, ListView):
         # populate the remaining context objects
         context['list_slug'] = list_obj.url_id
         context['list_name'] = list_obj.title
-        context['edit_bookmark_form'] = BookmarkEditForm 
+        context['edit_bookmark_form'] = BookmarkEditForm
+        context['no_preview_thumb'] = THUMBNAIL_IMAGE_HREF 
         return context
 
 class LinkBoardsListView(LoginRequiredMixin, CreateView, ListView):

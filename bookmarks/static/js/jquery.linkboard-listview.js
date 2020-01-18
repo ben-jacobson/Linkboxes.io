@@ -2,7 +2,7 @@
     Create linkboard events
 */
 
-
+const placeholder_thumb_preview = 'https://bookmark-static.s3.amazonaws.com/no_thumbnail.jpg';
 
 /*
     Edit linkboard events
@@ -10,9 +10,10 @@
 
 // user clicks the edit icon next to their linkboard
 $('.link-board-edit-icon').click(function(event) {
+    $('#rename-linkboard-form').trigger("reset"); // reset the form
+
     // when clicking the edit icon, populate the placeholer
     var list_name = $(event.target).closest('tr').attr('data-list-name');
-    $('#rename-linkboard-form').trigger("reset");
     $('#edit-board-title').attr('value', list_name);
 
     // populate a data field so that the modal save knows list it is operating on

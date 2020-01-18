@@ -85,6 +85,11 @@
                         {% endfor %}
                     </form>
                 </div>
+                <div class='thumbnail-preview'>
+                    <div class="container-fluid">
+                        <img id='edit-thumb-preview' class='link-preview-thumb' src='{{ no_preview_thumb }}' width=460 />  
+                    </div>
+                </div>                
                 <div class="modal-footer">
                     <button id="edit-modal-close" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Cancel</button>
@@ -105,7 +110,6 @@
                     </button>
                 </div>
                 <form id='create-form' action='/{{ list_slug }}' method='POST'>
-
                     <div class="modal-body">
                         {% csrf_token %}
                         {{ form.non_field_errors }}
@@ -115,15 +119,19 @@
                         {% for field in form.visible_fields %}
                         <div class='form-group'>
                             {{ field.errors }}{{ field.label_tag }}{{ field }}{{ field.help_text }}</div>
-                        {% endfor %}
+                        {% endfor %}                      
                     </div>
+                    <div class='thumbnail-preview'>
+                        <div class="container-fluid">
+                            <img id='create-thumb-preview' class='link-preview-thumb' src='{{ no_preview_thumb }}' width=460 />
+                        </div>        
+                    </div>                      
                     <div class="modal-footer">
                         <button id="create-modal-close" type="button" class="btn btn-secondary"
                             data-dismiss="modal">Cancel</button>
                         <input type='submit' id="create-modal-save" value='Save' class="btn btn-primary" />
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

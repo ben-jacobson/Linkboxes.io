@@ -90,7 +90,10 @@ $('.edit-icon').click(function(e) {
             // update the modal form data
             $('#edit-title').attr('value', bookmark_data['title']);
             $('#edit-url').attr('value', bookmark_data['url']);
-            $('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);            
+            $('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);   
+            
+            // update the thumbnail while there
+            update_thumbnail_in_modal_by_src($('#edit-thumbnail'), bookmark_data['thumbnail_url']);
         }
     });
 });
@@ -185,3 +188,46 @@ $('.copy-icon').click(function(e) {
     alert('Feature coming soon');
     // get the data from the element on page, not from the server - this is a resource saving exercise
 });
+
+
+// event when user updates the url field
+
+function get_thumbnail_of_link(elem) {
+    target_url = $(elem.target).val();
+    const key = "5e235b5f50681750622b888646661fb918749ee3e550f";
+    
+    /*$.ajax({
+        url: "https://api.linkpreview.net",
+        dataType: "jsonp",
+        data: {q: target_url, key: key},
+        success: function (response) {
+            if (response) {
+                console.log(response);
+                console.log(response.title);
+                console.log(response.image);
+            }
+            else {
+                console.log('no thumbnail found');
+            }
+        }
+    }); */
+}
+
+$('input[id=edit-url]').on('change paste keyup', get_thumbnail_of_link);
+$('input[id=create-url]').on('change paste keyup', get_thumbnail_of_link);
+
+// event when user updates the thumbnail field
+
+function update_thumbnail_on_modal_update(elem) {
+    var image_src = $(elem.target).val();
+    update_thumbnail_in_modal_by_src(elem.target, image_src);
+}
+
+function update_thumbnail_in_modal_by_src(elem, img_src) {   
+    var modal_elem = $(elem).closest('div.modal');
+    var thumbnail_img_elem = $(modal_elem).find('.link-preview-thumb');  
+    thumbnail_img_elem.attr('src', img_src);
+}
+
+$('input[id=edit-thumbnail]').on('change paste keyup', update_thumbnail_on_modal_update);
+$('input[id=create-thumbnail]').on('change paste keyup', update_thumbnail_on_modal_update);
