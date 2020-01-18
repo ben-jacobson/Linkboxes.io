@@ -74,7 +74,7 @@ $('.link-board-delete-icon').click(function(event) {
 
     // populate the modal title
     var list_name = $(event.target).closest('tr').attr('data-list-name');
-    $('h5.modal-title').html("Are your sure you want to delete '" + list_name + "'");
+    $('h5.delete-modal-title').html("Are your sure you want to delete '" + list_name + "'");
 }); 
 
 
