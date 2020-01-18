@@ -9,12 +9,12 @@ from django.contrib.auth.models import User
 class BookmarkFormMixin(ModelForm):
     class Meta:
         model = Bookmark
-        fields = ('title', 'url', 'thumbnail_url', )
+        fields = ('url', 'title', 'thumbnail_url', )
 
 class BookmarkCreateForm(BookmarkFormMixin):
-    title = CharField(widget=TextInput(attrs={'id': 'create-title', 'class': 'form-control', 'placeholder': 'Title',}), label='Title')
-    url = CharField(widget=TextInput(attrs={'id': 'create-url', 'class': 'form-control', 'placeholder': 'URL',}), label='URL')
-    thumbnail_url = URLField(widget=URLInput(attrs={'id': 'create-thumbnail', 'class': 'form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL', required=False)
+    title = CharField(widget=TextInput(attrs={'id': 'create-title', 'class': 'form-title form-control', 'placeholder': 'Title',}), label='Title')
+    url = CharField(widget=TextInput(attrs={'id': 'create-url', 'class': 'form-url form-control', 'placeholder': 'URL',}), label='URL')
+    thumbnail_url = URLField(widget=URLInput(attrs={'id': 'create-thumbnail', 'class': 'form-thumb form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL', required=False)
     list_id = CharField(widget=HiddenInput())
 
     def save(self):
@@ -23,9 +23,9 @@ class BookmarkCreateForm(BookmarkFormMixin):
         super().save()
 
 class BookmarkEditForm(BookmarkFormMixin):
-    title = CharField(widget=TextInput(attrs={'id': 'edit-title', 'class': 'form-control', 'placeholder': 'Title',}), label='Title')
-    url = CharField(widget=TextInput(attrs={'id': 'edit-url', 'class': 'form-control', 'placeholder': 'URL',}), label='URL')
-    thumbnail_url = URLField(widget=URLInput(attrs={'id': 'edit-thumbnail', 'class': 'form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL')
+    title = CharField(widget=TextInput(attrs={'id': 'edit-title', 'class': 'form-title form-control', 'placeholder': 'Title',}), label='Title')
+    url = CharField(widget=TextInput(attrs={'id': 'edit-url', 'class': 'form-url form-control', 'placeholder': 'URL',}), label='URL')
+    thumbnail_url = URLField(widget=URLInput(attrs={'id': 'edit-thumbnail', 'class': 'form-url form-control', 'placeholder': 'Thumbnail URL'}), label='Thumbnail URL')
     
     def save(self):
         raise ValueError('Form Saving Is Disabled') # we have some JQuery code to do this via an API call.
