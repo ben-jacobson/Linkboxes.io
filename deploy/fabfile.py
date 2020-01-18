@@ -48,8 +48,12 @@ server {{
     listen 80;
     server_name {domain}; 
 
-    gzip on;
-    gzip_types text/plain text/css text/js text/xml text/javascript application/javascript application/x-javascript application/json application/xml application/xml+rss;
+    gzip on;  # these may need to be moved to /etc/nginx/nginx.conf to work. was unable to test this at the time.
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
     location /static {{
         alias /home/{env_user}/sites/static;        
@@ -191,9 +195,6 @@ def initial_config():
         _config_nginx(server_secrets) 
         _reload_nginx()
         _config_server_to_load_gunicorn_on_startup(server_secrets)
-
-
-        'TODO - go to /etc/nginx/nginx.conf and uncomment the gzip settings. or maybe the sites-enabled file can be modified to take these settings?' 
 
 def deploy():
     server_secrets = _read_json_data_fromfile('server_secrets.json')

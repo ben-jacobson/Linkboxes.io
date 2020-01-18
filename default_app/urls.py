@@ -23,4 +23,3 @@ urlpatterns = [
     path('mylinkboxes', LinkBoardsListView.as_view(), name='linkboards-listview'),
     path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
 ]
-
