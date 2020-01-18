@@ -25,6 +25,7 @@ function ajax_request_set_new_list_order(list_id, new_order) {
     Global Variables
 */
 var sortable_js = null;
+const DEFAULT_THUMBNAIL_IMAGE_HREF = 'https://bookmark-static.s3.amazonaws.com/no_thumbnail.jpg';
 
 /*
     For enabling the list view drag and drop
@@ -65,6 +66,16 @@ $('.move-icon').mouseleave(function () {
     //console.log('disable sorting');
     sortable_js.option("disabled", true);      
 });
+
+// event when the user clicks the + button to add a new link
+
+$('#create-new-bookmark-button').click(function() {
+    //$('#create-form').trigger("reset"); // we don't want to reset the form, because if the user clicks out, then 
+
+    // reset the image
+    $('#create-thumb-preview').attr('src', DEFAULT_THUMBNAIL_IMAGE_HREF);
+    console.log('test');
+})
 
 // event when user clicks the edit button
 $('.edit-icon').click(function(e) {
@@ -185,7 +196,7 @@ $('.copy-icon').click(function(e) {
     //var bookmark_id = $(e.target).closest('.bookmark-card').attr('data-bookmark-id');
     //var bookmark_url = $(e.target).closest('.bookmark-card').find('a')[0].attr('href', json_data['url']); // update all hyperlinks found on page (normally 2)
 
-    alert('Feature coming soon');
+    console.log('Feature coming soon');
     // get the data from the element on page, not from the server - this is a resource saving exercise
 });
 
