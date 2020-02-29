@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 
-from bookmarks.views import HomePageView, UserLoginView, UserSignupView, BookmarkListView, LinkBoardsListView, ListViewSet, BookmarkViewSet
+from bookmarks.views import HomePageView, UserLoginView, UserSignupView, BookmarkListView, LinkBoardsListView, ListViewSet, BookmarkViewSet, get_preview
 from django.contrib.auth.views import LogoutView 
 
 from rest_framework import routers
@@ -19,6 +19,9 @@ urlpatterns = [
     path('login', UserLoginView.as_view(), name='login'),    
     path('logout', LogoutView.as_view(), name='logout'),
     path('signup', UserSignupView.as_view(), name='signup'),
+
+    #path('get_preview', get_preview, name='get-preview'), 
+    re_path(r'^get_preview$', get_preview, name='get-preview'),
 
     path('mylinkboxes', LinkBoardsListView.as_view(), name='linkboards-listview'),
     path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),

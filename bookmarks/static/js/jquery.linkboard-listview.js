@@ -1,10 +1,4 @@
 /*
-    Create linkboard events
-*/
-
-const placeholder_thumb_preview = 'https://bookmark-static.s3.amazonaws.com/no_thumbnail.jpg';
-
-/*
     Edit linkboard events
 */
 

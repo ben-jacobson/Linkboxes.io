@@ -16,7 +16,10 @@ from .serializers import ListSerializer, BookmarkSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from django.http import JsonResponse
 from json import loads
+
+from opengraph_parse.opengraph_parse import parse_page
 
 '''
 
@@ -114,6 +117,37 @@ class LinkBoardsListView(LoginRequiredMixin, CreateView, ListView):
         form.instance.owner = self.request.user
         return super(LinkBoardsListView, self).form_valid(form)
 
+
+'''
+
+Endpoint for previewing title and image
+
+'''
+
+def get_preview(request):    
+    ''' 
+    usage:
+    GET request to http://localhost:8000/get_preview?url=https://www.google.com/
+    '''
+    url = request.GET.get('url')
+    page_preview = parse_page(url, ["og:title", "og:image", ]) # we only need he title and image for now.
+    placeholder_title = 'No title found'
+
+    if not page_preview:
+        page_preview['og:title'] = placeholder_title
+        page_preview['og:image'] = ''
+
+    if not 'og:title' in page_preview:
+        page_preview['og:title'] = placeholder_title
+
+    if not 'og:image' in page_preview:
+        page_preview['og:image'] = ''
+    
+    json_data = {
+        'title': page_preview['og:title'],
+        'image': page_preview['og:image'],
+    }
+    return JsonResponse(json_data)
 
 '''
 

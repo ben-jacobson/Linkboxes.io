@@ -87,8 +87,6 @@ $('.move-icon').mouseleave(function () {
 // event when the user clicks the + button to add a new link
 
 $('#create-new-bookmark-button').click(function() {
-    //$('#create-form').trigger("reset"); // we don't want to reset the form, because if the user clicks out, then 
-
     // reset the image
     $('#create-thumb-preview').attr('src', DEFAULT_THUMBNAIL_IMAGE_HREF);
 })
@@ -218,12 +216,11 @@ $('.copy-icon').click(function(e) {
 
 
 // event when user updates the url field
-
 var get_thumbnail_of_url = debounce(function (elem) {
     var target_url = $(elem.target).val();
-    const key = "5e235b5f50681750622b888646661fb918749ee3e550f";
+    //const key = "5e235b5f50681750622b888646661fb918749ee3e550f";
     
-    $.ajax({
+    /*$.ajax({
         url: "https://api.linkpreview.net",
         dataType: "jsonp",
         data: {q: target_url, key: key},
@@ -237,7 +234,21 @@ var get_thumbnail_of_url = debounce(function (elem) {
                 update_thumbnail_in_modal_by_src(elem.target, response.image);
             }
         }
-    }); 
+    });*/
+    
+    $.ajax({
+        url: '/get_preview?url=' + target_url,
+        success: function (response) {
+            if (response) {
+                // update the title and thumbnail url fields 
+                $(elem.target).closest('div.modal').find('.form-title').attr('value', response.title);
+                $(elem.target).closest('div.modal').find('.form-thumb').attr('value', response.image);
+            
+                // update the image thumbnail
+                update_thumbnail_in_modal_by_src(elem.target, response.image);
+            }            
+        },
+    });
 }, 500);
 
 $('input[id=edit-url]').on('change paste keyup', get_thumbnail_of_url);
