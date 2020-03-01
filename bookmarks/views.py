@@ -19,7 +19,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from json import loads
 
-from opengraph_parse.opengraph_parse import parse_page
+from opengraph_parse import parse_page
 
 '''
 
@@ -130,7 +130,11 @@ def get_preview(request):
     GET request to http://localhost:8000/get_preview?url=https://www.google.com/
     '''
     url = request.GET.get('url')
-    page_preview = parse_page(url, ["og:title", "og:image", ]) # we only need he title and image for now.
+
+    if 'http' not in url:
+        url = 'http://' + url
+         
+    page_preview = parse_page(url, tags_to_search=["og:title", "og:image", ], fallback_tags={'og:title': 'title'}) # we only need he title and image for now.
     placeholder_title = 'No title found'
 
     if not page_preview:
