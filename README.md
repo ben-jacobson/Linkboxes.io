@@ -1,9 +1,10 @@
 # Known Bugs
-	- Attempting to load the page without a WWW doesn't load.
+	FIXED - Attempting to load the page without a WWW doesn't load.
 	- Grid view needs to letter box/crop images if they are not big enough vertically / too large
 	- Site throws an error if you include a trailing '/' after URLs	
 
 # Features to implement in future releases
+	- What else can we do to reduce hosting costs?
 	- Set up private linkboxes that require authentication to view
 	- Google Analytics tags should not be loaded on linkboxes
 	- If an image throws a 404 or 500 error, it should replace with placeholder by the JS

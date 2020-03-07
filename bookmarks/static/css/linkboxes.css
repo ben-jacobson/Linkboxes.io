@@ -32,8 +32,15 @@
     text-align: left;
 }
 
+.bookmark-card-thumbnail-img {
+    line-height: 340px;
+    height: 340px;
+    background-color: #eeeeee; 
+}
+
 .bookmark-thumbnail {
-    width: 100%
+    width: 100%; 
+    vertical-align: middle;
 }
 
 p.bookmark-edit-icons {
