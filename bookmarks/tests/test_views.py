@@ -129,6 +129,17 @@ class BookmarkListViewTests(test_objects_mixin, TestCase):
         page_form = response.context['form']
         self.assertEquals(self.test_bookmarks_list.url_id, page_form.initial['list_id'])              
 
+    def test_get_preview(self):
+        '''
+        Unit test - test our get_preview method and url.
+        NOTE - this runs a test get request against a local version of our home page, if this isn't running, the test will fail. We should replace this with mocks or something similar
+        '''
+        test_url = 'http://localhost:8000'        
+        get_preview_url = reverse('get-preview') + '?url=' + test_url
+        response = self.client.get(get_preview_url)
+        expected_json_string_output = '{"title": "Linkboxes.io", "image": ""}'
+        self.assertIn(expected_json_string_output, str(response.content))
+
 class LinkBoardListViewTests(test_objects_mixin, TestCase):
     def test_uses_correct_template(self):
         '''

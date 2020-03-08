@@ -129,29 +129,26 @@ def get_preview(request):
     usage:
     GET request to http://localhost:8000/get_preview?url=https://www.google.com/
     '''
-    url = request.GET.get('url')
+    url = request.GET.get('url') # retrieve the url from the querystring, but don't make the GET request
 
-    if 'http' not in url:
+    if 'http' not in url: # add in a http prefix if needed
         url = 'http://' + url
-         
-    page_preview = parse_page(url, tags_to_search=["og:title", "og:image", ], fallback_tags={'og:title': 'title'}) # we only need he title and image for now.
-    placeholder_title = 'No title found'
 
-    if not page_preview:
-        page_preview['og:title'] = placeholder_title
-        page_preview['og:image'] = ''
-
-    if not 'og:title' in page_preview:
-        page_preview['og:title'] = placeholder_title
-
-    if not 'og:image' in page_preview:
-        page_preview['og:image'] = ''
+    page_preview = { # start with blank default data
+        'og:title': '', 
+        'og:image': '',         
+    }
     
-    json_data = {
+    # run the get request and parse the page data
+    raw_data = parse_page(url, tags_to_search=["og:title", "og:image", ], fallback_tags={'og:title': 'title'}) # we only need he title and image for now.
+
+    if raw_data: # if there is raw data, then update the dictionary entries with it. Only overriding whats needed
+        page_preview.update(raw_data)
+
+    return JsonResponse({
         'title': page_preview['og:title'],
         'image': page_preview['og:image'],
-    }
-    return JsonResponse(json_data)
+    })
 
 '''
 

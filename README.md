@@ -1,6 +1,6 @@
 # Known Bugs
 	FIXED - Attempting to load the page without a WWW doesn't load.
-	- Grid view needs to letter box/crop images if they are not big enough vertically / too large
+	FIXED - Grid view needs to letter box/crop images if they are not big enough vertically / too large
 	- Site throws an error if you include a trailing '/' after URLs	
 
 # Features to implement in future releases

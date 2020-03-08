@@ -12,17 +12,15 @@ router.register(r'Bookmark', BookmarkViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls), name='api'),
-    #path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    path('admin', admin.site.urls),
+    path('admin', admin.site.urls, name='admin'),
     path('', HomePageView.as_view(), name='home'),
-    path('login', UserLoginView.as_view(), name='login'),    
-    path('logout', LogoutView.as_view(), name='logout'),
-    path('signup', UserSignupView.as_view(), name='signup'),
 
-    #path('get_preview', get_preview, name='get-preview'), 
+    re_path(r'^mylinkboxes/?$', LinkBoardsListView.as_view(), name='linkboards-listview'),
+    re_path(r'^login/?$', UserLoginView.as_view(), name='login'),    
+    re_path(r'^logout/?$', LogoutView.as_view(), name='logout'),
+    re_path(r'^signup/?$', UserSignupView.as_view(), name='signup'),
     re_path(r'^get_preview$', get_preview, name='get-preview'),
+    re_path(r'^(?P<slug>[-\w]+)/?$', BookmarkListView.as_view(), name='bookmarks-listview'),     # alternativel without optional trailing slash path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),    
 
-    path('mylinkboxes', LinkBoardsListView.as_view(), name='linkboards-listview'),
-    path('<slug:slug>', BookmarkListView.as_view(), name='bookmarks-listview'),
 ]
