@@ -1,5 +1,5 @@
 # Known Bugs
-	- If you manually alter the content of the image url or the title, then copy and paste new content into the url field, it won't auto update, just need to reset the form 	
+	FIXED - If you manually alter the content of the image url or the title, then copy and paste new content into the url field, it won't auto update, just need to reset the form 	
 
 # Features to implement in future releases
 	- Make it so that the deploy script can deploy to a staging server run only within the house. E.g a raspberry pi
