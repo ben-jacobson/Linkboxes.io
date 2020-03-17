@@ -3,7 +3,7 @@
 
 # Features to implement in future releases
 	- Make it so that the deploy script can deploy to a staging server run only within the house. E.g a raspberry pi
-	- publicize the repo, change the settings.py file to read from secrets, tighten up our repo to ensure nothing secret is on there and then change to public
+	COMPLETE - publicize the repo, change the settings.py file to read from secrets, tighten up our repo to ensure nothing secret is on there and then change to public
 	- When signing in as a new user, needs to generate a confirmation email
 	- set up a confirmation box for deleting bookmarks, not just for entire linkboxes
 	- Set up private linkboxes that require authentication to view
