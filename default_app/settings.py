@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from .secretkey import SECRET_KEY # literally just copied the secret key variable into this file, just that one line
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,8 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kkj%p@7_#rsv3q0wy%f7-3l6dcxwj@p(ytid=x)10*c77%7s(2'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

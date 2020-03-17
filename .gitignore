@@ -5,3 +5,4 @@ geckodriver.log
 bookmarks/migrations
 deploy/LinkboxesIO.pem
 deploy/server_secrets.json
+default_app/secretkey.py
