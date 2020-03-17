@@ -35,8 +35,7 @@ function debounce(func, wait, immediate) {
 		timeout = setTimeout(later, wait);
 		if (callNow) func.apply(context, args);
 	};
-};
-
+}
 
 /*
     Global Variables
@@ -89,7 +88,8 @@ $('.move-icon').mouseleave(function () {
 $('#create-new-bookmark-button').click(function() {
     // reset the image
     $('#create-thumb-preview').attr('src', DEFAULT_THUMBNAIL_IMAGE_HREF);
-})
+});
+
 
 // event when user clicks the edit button
 $('.edit-icon').click(function(e) {
@@ -113,9 +113,13 @@ $('.edit-icon').click(function(e) {
             })[0];
 
             // update the modal form data
-            $('#edit-title').attr('value', bookmark_data['title']);
-            $('#edit-url').attr('value', bookmark_data['url']);
-            $('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);   
+            //$('#edit-title').attr('value', bookmark_data['title']);
+            //$('#edit-url').attr('value', bookmark_data['url']);
+            //$('#edit-thumbnail').attr('value', bookmark_data['thumbnail_url']);   
+            
+            $('#edit-title').val(bookmark_data['title']);
+            $('#edit-url').val(bookmark_data['url']);
+            $('#edit-thumbnail').val(bookmark_data['thumbnail_url']);               
             
             // update the thumbnail while there
             update_thumbnail_in_modal_by_src($('#edit-thumbnail'), bookmark_data['thumbnail_url']);
@@ -218,32 +222,15 @@ $('.copy-icon').click(function(e) {
 // event when user updates the url field
 var get_thumbnail_of_url = debounce(function (elem) {
     var target_url = $(elem.target).val();
-    //const key = "5e235b5f50681750622b888646661fb918749ee3e550f";
-    
-    /*$.ajax({
-        url: "https://api.linkpreview.net",
-        dataType: "jsonp",
-        data: {q: target_url, key: key},
-        success: function (response) {
-            if (response) {
-                // update the title and thumbnail url fields 
-                $(elem.target).closest('div.modal').find('.form-title').attr('value', response.title);
-                $(elem.target).closest('div.modal').find('.form-thumb').attr('value', response.image);
-            
-                // update the image thumbnail
-                update_thumbnail_in_modal_by_src(elem.target, response.image);
-            }
-        }
-    });*/
     
     $.ajax({
         url: '/get_preview?url=' + target_url,
         success: function (response) {
             if (response) {
                 // update the title and thumbnail url fields 
-                $(elem.target).closest('div.modal').find('.form-title').attr('value', response.title);
-                $(elem.target).closest('div.modal').find('.form-thumb').attr('value', response.image);
-            
+                $(elem.target).closest('div.modal').find('.form-title').val(response.title);
+                $(elem.target).closest('div.modal').find('.form-thumb').val(response.image);
+                                            
                 // update the image thumbnail
                 update_thumbnail_in_modal_by_src(elem.target, response.image);
             }            
