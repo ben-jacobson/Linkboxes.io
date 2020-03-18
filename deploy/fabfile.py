@@ -92,6 +92,7 @@ def _alter_django_settings_py(server_secrets):
     site_name = server_secrets['domain']    
     remote_home_folder = server_secrets['remote_home_folder']
     settings_file = remote_home_folder + "/" + server_secrets['default_app_name'] + '/settings.py'
+    django_secret_key = server_secrets['django_secret_key']
 
     # for this application, we'll skip the step for rerolling. Our public key was never accessible to the public. Also, this code was modified without testing, be sure to debug this code.
     #chars  = 'abcdefghijklmnopqrstuvwxyz0123456789'           # used as array of usable characters
@@ -104,6 +105,11 @@ def _alter_django_settings_py(server_secrets):
     sed(settings_file, 
         'ALLOWED_HOSTS = .+$', 
         f'ALLOWED_HOSTS = ["127.0.0.1", "localhost", "{site_name}"]'
+    )
+
+    sed(settings_file, 
+        "SECRET_KEY = 'REPLACEME'",
+        f"SECRET_KEY = '{django_secret_key}'"
     )
 
     # remove the line that allows users to browser the API. Just comment it out. Again, SED has issues with single quotes unless run from CLI
