@@ -25,7 +25,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
 
-SECRET_KEY = "REPLACEME"
+SECRET_KEY = 'REPLACEME'
 
 # Application definition
 

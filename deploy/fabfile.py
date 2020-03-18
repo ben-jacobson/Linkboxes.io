@@ -108,8 +108,8 @@ def _alter_django_settings_py(server_secrets):
     )
 
     sed(settings_file, 
-        "SECRET_KEY = \"REPLACEME\"",
-        f"SECRET_KEY = \"{django_secret_key}\""
+        'SECRET_KEY = .+$',
+        f'SECRET_KEY = \"{django_secret_key}\"'
     )
 
     # remove the line that allows users to browser the API. Just comment it out. Again, SED has issues with single quotes unless run from CLI
