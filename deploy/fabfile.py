@@ -196,7 +196,7 @@ def initial_config():
         run('sudo apt install python3')        # todo - add in creating symbolic links so that commands can be run just by typing python, not needing to type python3
         run('sudo apt install python3-pip')    # todo - same as above but with pip
         run('sudo apt install git')
-        run('sudo apt-get install yui-compressor') # install a minifier to run on deployment
+        run('sudo apt-get install yui-compressor') # install a minifier to run every deployment
         _install_nginx_and_gunicorn()
         _config_nginx(server_secrets) 
         _reload_nginx()
@@ -207,7 +207,7 @@ def deploy():
     site_folder = server_secrets['remote_home_folder'] 
     
     with cd(site_folder):
-        _backup_dbase(server_secrets)
+        #_backup_dbase(server_secrets)
         _get_latest_source_from_git(server_secrets, site_folder)
         _alter_django_settings_py(server_secrets)
         _install_project_dependancies()     
