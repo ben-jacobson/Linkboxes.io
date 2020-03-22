@@ -1,3 +1,3 @@
 #! /bin/bash
-fab deploy:host=ubuntu@ubuntuStaging.local
+fab deploy_staging:host=ubuntu@ubuntuStaging.local
 

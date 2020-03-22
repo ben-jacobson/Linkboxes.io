@@ -76,7 +76,7 @@ def _get_latest_source_from_git(server_secrets, site_folder):
     '''
     Used for both initial deployment and ongoing deployment, this will pull down the source from the remote repo and run git reset --hard
     '''
-    if exists('.git'):  # check if it's a git repo already. 
+    if exists('.git'):  # check if a git repo exists already
         run('git fetch')  
     else:
         run(f'git clone {server_secrets["github_repo_location"]} .')  
@@ -178,6 +178,11 @@ def _backup_dbase(server_secrets):
     run(f'mkdir -p {backup_location}')    
     run(f'cp {dbase_location}/db.sqlite3 {backup_location}/db_backup.sqlite3')
 
+def _create_symbolic_links_to_python_pip():
+    # some of our pip packages rely on being able to call 'python' instead of 'python3', we'll create symbolic links to help with this. 
+    run('sudo ln -s /usr/bin/python3 /usr/bin/python')
+    run('sudo ln -s /usr/bin/pip3 /usr/bin/pip')
+
 '''
 
 Fabric Methods
@@ -193,8 +198,10 @@ def initial_config():
     with cd(site_folder):
         run('sudo apt-get update')
         run('sudo apt-get upgrade')
-        run('sudo apt install python3')        # todo - add in creating symbolic links so that commands can be run just by typing python, not needing to type python3
-        run('sudo apt install python3-pip')    # todo - same as above but with pip
+        run('sudo apt install python3')       
+        run('sudo apt install python3-pip')    
+        run('sudo pip3 install --upgrade pip setuptools wheel') # finding that by default python3 comes with older version of wheel and setuptools, update to latest version helps with initial deployment
+        _create_symbolic_links_to_python_pip()
         run('sudo apt install git')
         run('sudo apt-get install yui-compressor') # install a minifier to run every deployment
         _install_nginx_and_gunicorn()
@@ -202,12 +209,11 @@ def initial_config():
         _reload_nginx()
         _config_server_to_load_gunicorn_on_startup(server_secrets)
 
-def deploy():
-    server_secrets = _read_json_data_fromfile('server_secrets.json')
+def deploy(server_secrets):
     site_folder = server_secrets['remote_home_folder'] 
     
     with cd(site_folder):
-        #_backup_dbase(server_secrets)
+        _backup_dbase(server_secrets)
         _get_latest_source_from_git(server_secrets, site_folder)
         _alter_django_settings_py(server_secrets)
         _install_project_dependancies()     
@@ -218,3 +224,11 @@ def deploy():
         _reload_nginx()
         _reload_gunicorn(server_secrets)
 
+def deploy_production():
+    server_secrets = _read_json_data_fromfile('server_secrets.json')
+    deploy(server_secrets)
+
+def deploy_staging():
+    server_secrets = _read_json_data_fromfile('server_secrets.json')
+    server_secrets['domain'] = server_secrets['staging_domain'] # overwrite the domain 
+    deploy(server_secrets)
