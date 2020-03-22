@@ -229,6 +229,7 @@ def deploy_production():
     deploy(server_secrets)
 
 def deploy_staging():
+    run('scp ubuntu@ubuntuStaging.local:/home/ubuntu/sites/bookmarks/db.sqlite3 /home/ben/coding/db_backup_linkboxes/db.sqlite3')
     server_secrets = _read_json_data_fromfile('server_secrets.json')
     server_secrets['domain'] = server_secrets['staging_domain'] # overwrite the domain 
     deploy(server_secrets)
