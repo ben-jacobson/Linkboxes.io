@@ -4,7 +4,7 @@ beautifulsoup4==4.8.2
 bs4==0.0.1
 certifi==2019.9.11
 chardet==3.0.4
-cryptography==2.8
+cryptography==3.3.2
 Django==2.1
 djangorestframework==3.10.3
 Fabric3==1.14.post1
