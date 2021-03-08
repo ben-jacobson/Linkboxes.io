@@ -1,7 +1,9 @@
 #! /bin/bash
 
 # for staging environment
-fab initial_config:host=ubuntu@ubuntuStaging.local
+fab initial_config:host=ubuntu@ubuntu.local
+
+echo "next step - run your first deployment"
 
 # for production environment
 #ssh-add LinkboxesIO.pem 

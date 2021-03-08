@@ -208,12 +208,14 @@ def initial_config():
         _config_nginx(server_secrets) 
         _reload_nginx()
         _config_server_to_load_gunicorn_on_startup(server_secrets)
+	# note - one thing to do if deploying initially to a staging server, is look at the nginx config file in nginx/sites-enabled/ and change the server name to whatever your staging server responds to - e.g ubuntu.local
+
 
 def deploy(server_secrets):
     site_folder = server_secrets['remote_home_folder'] 
     
     with cd(site_folder):
-        _backup_dbase(server_secrets)
+        _backup_dbase(server_secrets)  # may need to comment this out on first deployment
         _get_latest_source_from_git(server_secrets, site_folder)
         _alter_django_settings_py(server_secrets)
         _install_project_dependancies()     
