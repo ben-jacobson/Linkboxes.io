@@ -6,7 +6,7 @@ certifi==2019.9.11
 chardet==3.0.4
 cryptography==2.8
 Django==2.1
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 Fabric3==1.14.post1
 hashids==1.2.0
 idna==2.8
